@@ -18,18 +18,18 @@ rule deinterleave:
 
 rule centrifuge_on_contigs:
     input:
-        tar=f"{img_folder}" + "/{sample}.tar.gz",
-        fna=f"{img_folder}" + "/{sample}.a.fna",
+        tar = f"{img_folder}" + "/{sample}.tar.gz"
     output:
         f"{taxo_tmpdir}" + "/{batch}/{sample}.a.cf"
-    params:
-        centrifuge_idx = software.centrifuge_idx
+    #params:
+    #    centrifuge_idx = software.centrifuge_idx,
+    #    fna = f"{img_folder}" + "/{sample}.a.fna",
     envmodules:
         "centrifuge/1.0.4"
     shell:
         """
-        centrifuge -x {params.centrifuge_idx} 
-            -U <(zcat {input.tar} | tar xfO - {input.fna}) 
+        centrifuge -x {software.centrifuge_idx} 
+            -U <(zcat {input.tar} | tar xfO - {img_folder}/{sample}.a.fna) 
             -f -p {resources.cpus_per_task} -S {output}
         """
 
