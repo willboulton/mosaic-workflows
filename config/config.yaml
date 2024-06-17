@@ -1,0 +1,14 @@
+samples: "config/samples.tsv"
+home: "gpfs/home/qcf21tku"
+fastq_tmpdir: "/gpfs/data/mock_lab/will/fastq/tmp_fastq"
+img_path: "/gpfs/data/mock_lab/will/mosaic_tmp/img_files_12_3_2024"
+software:
+    utils: "/gpfs/home/qcf21tku/software/utils"
+    globus: "/gpfs/home/qcf21tku/software/globus/globusconnectpersonal-3.2.3"
+    centrifuge_idx: "/gpfs/data/mock_lab/will/EUKFINDER_CENTRIFUGE/Centrifuge_NewDB_Sept2020"
+    mmseqs_db: "/gpfs/data/mock_lab/reference-data/MOSAIC/MOSAIC_PROT_REF_DB/MOSAIC_NR_u50_o100_DB"
+globus:
+    nersc_uuid: "6bdc7956-fc0f-4ad2-989c-7aa5ee643a79"
+    ada_uuid: "59222a93-92c2-11ee-8c81-fd88ce9321ad"
+run_batch:
+    - "E04_1"

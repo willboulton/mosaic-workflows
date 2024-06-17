@@ -1,0 +1,46 @@
+configfile: "config/config.yaml"
+
+include: "rules/00_utils.smk"
+include: "rules/02_read_taxonomy.smk"
+
+localrules: all
+#wildcard_constraints:
+#        model="dirichlet_[12]",
+#        sample="SRR[0-9]*"
+
+
+from itertools import product
+
+(
+    software, 
+    home, 
+    fastq_tmpdir, 
+    globus,
+    samples, 
+    run_batch, 
+    img_path
+) = initialise_config(config)
+
+
+def select_samples(wc):
+    filter_samples = [s for s in samples if s.batch in run_batch]
+    samples_x_rg = list(product(filter_samples, ["1", "2"]))
+    return [ f"{fastq_tmpdir}/{s.batch}/{s.img_taxon_id}-filter-METAG_{r}.fastq.gz" for s, r in samples_x_rg ]
+
+def sample_dict(wc):
+    result = [s for s in samples if str(s.img_taxon_id) == wc.sample][0]._asdict()
+    return result
+
+def set_param(varname):
+    return (lambda wc: sample_dict(wc)[varname])
+
+onstart:
+    print("starting")
+    print("********")
+    for b in run_batch:
+        shell(f"mkdir -p {fastq_tmpdir}/{b}")
+
+
+rule all:
+    input: select_samples
+

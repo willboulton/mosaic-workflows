@@ -1,0 +1,43 @@
+---
+snakefile: workflow/Snakefile
+latency-wait: 30
+show-failed-logs: True
+keep-going: True
+printshellcmds: True
+rerun-incomplete: True
+rerun-trigger: mtime
+restart-times: 0
+use-conda: True
+conda-frontend: conda
+latency-wait: 100
+use-envmodules: True
+
+# Cluster submission
+executor: slurm
+jobname: "{rule}.{jobid}"
+max-jobs-per-second: 1
+max-status-checks-per-second: 10
+jobs: 256 # max number of jobs running in parallel
+# Set resources for particular jobs
+# Default cluster resources
+default-resources:
+    - globus_workers=3
+    - mem="4G"
+    - slurm_partition="compute-64-512,compute-24-96"
+    - runtime="4h" # days:hours:mins
+    - threads=1
+    - cpus_per_task=1
+
+centrifuge_on_contigs:
+    - mem="128G"
+    - slurm_partition="compute-64-512"
+    - runtime="10h"
+    - threads=16
+    - cpus_per_task=16
+
+centrifuge_on_reads:
+    - mem="256G"
+    - slurm_partition="compute-64-512"
+    - runtime="12h"
+    - threads=16
+    - cpus_per_task=16
