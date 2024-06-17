@@ -10,21 +10,26 @@ wildcard_constraints:
         sample="33000\d\d\d\d\d"
 
 
-from itertools import product
-
 def select_samples(wc):
+    from itertools import product
     filter_samples = [s for s in samples if s.batch in run_batch]
     samples_x_rg = list(product(filter_samples, ["1", "2"]))
     return [ f"{fastq_tmpdir}/{s.batch}/{s.img_taxon_id}-filter-METAG_{r}.fastq.gz" for s, r in samples_x_rg ]
 
-
+def select_samples_2(wc):
+    filter_samples = [s for s in samples if s.batch in run_batch]
+    return (
+        [ f"{taxo_tmpdir}/{s.batch}/{s.sample}.fastq.cf" for s in filter_samples ] + 
+        [ f"{taxo_tmpdir}/{s.batch}/{s.sample}.a.cf" for s in filter_samples ]
+    )
 
 onstart:
     print("starting")
     print("********")
     for b in run_batch:
         shell(f"mkdir -p {fastq_tmpdir}/{b}")
+        shell(f"mkdir -p {taxo_tmpdir}/{b}")
 
 
 rule all:
-    input: select_samples
+    input: select_samples_2
