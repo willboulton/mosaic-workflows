@@ -52,7 +52,7 @@ rule centrifuge_on_reads:
 rule mmseqs:
     input:
     output:
-        f"{taxo_tmpdir}" + "/{batch}"
+        f"{taxo_tmpdir}" + "/{batch}/{sample}.faa.mms2"
     params:
         sample = set_param("sample_id"),
         tmpdir = f"{taxo_tmpdir}" + "/{batch}/{sample}",

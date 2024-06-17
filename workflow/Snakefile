@@ -4,9 +4,10 @@ include: "rules/00_utils.smk"
 include: "rules/02_read_taxonomy.smk"
 
 localrules: all
-#wildcard_constraints:
-#        model="dirichlet_[12]",
-#        sample="SRR[0-9]*"
+
+wildcard_constraints:
+        batch="[EIST]\d\d_\d",
+        sample="33000\d\d\d\d\d"
 
 
 from itertools import product
