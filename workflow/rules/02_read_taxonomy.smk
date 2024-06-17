@@ -29,7 +29,7 @@ rule centrifuge_on_contigs:
     shell:
         """
         centrifuge -x {software.centrifuge_idx} 
-            -U <(zcat {input.tar} | tar xfO - {img_folder}/{sample}.a.fna) 
+            -U <(zcat {input.tar} | tar xfO - {img_folder}/{wildcards.sample}.a.fna) 
             -f -p {resources.cpus_per_task} -S {output}
         """
 
