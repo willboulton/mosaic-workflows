@@ -1,3 +1,5 @@
+configfile: "config/config.yaml"
+
 from collections import namedtuple
 import pandas as pd
 
@@ -23,3 +25,20 @@ def to_samplelist(df):
     """
     STuple = namedtuple("STuple", df.columns)
     return [STuple(**d) for d in df.to_dict('records')]
+
+def sample_dict(wc):
+    result = [s for s in samples if str(s.img_taxon_id) == wc.sample][0]._asdict()
+    return result
+
+def set_param(varname):
+    return (lambda wc: sample_dict(wc)[varname])
+
+(
+    software, 
+    home, 
+    fastq_tmpdir, 
+    globus,
+    samples, 
+    run_batch, 
+    img_path
+) = initialise_config(config)

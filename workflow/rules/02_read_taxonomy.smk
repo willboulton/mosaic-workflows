@@ -1,14 +1,4 @@
-configfile: "config/config.yaml"
 include: "00_utils.smk"
-(
-    software, 
-    home, 
-    fastq_tmpdir, 
-    globus,
-    samples, 
-    run_batch, 
-    img_path
-) = initialise_config(config)
 
 
 rule deinterleave:
