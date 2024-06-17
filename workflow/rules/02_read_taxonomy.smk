@@ -52,7 +52,7 @@ rule mmseqs:
     output:
         f"{taxo_tmpdir}" + "/{batch}"
     params:
-        sample = set_param("sample_id")
+        sample = set_param("sample_id"),
         tmpdir = f"{taxo_tmpdir}" + "/{batch}/{sample}",
         mmseq_db = software.mmseqs_db,
         img_folder = img_folder
