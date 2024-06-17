@@ -18,8 +18,8 @@ rule deinterleave:
 
 rule centrifuge_on_contigs:
     input:
-        tar=f"{img_path}" + "/{sample}.tar.gz",
-        fna=f"{img_path}" + "/{sample}.a.fna",
+        tar=f"{img_folder}" + "/{sample}.tar.gz",
+        fna=f"{img_folder}" + "/{sample}.a.fna",
     output:
         f"{taxo_tmpdir}" + "/{batch}/{sample}.a.cf"
     params:
