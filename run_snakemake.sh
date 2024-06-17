@@ -14,3 +14,4 @@
 cd /gpfs/home/qcf21tku/my_code/mosaic-workflows
 conda activate snakemake
 snakemake --profile profile_slurm/
+

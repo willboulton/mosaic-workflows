@@ -28,16 +28,18 @@ default-resources:
     - threads=1
     - cpus_per_task=1
 
-centrifuge_on_contigs:
-    - mem="128G"
-    - slurm_partition="compute-64-512"
-    - runtime="10h"
-    - threads=16
-    - cpus_per_task=16
+set-resources:
+    - centrifuge_on_contigs:mem="128G"
+    - centrifuge_on_contigs:slurm_partition="compute-64-512"
+    - centrifuge_on_contigs:runtime=00-10:00
+    - centrifuge_on_contigs:cpus_per_task=16
 
-centrifuge_on_reads:
-    - mem="256G"
-    - slurm_partition="compute-64-512"
-    - runtime="12h"
-    - threads=16
-    - cpus_per_task=16
+    - centrifuge_on_reads:mem="480G"
+    - centrifuge_on_reads:slurm_partition="compute-64-512"
+    - centrifuge_on_reads:runtime=00-10:00
+    - centrifuge_on_reads:cpus_per_task=16
+
+set-threads:
+    - centrifuge_on_contigs=16
+    - centrifuge_on_reads=16
+
