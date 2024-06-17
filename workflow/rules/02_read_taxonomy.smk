@@ -1,5 +1,5 @@
 configfile: "config/config.yaml"
-include: "rules/00_utils.smk"
+include: "00_utils.smk"
 (
     software, 
     home, 
