@@ -17,8 +17,8 @@ def initialise_config(config):
 
     samples = to_samplelist(pd.read_csv(config['samples'], sep = '\t'))
     run_batch = config['run_batch']
-    img_path = config['img_path']
-    return (software, home, fastq_tmpdir, taxo_tmpdir, globus, samples, run_batch, img_path) 
+    img_folder = config['img_folder']
+    return (software, home, fastq_tmpdir, taxo_tmpdir, globus, samples, run_batch, img_folder) 
 
 
 def to_samplelist(df):
@@ -42,5 +42,5 @@ def set_param(varname):
     globus,
     samples, 
     run_batch, 
-    img_path
+    img_folder
 ) = initialise_config(config)
