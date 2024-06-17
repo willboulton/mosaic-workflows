@@ -1,6 +1,7 @@
 samples: "config/samples.tsv"
 home: "gpfs/home/qcf21tku"
 fastq_tmpdir: "/gpfs/data/mock_lab/will/fastq/tmp_fastq"
+taxo_tmpdir: "/gpfs/data/mock_lab/will/mosaic_tmp/taxo_tmpdir"
 img_path: "/gpfs/data/mock_lab/will/mosaic_tmp/img_files_12_3_2024"
 software:
     utils: "/gpfs/home/qcf21tku/software/utils"
