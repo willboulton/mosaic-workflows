@@ -1,6 +1,5 @@
 configfile: "config/config.yaml"
 
-include: "rules/00_utils.smk"
 include: "rules/02_read_taxonomy.smk"
 
 localrules: all
@@ -32,4 +31,4 @@ onstart:
 
 
 rule all:
-    input: select_samples_2
+    input: select_samples
