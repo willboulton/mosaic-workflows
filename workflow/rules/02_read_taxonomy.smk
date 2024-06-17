@@ -1,3 +1,16 @@
+configfile: "config/config.yaml"
+include: "rules/00_utils.smk"
+(
+    software, 
+    home, 
+    fastq_tmpdir, 
+    globus,
+    samples, 
+    run_batch, 
+    img_path
+) = initialise_config(config)
+
+
 rule deinterleave:
     input:
         f"{fastq_tmpdir}" + "/{batch}/{sample}-filter-METAG.fastq.gz",
@@ -9,8 +22,7 @@ rule deinterleave:
     conda:
         "bio"
     shell:
-        """
-        cd {fastq_tmpdir}/{params.batch}
+        f"cd {fastq_tmpdir}" + """/{params.batch}
         {software.utils}/deinterleave {input}
         """
 
@@ -52,7 +64,7 @@ rule mmseqs:
     output:
         f"{taxo_tmpdir}" + "/{batch}"
     params:
-        sample = set_param("sample_id")
+        sample = set_param("sample_id"),
         tmpdir = f"{taxo_tmpdir}" + "/{batch}/{sample}",
         mmseq_db = software.mmseqs_db,
         img_folder = img_folder

@@ -8,9 +8,6 @@ localrules: all
 #        model="dirichlet_[12]",
 #        sample="SRR[0-9]*"
 
-
-from itertools import product
-
 (
     software, 
     home, 
@@ -21,6 +18,7 @@ from itertools import product
     img_path
 ) = initialise_config(config)
 
+from itertools import product
 
 def select_samples(wc):
     filter_samples = [s for s in samples if s.batch in run_batch]
