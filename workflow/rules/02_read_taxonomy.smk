@@ -12,8 +12,9 @@ rule deinterleave:
     conda:
         "bio"
     shell:
-        f"cd {fastq_tmpdir}" + """/{params.batch}
-        {software.utils}/deinterleave {input}
+        """
+        cd {fastq_tmpdir}/{params.batch}
+        {software.utils}/deinterleave_parallel {input}
         """
 
 rule centrifuge_on_contigs:

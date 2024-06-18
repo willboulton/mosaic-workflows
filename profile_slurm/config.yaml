@@ -28,6 +28,11 @@ default-resources:
     - cpus_per_task=1
 
 set-resources:
+    - deinterleave:mem="6G"
+    - deinterleave:slurm_partition="compute-64-512,compute-24-96"
+    - deinterleave:runtime=00-06:00
+    - deinterleave:cpus_per_task=4
+    
     - centrifuge_on_contigs:mem="128G"
     - centrifuge_on_contigs:slurm_partition="compute-64-512"
     - centrifuge_on_contigs:runtime=00-10:00
@@ -39,5 +44,6 @@ set-resources:
     - centrifuge_on_reads:cpus_per_task=16
 
 set-threads:
+    - deinterleave=4
     - centrifuge_on_contigs=16
     - centrifuge_on_reads=16
