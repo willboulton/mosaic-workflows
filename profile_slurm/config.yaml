@@ -24,13 +24,13 @@ default-resources:
     - globus_workers=3
     - mem="4G"
     - slurm_partition="compute-64-512,compute-24-96"
-    - runtime="4h" # days:hours:mins
+    - runtime="4h" # days:hours:mins, or number in minutes
     - cpus_per_task=1
 
 set-resources:
-    - deinterleave:mem="6G"
+    - deinterleave:mem="2G"
     - deinterleave:slurm_partition="compute-64-512,compute-24-96"
-    - deinterleave:runtime="00:06:00"
+    - deinterleave:runtime=240
     - deinterleave:cpus_per_task=4
     
     - centrifuge_on_contigs:mem="128G"
