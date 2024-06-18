@@ -26,8 +26,8 @@ rule centrifuge_on_contigs:
         "centrifuge/1.0.4"
     shell:
         """
-        centrifuge -x {software.centrifuge_idx} 
-            -U <(zcat {input.tar} | tar xfO - {wildcards.sample}/{wildcards.sample}.a.fna) 
+        centrifuge -x {software.centrifuge_idx} \\
+            -U <(zcat {input.tar} | tar xfO - {wildcards.sample}/{wildcards.sample}.a.fna) \\
             -f -p {resources.cpus_per_task} -S {output}
         """
 
@@ -44,9 +44,9 @@ rule centrifuge_on_reads:
         "centrifuge/1.0.4"
     shell:
         """
-        centrifuge -x {software.centrifuge_idx} 
-            -1 {input.fq1}
-            -2 {input.fq2}
+        centrifuge -x {software.centrifuge_idx} \\
+            -1 {input.fq1} \\
+            -2 {input.fq2} \\
             -q -p {resources.cpus_per_task} -S {output}
         """
 

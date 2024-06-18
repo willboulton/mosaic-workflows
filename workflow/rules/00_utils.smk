@@ -11,7 +11,7 @@ def initialise_config(config):
 
     home = config['home']
     fastq_tmpdir = config['fastq_tmpdir']
-    taxo_tmpdir = config['fastq_tmpdir']
+    taxo_tmpdir = config['taxo_tmpdir']
 
     globus = namedtuple("globus", (k for k in config["globus"].keys()))(**config["globus"])
 
