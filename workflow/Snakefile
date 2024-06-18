@@ -18,7 +18,7 @@ def select_samples(wc):
 def select_samples_2(wc):
     filter_samples = [s for s in samples if s.batch in run_batch]
     return (
-        [ f"{taxo_tmpdir}/{s.batch}/{s.img_taxon_id}.fastq.cf" for s in filter_samples ] + 
+        #[ f"{taxo_tmpdir}/{s.batch}/{s.img_taxon_id}.fastq.cf" for s in filter_samples ] + 
         [ f"{taxo_tmpdir}/{s.batch}/{s.img_taxon_id}.a.cf" for s in filter_samples ]
     )
 
