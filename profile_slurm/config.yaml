@@ -33,7 +33,7 @@ set-resources:
     - deinterleave:runtime=240
     - deinterleave:cpus_per_task=4
     
-    - centrifuge_on_contigs:mem="128G"
+    - centrifuge_on_contigs:mem="256G"
     - centrifuge_on_contigs:slurm_partition="compute-64-512"
     - centrifuge_on_contigs:runtime=600
     - centrifuge_on_contigs:cpus_per_task=16
