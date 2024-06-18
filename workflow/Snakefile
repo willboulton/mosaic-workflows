@@ -31,4 +31,4 @@ onstart:
 
 
 rule all:
-    input: select_samples
+    input: select_samples_2
