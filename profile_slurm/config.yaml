@@ -35,12 +35,12 @@ set-resources:
     
     - centrifuge_on_contigs:mem="128G"
     - centrifuge_on_contigs:slurm_partition="compute-64-512"
-    - centrifuge_on_contigs:runtime=00-10:00
+    - centrifuge_on_contigs:runtime=600
     - centrifuge_on_contigs:cpus_per_task=16
 
     - centrifuge_on_reads:mem="480G"
     - centrifuge_on_reads:slurm_partition="compute-64-512"
-    - centrifuge_on_reads:runtime=00-10:00
+    - centrifuge_on_reads:runtime=720
     - centrifuge_on_reads:cpus_per_task=16
 
 set-threads:

@@ -34,6 +34,9 @@ rule centrifuge_on_contigs:
             -f -p {resources.cpus_per_task} -S {output}
         """
 
+rule bowtie2:
+    
+
 rule centrifuge_on_reads:
     input:
         fq1=f"{fastq_tmpdir}" + "/{batch}/{sample}-filter-METAG_1.fastq.gz",
