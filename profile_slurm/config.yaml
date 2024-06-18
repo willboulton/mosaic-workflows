@@ -30,7 +30,7 @@ default-resources:
 set-resources:
     - deinterleave:mem="6G"
     - deinterleave:slurm_partition="compute-64-512,compute-24-96"
-    - deinterleave:runtime=00-06:00
+    - deinterleave:runtime="00-06:00"
     - deinterleave:cpus_per_task=4
     
     - centrifuge_on_contigs:mem="128G"
