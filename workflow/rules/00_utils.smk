@@ -12,13 +12,24 @@ def initialise_config(config):
     home = config['home']
     fastq_tmpdir = config['fastq_tmpdir']
     taxo_tmpdir = config['taxo_tmpdir']
+    bam_tmpdir = config['bam_tmpdir']
 
     globus = namedtuple("globus", (k for k in config["globus"].keys()))(**config["globus"])
 
     samples = to_samplelist(pd.read_csv(config['samples'], sep = '\t'))
     run_batch = config['run_batch']
     img_folder = config['img_folder']
-    return (software, home, fastq_tmpdir, taxo_tmpdir, globus, samples, run_batch, img_folder) 
+    return (
+        software, 
+        home, 
+        fastq_tmpdir, 
+        taxo_tmpdir, 
+        bam_tmpdir, 
+        globus, 
+        samples, 
+        run_batch, 
+        img_folder
+    ) 
 
 
 def to_samplelist(df):
@@ -39,6 +50,7 @@ def set_param(varname):
     home, 
     fastq_tmpdir, 
     taxo_tmpdir,
+    bam_tmpdir,
     globus,
     samples, 
     run_batch, 

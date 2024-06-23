@@ -18,8 +18,9 @@ def select_samples(wc):
 def select_samples_2(wc):
     filter_samples = [s for s in samples if s.batch in run_batch]
     return (
-        #[ f"{taxo_tmpdir}/{s.batch}/{s.img_taxon_id}.fastq.cf" for s in filter_samples ] + 
-        [ f"{taxo_tmpdir}/{s.batch}/{s.img_taxon_id}.a.cf" for s in filter_samples ]
+        [ f"{taxo_tmpdir}/{s.batch}/{s.img_taxon_id}.fastq.cf" for s in filter_samples ] + 
+        [ f"{taxo_tmpdir}/{s.batch}/{s.img_taxon_id}.faa.mms2lca" for s in filter_samples ] + 
+        [ f"{bam_tmpdir}/{s.batch}/{s.img_taxon_id}.sorted.bam" for s in filter_samples ]
     )
 
 onstart:
@@ -28,7 +29,7 @@ onstart:
     for b in run_batch:
         shell(f"mkdir -p {fastq_tmpdir}/{b}")
         shell(f"mkdir -p {taxo_tmpdir}/{b}")
-
+        shell(f"mkdir -p {bam_tmpdir}/{b}")
 
 rule all:
     input: select_samples_2

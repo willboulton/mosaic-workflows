@@ -2,11 +2,25 @@
 
 # Run mmseqs2 using 
 
+# Parameters:
+
+# the sample id - 33000xxxxx
 SAMPLE_ID=$1
+
+# output directory (full path)
 OUT=$2
+
+# a temporary directory (full path)
 TMP=$3
+
+# mmseqs target DB 
 TARGET_DB=$4
+
+# n. threads
 CPUS_PER_TASK=$5
+
+# folder containing all the zipped sample annotations 
+# e.g. /path/to/33000xxxxx.tar.gz
 IMG_FOLDER=$6
 
 
@@ -14,11 +28,11 @@ if [ ! -d $TMP ]; then
     mkdir $TMP
 fi
 
-zcat  ${IMG_FOLDER}/${SAMPLE_ID}.tar.gz | tar xfO - ${SAMPLE_ID}.a.faa > $TMP/${SAMPLE_ID}.a.faa
-
 if [ ! -d $OUT ]; then
     mkdir $OUT
 fi
+
+zcat ${IMG_FOLDER}/${SAMPLE_ID}.tar.gz | tar xfO - ${SAMPLE_ID}.a.faa > $TMP/${SAMPLE_ID}.a.faa
 
 QUERY=$TMP/${SAMPLE_ID}_DB
 
@@ -46,6 +60,5 @@ mmseqs createtsv \
 
 ### Delete query DB and intermediate files
 
-rm -f $TMP/${SAMPLE_ID}.a.faa
-rm -f $QUERY*
+rm -rf $TMP
 rm -f $OUT/${SAMPLE_ID}.faa.mms2.[0-9]*

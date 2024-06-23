@@ -33,17 +33,35 @@ set-resources:
     - deinterleave:runtime=240
     - deinterleave:cpus_per_task=4
     
-    - centrifuge_on_contigs:mem="256G"
+    - centrifuge_on_contigs:mem="180G"
     - centrifuge_on_contigs:slurm_partition="compute-64-512"
-    - centrifuge_on_contigs:runtime=600
+    - centrifuge_on_contigs:runtime=45
     - centrifuge_on_contigs:cpus_per_task=16
+
+    - bwa_mem:mem="8G"
+    - bwa_mem:slurm_partition="compute-64-512,compute-24-96"
+    - bwa_mem:runtime=120
+    - bwa_mem:cpus_per_task=8
+
+    - get_unmapped_reads:mem="4G"
+    - get_unmapped_reads:slurm_partition="compute-64-512,compute-24-96"
+    - get_unmapped_reads:runtime=60
+    - get_unmapped_reads:cpus_per_task=8
 
     - centrifuge_on_reads:mem="480G"
     - centrifuge_on_reads:slurm_partition="compute-64-512"
     - centrifuge_on_reads:runtime=720
     - centrifuge_on_reads:cpus_per_task=16
 
+    - mmseqs:mem="240G"
+    - mmseqs:slurm_partition="compute-64-512"
+    - mmseqs:runtime=90
+    - mmseqs:cpus_per_task=16
+    
 set-threads:
     - deinterleave=4
     - centrifuge_on_contigs=16
+    - bwa_mem=8
+    - get_unmapped_reads=8
     - centrifuge_on_reads=16
+    - mmseqs=16
