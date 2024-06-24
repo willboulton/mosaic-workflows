@@ -12,6 +12,7 @@ def initialise_config(config):
     home = config['home']
     fastq_tmpdir = config['fastq_tmpdir']
     taxo_tmpdir = config['taxo_tmpdir']
+    assembly_dir = config['assembly_dir']
     bam_tmpdir = config['bam_tmpdir']
     binning_dir = config['binning_dir']
 
@@ -26,6 +27,7 @@ def initialise_config(config):
         fastq_tmpdir, 
         taxo_tmpdir, 
         bam_tmpdir, 
+        assembly_dir,
         binning_dir,
         globus, 
         samples, 
@@ -53,6 +55,7 @@ def set_param(varname):
     fastq_tmpdir, 
     taxo_tmpdir,
     bam_tmpdir,
+    assembly_dir,
     binning_dir,
     globus,
     samples, 

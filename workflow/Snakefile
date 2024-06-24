@@ -34,6 +34,7 @@ onstart:
         shell(f"mkdir -p {fastq_tmpdir}/{b}")
         shell(f"mkdir -p {taxo_tmpdir}/{b}")
         shell(f"mkdir -p {bam_tmpdir}/{b}")
+        shell(f"mkdir -p {assembly_dir}/{b}")
 
 
 rule all:
