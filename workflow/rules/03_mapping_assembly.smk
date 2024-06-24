@@ -1,8 +1,8 @@
-include: "00_utils.smk"
+#include: "00_utils.smk"
 
 rule concat_fastq:
     input:
-        directory(f"{fastq_tmpdir}" + "/{batch}")
+        f"{fastq_tmpdir}" + "/{batch}"
     output:
         f"{assembly_dir}" + "/{batch}/{batch}-EVU.fastq.gz"
     shell:

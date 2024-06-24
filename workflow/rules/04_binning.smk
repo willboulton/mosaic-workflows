@@ -1,4 +1,4 @@
-include: "00_utils.smk"
+#include: "00_utils.smk"
 
 rule vamb_single_assembly:
 rule vamb_coassembly:
@@ -7,7 +7,7 @@ rule metabat_single_assembly:
     input:
         img_file = f"{img_folder}" + "/{sample}.tar.gz"
     output:
-        directory(f"{binning_dir}/{sample}/metabat")
+        directory(f"{binning_dir}" + "/{sample}/metabat")
     params:
         fna = "{sample}/{sample}.a.fna",
         depth = "{sample}/{sample}.a.depth.txt"
