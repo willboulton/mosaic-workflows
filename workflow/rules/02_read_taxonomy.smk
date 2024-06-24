@@ -121,7 +121,7 @@ rule vamb_convert_coverage:
     input:
         f"{bam_tmpdir}" + "/{batch}/{sample}.sorted.bam"
     output:
-        jgi_depths=""
+        jgi_depths="",
         npz=""
     conda:
         "anvio"
