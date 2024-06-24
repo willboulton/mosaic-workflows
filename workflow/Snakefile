@@ -5,7 +5,7 @@ include: "rules/02_read_taxonomy.smk"
 localrules: all
 
 wildcard_constraints:
-        batch="[EIST]\d\d_\d",
+        batch="[EIST]\d\d_(\d)+",
         sample="33000\d\d\d\d\d"
 
 
@@ -27,7 +27,7 @@ def select_samples_2(wc):
 onstart:
     print("starting")
     print("********")
-    shell(f"mkdir -p {binnig_dir}")
+    shell(f"mkdir -p {binning_dir}")
     for b in run_batch:
         shell(f"mkdir -p {fastq_tmpdir}/{b}")
         shell(f"mkdir -p {taxo_tmpdir}/{b}")

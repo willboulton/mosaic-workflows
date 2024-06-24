@@ -163,9 +163,12 @@ rule taxometer:
 #  - add any remaining contigs from centrifuge
 rule aggregate_taxonomy:
     input:
-        pass
+        mms2 = "",
+        cent = "",
+        taxo = ""
     output:
-        pass
+        unmapped = "",
+        mapped = ""
     conda:
         "bio"
     script: 
