@@ -13,6 +13,7 @@ def initialise_config(config):
     fastq_tmpdir = config['fastq_tmpdir']
     taxo_tmpdir = config['taxo_tmpdir']
     bam_tmpdir = config['bam_tmpdir']
+    binning_dir = config['binning_dir']
 
     globus = namedtuple("globus", (k for k in config["globus"].keys()))(**config["globus"])
 
@@ -25,6 +26,7 @@ def initialise_config(config):
         fastq_tmpdir, 
         taxo_tmpdir, 
         bam_tmpdir, 
+        binning_dir,
         globus, 
         samples, 
         run_batch, 
@@ -51,6 +53,7 @@ def set_param(varname):
     fastq_tmpdir, 
     taxo_tmpdir,
     bam_tmpdir,
+    binning_dir,
     globus,
     samples, 
     run_batch, 

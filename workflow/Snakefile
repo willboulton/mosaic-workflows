@@ -20,16 +20,19 @@ def select_samples_2(wc):
     return (
         [ f"{taxo_tmpdir}/{s.batch}/{s.img_taxon_id}.fastq.cf" for s in filter_samples ] + 
         [ f"{taxo_tmpdir}/{s.batch}/{s.img_taxon_id}.faa.mms2lca" for s in filter_samples ] + 
-        [ f"{bam_tmpdir}/{s.batch}/{s.img_taxon_id}.sorted.bam" for s in filter_samples ]
+        [ f"{bam_tmpdir}/{s.batch}/{s.img_taxon_id}.sorted.bam" for s in filter_samples ] +
+        [ f"{binning_dir}/{s.img_taxon_id}/metabat" for s in samples ]
     )
 
 onstart:
     print("starting")
     print("********")
+    shell(f"mkdir -p {binnig_dir}")
     for b in run_batch:
         shell(f"mkdir -p {fastq_tmpdir}/{b}")
         shell(f"mkdir -p {taxo_tmpdir}/{b}")
         shell(f"mkdir -p {bam_tmpdir}/{b}")
+
 
 rule all:
     input: select_samples_2

@@ -57,6 +57,11 @@ set-resources:
     - mmseqs:slurm_partition="compute-64-512"
     - mmseqs:runtime=90
     - mmseqs:cpus_per_task=16
+
+    - metabat_single_assembly:mem="16G"
+    - metabat_single_assembly:slurm_partition="compute-64-512,compute-24-96"
+    - metabat_single_assembly:runtime=60
+    - metabat_single_assembly:cpus_per_task=4
     
 set-threads:
     - deinterleave=4
@@ -65,3 +70,4 @@ set-threads:
     - get_unmapped_reads=8
     - centrifuge_on_reads=16
     - mmseqs=16
+    - metabat_single_assembly=4

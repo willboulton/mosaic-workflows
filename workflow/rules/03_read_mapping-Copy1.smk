@@ -1,3 +1,5 @@
+include: "00_utils.smk"
+
 rule concat_fastq:
     input:
         directory(f"{fastq_tmpdir}" + "/{batch}")
