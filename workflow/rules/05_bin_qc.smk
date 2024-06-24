@@ -1,0 +1,9 @@
+rule vacuum_blobology:
+rule flye_reassembly:
+rule tidy_bins_with_assembly_graph:
+rule bandage_view_assembly:
+rule eukcc:
+rule busco:
+rule checkm:
+rule checkv:
+rule gvclass:
