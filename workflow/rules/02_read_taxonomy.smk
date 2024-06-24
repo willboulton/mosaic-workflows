@@ -119,7 +119,7 @@ rule mmseqs_lca:
 
 rule vamb_convert_coverage:
     input:
-        pass
+        f"{bam_tmpdir}" + "/{batch}/{sample}.sorted.bam"
     output:
         jgi_depths=""
         npz=""
@@ -144,8 +144,8 @@ rule taxometer:
         "vamb"
     shell:
         # Perhaps these are better to use - use what's available!
-        #--bamfiles /path/to/bam/*.bam \
-        #--taxonomy another_taxonomy.csv \
+        #  --bamfiles /path/to/bam/*.bam \
+        #  --taxonomy another_taxonomy.csv \
         """
         {software}/vamb taxometer \\
             --fasta {input.fna} \\
