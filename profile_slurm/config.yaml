@@ -58,7 +58,7 @@ set-resources:
     - mmseqs:runtime=90
     - mmseqs:cpus_per_task=16
 
-    - metabat_single_assembly:mem="16G"
+    - metabat_single_assembly:mem="24G"
     - metabat_single_assembly:slurm_partition="compute-64-512,compute-24-96"
     - metabat_single_assembly:runtime=60
     - metabat_single_assembly:cpus_per_task=4

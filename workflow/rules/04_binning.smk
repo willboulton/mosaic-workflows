@@ -15,15 +15,16 @@ rule metabat_single_assembly:
         "anvio"
     shell:
         """
-        cd {output}
+        cd {binning_dir}
         tar xzf {input.img_file} {params.fna}
         tar xzf {input.img_file} {params.depth}
         sort -k 2 -t '_' -n {params.depth} > {params.depth}.sorted
         metabat2 \\
             -i {params.fna} \\
-            --cvExt -a {params.depth}.sorted \\
-            -o mbat. -t {threads}
-        rm -rf {sample}
+            -a {params.depth}.sorted --cvExt \\
+            -o {wildcards.sample}/metabat/mbat \\
+            -t {threads}
+        rm -f {wildcards.sample}/{wildcards.sample}.*
         """
 
 rule metabat_coassembly:

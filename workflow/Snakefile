@@ -1,6 +1,8 @@
 configfile: "config/config.yaml"
 
 include: "rules/02_read_taxonomy.smk"
+include: "rules/03_mapping_assembly.smk"
+include: "rules/04_binning.smk"
 
 localrules: all
 
