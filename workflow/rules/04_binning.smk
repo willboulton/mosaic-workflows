@@ -5,22 +5,23 @@ rule vamb_coassembly:
 rule vamb_multiassembly:
 rule metabat_single_assembly:
     input:
-        img_file = f"{img_folder}" + "/{sample}.tar.gz",
-        fna = "{sample}/{sample}.a.fna",
-        depth = "{sample}/{sample}.a.depth.txt"
+        img_file = f"{img_folder}" + "/{sample}.tar.gz"
     output:
         directory(f"{binning_dir}/{sample}/metabat")
+    params:
+        fna = "{sample}/{sample}.a.fna",
+        depth = "{sample}/{sample}.a.depth.txt"
     conda:
         "anvio"
     shell:
         """
         cd {output}
-        tar xzf {input.img_file} {input.fna}
-        tar xzf {input.img_file} {input.depth}
-        sort -k 2 -t '_' -n {input.depth} > {input.depth}.sorted
+        tar xzf {input.img_file} {params.fna}
+        tar xzf {input.img_file} {params.depth}
+        sort -k 2 -t '_' -n {params.depth} > {params.depth}.sorted
         metabat2 \\
-            -i {input.fna} \\
-            --cvExt -a {input.depth}.sorted \\
+            -i {params.fna} \\
+            --cvExt -a {params.depth}.sorted \\
             -o mbat. -t {threads}
         rm -rf {sample}
         """
