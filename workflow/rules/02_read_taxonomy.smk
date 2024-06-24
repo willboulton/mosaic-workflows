@@ -173,19 +173,22 @@ rule aggregate_taxonomy:
 
 rule split_fastq:
     input:
-        "{bam_tmpdir}/{batch}/{sample}.sorted.bam"
+        fq = "",
+        bam = "",
+        unmapped = "",
+        mapped = ""
     output:
-        mapped = "{fastq_tmpdir}/{batch}/{sample}-EVU-mapped.fastq.gz",
-        unmapped = "{fastq_tmpdir}/{batch}/{sample}-EVU-unmapped.fastq.gz"
+        mapped = f"{fastq_tmpdir}" + "/{batch}/{sample}-EVU-mapped.fastq.gz",
+        unmapped = f"{fastq_tmpdir}" + "/{batch}/{sample}-EVU-unmapped.fastq.gz"
     envmodules:
-        "bbtools", 
+        "bbmap/37.28", 
         "samtools/1.16.1"
     shell:
         """
-        samtools fastq -@ {threads} -f 12 {input.fq} | \\
+        samtools fastq -@ {threads} -f 12 {input.bam} | \\
             filterbyname.sh include=true in=stdin.fq.gz names={input.unmapped} out={output.unmapped}
         
-        filterbyname.sh include=true in={} names={input.mapped} out={output.mapped}
+        filterbyname.sh include=true in={input.fq} names={input.mapped} out={output.mapped}
         """
 
 
