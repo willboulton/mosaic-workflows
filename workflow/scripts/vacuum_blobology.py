@@ -69,11 +69,20 @@ if __name__ == "__main__":
 
     print("Saving transformed output coordinates file")
     coords = data.transform(mat)
-    np.save(
-        args.umap_out, 
-        coords
-    )
-    
+    extn = args.umap_out.split(".")[-1]
+    if extn == "npy":
+        np.save(
+            args.umap_out[:-4], 
+            coords
+        )
+
+    elif extn in ["tsv", "txt"]:
+        pass
+    elif extn == "csv":
+        pass
+    else:
+        exit(f"The parameter --umap_out, {args.umap_out} must have an extension one of npy, tsv, txt, or csv")
+        
     # get the umap weighted graph and put it in a readable form
     # (to, from) value
     print("generating ijv graph")
