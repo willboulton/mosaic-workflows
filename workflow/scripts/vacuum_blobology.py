@@ -1,6 +1,6 @@
 #!/usr/env/python
 
-from sys import argv, exit
+from sys import exit
 import numpy as np
 import pandas as pd
 import umap
@@ -54,7 +54,7 @@ if __name__ == "__main__":
     elif args.embeddings_format == "COMEBin":
         pass
     else:
-        exit("unknown file extension, only npz, tsv, csv, or txt allowed")
+        exit("unknown file, only VAMB npz, or COMEBin tsv allowed")
     
     data = umap.UMAP().fit(mat)
     

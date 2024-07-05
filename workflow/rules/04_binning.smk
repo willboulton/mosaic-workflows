@@ -2,8 +2,8 @@
 
 rule vamb_single_assembly:
     input:
-        tar="",
-        bam=""
+        tar="/gpfs/data/mock_lab/will/mosaic_tmp/binning_dir/{sample}/{sample}.a.fna",
+        bam="/gpfs/home/qcf21tku/scratch/{sample}/bam/{sample}.sorted.bam"
     output:
         directory(f"{{binning_dir}}/{sample}/vamb")
     params:
@@ -14,18 +14,16 @@ rule vamb_single_assembly:
         "cuda/11.8"
     shell:
         """
-        scripts/jgi_to_vamb_abd.py $1 $2 $3
-        
-        vamb \\
-            --minfasta 500000 \\
+        vamb \
+            --minfasta 50000 \\
             --norefcheck \\
-            -p {threads} \\
+            -p {threads} \
             -m 2000 \\
             --cuda \\
-            --rpkm anvio/binning/jgi_depths_to_vamb_lenfiltered_2500.npz \\
-            --fasta anvio/contigs_renamed.fna \\
-            --outdir {output}
+            --bamfiles {input.bam} \\
+            --fasta {input.fna} 
         """
+
 
 rule vamb_coassembly:
 rule vamb_multiassembly:
@@ -71,11 +69,11 @@ rule comebin_single_assembly:
     shell:
         """
         cd /gpfs/data/mock_lab/will/mosaic_tmp/binning_dir/{sample}
-        python {comebin_dir}/scripts/Filter_tooshort.py {sample}.a.renamed.fna 2000
+        python {comebin_dir}/scripts/Filter_tooshort.py {sample}.a.renamed.fna 1000
         cd {comebin_dir}
         scripts/contig_to_scaffold_ids.py {input.fna} {input.map} ${{intput.fna}$.}.renamed.fna
         comebin \\
-            -a ${{intput.fna}$.}.renamed_2000.fa \\
+            -a ${{intput.fna}$.}.renamed_1000.fa \\
             -p {input.bam} \\
             -o {output} \\
             -t {threads} 

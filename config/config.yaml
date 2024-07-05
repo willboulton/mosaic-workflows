@@ -11,6 +11,7 @@ software:
     globus: "/gpfs/home/qcf21tku/software/globus/globusconnectpersonal-3.2.3"
     centrifuge_idx: "/gpfs/data/mock_lab/will/EUKFINDER_CENTRIFUGE/Centrifuge_NewDB_Sept2020"
     mmseqs_db: "/gpfs/data/mock_lab/reference-data/MOSAIC/MOSAIC_PROT_REF_DB/MOSAIC_NR_u50_o100_DB"
+    checkm_db: "/gpfs/home/qcf21tku/scratch/checkm2_db/CheckM2_database/uniref100.KO.1.dmnd"
     kallisto: "/gpfs/home/qcf21tku/software/kallisto/build/src"
 globus:
     nersc_uuid: "6bdc7956-fc0f-4ad2-989c-7aa5ee643a79"

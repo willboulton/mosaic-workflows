@@ -15,8 +15,7 @@ rule checkm2:
             --threads {threads} \\
             --input {input} \\
             --output-directory {output} \\
-            --database_path $HOME/scratch/checkm2_db/CheckM2_database/uniref100.KO.1.dmnd \\
+            --database_path {software.checkm_db} \\
             --force -x {params.extension}
         """
-rule checkv:
 rule gvclass:
