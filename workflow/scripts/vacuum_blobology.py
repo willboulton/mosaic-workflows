@@ -93,5 +93,5 @@ if __name__ == "__main__":
     # -I inflation parameter is most important, smaller gives larger cluster but is slower
     # Try experimenting with mclcm heirarchical clutering
     
-    for 
-    os.subprocess(f"seqkit grep -f {} > {argv[4]}")
+    #for 
+    #os.subprocess(f"seqkit grep -f {} > {argv[4]}")
