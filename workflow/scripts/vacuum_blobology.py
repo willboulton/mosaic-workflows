@@ -26,6 +26,10 @@ def parse_args():
     parser.add_argument('--transform', type = bool, default = False, 
                         help = 'log-transform similarities to between 0 and 10.')
 
+    parser.add_argument('--fasta_in', type = str, default = '', 
+                        help = "Input fasta file of all contigs - only necessary if you're using fasta_out."
+                       )
+    
     parser.add_argument('--fasta_out', type = str, default = '', 
                         help = "Generate fasta files of the clusters (bins) in this directory." + 
                                "If left empty, doesn't produce the bins."
@@ -50,14 +54,20 @@ if __name__ == "__main__":
     # load the latent space matrix (N x 32 size)
     
     if args.embeddings_format == "VAMB":
+        print("Loading npz matrix")
         mat = np.load(args.embeddings).get("arr_0")
+        print("VAMB Latent space loaded")
     elif args.embeddings_format == "COMEBin":
-        pass
+        print("Loading COMEBin latent space")
+        mat = pd.read_csv(args.embeddings, ).to_numpy()
+        print("COMEBin Latent space loaded")
     else:
         exit("unknown file, only VAMB npz, or COMEBin tsv allowed")
-    
+
+    print("running umap - default parameters")
     data = umap.UMAP().fit(mat)
-    
+
+    print("Saving transformed output coordinates file")
     coords = data.transform(mat)
     np.save(
         args.umap_out, 
@@ -66,6 +76,7 @@ if __name__ == "__main__":
     
     # get the umap weighted graph and put it in a readable form
     # (to, from) value
+    print("generating ijv graph")
     umap_graph = data.graph_.tocoo()
     graph_coo = sparse.find(umap_graph)
     
@@ -79,6 +90,7 @@ if __name__ == "__main__":
         ijv_mat[:, 2] = 10 + np.log10(ijv_mat[:, 2] + 0.0000000001)
     
     # the 'value' is the umap likelihood of connection. 
+    print("saving ijv graph to temporary file " + f"{args.umap_out}.ijv_graph.tsv")
     np.savetxt(
         f"{args.umap_out}.ijv_graph.tsv", 
         ijv_mat, 
@@ -87,11 +99,13 @@ if __name__ == "__main__":
     )
     
     # run MCL algorithm like this:
-    # mcl vamb_umap_default_ijv_graph_log_sim.tsv --abc -I 1.2
+
+    print("running mcl: " + f"mcl {args.umap_out}.ijv_graph.tsv --abc -I {args.inflation} -o {args.mcl_out}")
+    os.system(f"mcl {args.umap_out}.ijv_graph.tsv --abc -I {args.inflation} -o {args.mcl_out}")
     
-    os.subprocess(f"mcl {args.umap_out}.ijv_graph.tsv --abc -I {args.inflation}")
     # -I inflation parameter is most important, smaller gives larger cluster but is slower
     # Try experimenting with mclcm heirarchical clutering
-    
-    #for 
-    #os.subprocess(f"seqkit grep -f {} > {argv[4]}")
+
+    if args.fasta_out and args.fasta_in:
+        for f in []:
+            os.system(f"seqkit grep -nf {args.fasta_in} > {args.fasta_out}/mcl.{f}.fna")
