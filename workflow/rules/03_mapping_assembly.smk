@@ -1,13 +1,20 @@
 #include: "00_utils.smk"
 
+def collate_fastqs(wc):
+    filter_samples = [s for s in samples if s.batch in run_batch]
+    return (
+        [   f"{fastq_tmpdir}/{s.batch}/{s.img_taxon_id}-EVU-mapped.fastq.gz" for s in filter_samples ] + 
+        [ f"{fastq_tmpdir}/{s.batch}/{s.img_taxon_id}-EVU-unmapped.fastq.gz" for s in filter_samples ]
+    )
+
 rule concat_fastq:
     input:
-        f"{fastq_tmpdir}" + "/{batch}"
+        collate_fastqs
     output:
         f"{assembly_dir}" + "/{batch}/{batch}-EVU.fastq.gz"
     shell:
         """
-        cat {input}/*-EVU-*.fastq.gz > {output}
+        cat {input} > {output}
         """
 
 rule megahit:
@@ -28,9 +35,9 @@ rule megahit:
             -o {output}
         """
 
-rule bwa_coassembly:
+rule kallisto_coassembly:
 
-rule bwa_x_sample:
+rule kallisto_x_sample:
     
 rule assembly_checkpoint_tidyup:
 

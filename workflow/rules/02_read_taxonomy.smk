@@ -129,8 +129,8 @@ rule vamb_convert_coverage:
         """
         jgi_summarize_bam_contig_depths ---
         scripts/jgi_to_vamb_abd.py \\
-            {input} \\   # 1. input file, 
-            2000 \\      # 2. contigLen used in vamb input, 
+            {input} \\   # 1. input file
+            2000 \\      # 2. contigLen used in vamb input
             {output.npz} # 3. output path
         """
 
@@ -176,10 +176,10 @@ rule aggregate_taxonomy:
 
 rule split_fastq:
     input:
-        fq = "",
-        bam = "",
-        unmapped = "",
-        mapped = ""
+        fq = f"{fastq_tmpdir}" + "/{batch}/{sample}-filter-METAG.fastq.gz",
+        bam = f"{bam_tmpdir}" + "",
+        unmapped = f"{taxo_tmpdir}" + "",
+        mapped = f"{taxo_tmpdir}" + ""
     output:
         mapped = f"{fastq_tmpdir}" + "/{batch}/{sample}-EVU-mapped.fastq.gz",
         unmapped = f"{fastq_tmpdir}" + "/{batch}/{sample}-EVU-unmapped.fastq.gz"
