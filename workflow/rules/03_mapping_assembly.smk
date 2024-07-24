@@ -11,7 +11,7 @@ rule concat_fastq:
     input:
         collate_fastqs
     output:
-        f"{{assembly_dir}}/{batch}/{batch}-EVU.fastq.gz"
+        f"{assembly_dir}/" + "{batch}/{batch}-EVU.fastq.gz"
     shell:
         """
         cat {input} > {output}

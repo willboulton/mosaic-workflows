@@ -5,7 +5,7 @@ rule vamb_single_assembly:
         tar="/gpfs/data/mock_lab/will/mosaic_tmp/binning_dir/{sample}/{sample}.a.fna",
         bam="/gpfs/home/qcf21tku/scratch/{sample}/bam/{sample}.sorted.bam"
     output:
-        directory(f"{{binning_dir}}/{sample}/vamb")
+        directory(f"{binning_dir}/" + "{sample}/vamb")
     params:
         ""
     conda:
@@ -29,9 +29,9 @@ rule vamb_coassembly:
 rule vamb_multiassembly:
 rule metabat_single_assembly:
     input:
-        img_file = f"{{img_folder}}/{sample}.tar.gz"
+        img_file = f"{img_folder}/" + "{sample}.tar.gz"
     output:
-        directory(f"{{binning_dir}}/{sample}/metabat")
+        directory(f"{binning_dir}/" + "{sample}/metabat")
     params:
         fna = "{sample}/{sample}.a.fna",
         depth = "{sample}/{sample}.a.depth.txt"
@@ -63,7 +63,7 @@ rule comebin_single_assembly:
         map = "",
         bam = "",
     output:
-        directory(f"{{binning_dir}}/{sample_id}/comebin")
+        directory(f"{binning_dir}/" + "{sample_id}/comebin")
     conda:
         "comebin_env"
     shell:
@@ -71,9 +71,9 @@ rule comebin_single_assembly:
         cd /gpfs/data/mock_lab/will/mosaic_tmp/binning_dir/{sample}
         python {comebin_dir}/scripts/Filter_tooshort.py {sample}.a.renamed.fna 1000
         cd {comebin_dir}
-        scripts/contig_to_scaffold_ids.py {input.fna} {input.map} ${{intput.fna}$.}.renamed.fna
+        scripts/contig_to_scaffold_ids.py {input.fna} {input.map} ${{input.fna}$.}.renamed.fna
         comebin \\
-            -a ${{intput.fna}$.}.renamed_1000.fa \\
+            -a ${{input.fna}$.}.renamed_1000.fa \\
             -p {input.bam} \\
             -o {output} \\
             -t {threads} 
