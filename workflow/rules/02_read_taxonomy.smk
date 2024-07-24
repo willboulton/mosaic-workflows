@@ -159,7 +159,7 @@ rule taxometer:
 
 rule tiara:
     input:
-        f"{{binning_dir}}/{sample}.a.fna"
+        f"{binning_dir}/" + "{sample}.a.fna"
     output:
         f"{{taxo_tmpdir}}/{sample}.tiara.txt"
     conda:
