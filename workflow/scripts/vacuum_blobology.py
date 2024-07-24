@@ -1,12 +1,15 @@
 #!/usr/env/python
 
 from sys import exit
+from scipy import sparse
+from tempfile import NamedTemporaryFile
+
 import numpy as np
 import pandas as pd
 import umap
-from scipy import sparse
-import os
+import subprocess
 import argparse
+
 
 def parse_args():
     
@@ -59,7 +62,7 @@ if __name__ == "__main__":
         print("VAMB Latent space loaded")
     elif args.embeddings_format == "COMEBin":
         print("Loading COMEBin latent space")
-        mat = pd.read_csv(args.embeddings, ).to_numpy()
+        mat = pd.read_csv(args.embeddings, sep = '\t').to_numpy()
         print("COMEBin Latent space loaded")
     else:
         exit("unknown file, only VAMB npz, or COMEBin tsv allowed")
@@ -99,22 +102,53 @@ if __name__ == "__main__":
         ijv_mat[:, 2] = 10 + np.log10(ijv_mat[:, 2] + 0.0000000001)
     
     # the 'value' is the umap likelihood of connection. 
-    print("saving ijv graph to temporary file " + f"{args.umap_out}.ijv_graph.tsv")
-    np.savetxt(
-        f"{args.umap_out}.ijv_graph.tsv", 
-        ijv_mat, 
-        delimiter = '\t', 
-        fmt = ['%i', '%i', '%.10e']
-    )
-    
-    # run MCL algorithm like this:
+    print("saving ijv graph to temporary file")
+    with NamedTemporaryFile() as tmpf1:
+        with NamedTemporaryFile() as tmpf2:
+            np.savetxt(
+                f"{tmpf1.name}", 
+                ijv_mat, 
+                delimiter = '\t', 
+                fmt = ['%i', '%i', '%.10e']
+            )
 
-    print("running mcl: " + f"mcl {args.umap_out}.ijv_graph.tsv --abc -I {args.inflation} -o {args.mcl_out}")
-    os.system(f"mcl {args.umap_out}.ijv_graph.tsv --abc -I {args.inflation} -o {args.mcl_out}")
-    
-    # -I inflation parameter is most important, smaller gives larger cluster but is slower
-    # Try experimenting with mclcm heirarchical clutering
+            # run MCL algorithm like this:
 
-    if args.fasta_out and args.fasta_in:
-        for f in []:
-            os.system(f"seqkit grep -nf {args.fasta_in} > {args.fasta_out}/mcl.{f}.fna")
+            print("running mcl: " + f"mcl {args.umap_out}.ijv_graph.tsv --abc -I {args.inflation} -o {tmpf2.name}")
+            subprocess.run([
+                "mcl", 
+                f"{tmpf1.name}", 
+                "--abc", 
+                "-I", f"{args.inflation}", 
+                "-o", f"{tmpf2.name}"
+            ])
+
+            # -I inflation parameter is most important, smaller gives larger cluster but is slower
+            # Try experimenting with mclcm heirarchical clutering
+
+            
+            with open(tmpf2.name, 'r') as mcl_results:
+                mcl_clusters = [
+                    [int(x) for x in cluster.split("\t")] for cluster in mcl_results.read().split("\n")
+                ]
+            
+            contig_ids = pd.read_csv(args.contig_map, header = False).to_list()
+            mcl_clusters = [
+                [contig_ids[x] for x in cluster] for cluster in mcl_clusters
+            ]
+
+            with open(f"{args.mcl_out}", 'w') as mcl_clusters_out:
+                for idx, cluster in enumerate(mcl_clusters):                
+                    for c in cluster:
+                        mcl_clusters_out.write(f"mcl.{idx + 1}\t{c}\n")
+                    
+                    if args.fasta_out and args.fasta_in:
+
+                        with open(f"{args.fasta_out}/mcl.{idx + 1}.fna", 'w') as seq_fna:
+                            with NamedTemporaryFile() as tmpf:
+                                
+                                tmpf.write("\n".join(cluster))
+                                subprocess.run([
+                                    "seqkit", "grep", "--quiet", "-nf", tmpf.name, args.fasta_in
+                                ], stdout = seq_fna)
+

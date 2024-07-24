@@ -157,6 +157,20 @@ rule taxometer:
             --delimiter_taxonomy ,
         """
 
+rule tiara:
+    input:
+        f"{{}}/{sample}.a.fna"
+    output:
+        f"{{taxo_tmpdir}}/{sample}.tiara.txt"
+    conda:
+        "tiara"
+    threads: 4
+    shell:
+        """
+        tiara -m 2000 -t {threads} -i {input} -o {output}
+        """
+
+
 # Priority is:
 #  - first trust taxometer from the phylodist file 
 #  - then trust taxometer from mmseqs
