@@ -1,6 +1,6 @@
 rule extract_files:
     input:
-        f"{binning_dir}/{{sample}}/{{sample}}.tar.gz"
+        f"{img_folder}/{{sample}}/{{sample}}.tar.gz"
     output:
         fna = f"{binning_dir}/{{sample}}/{{sample}}.a.fna",
         depth = f"{binning_dir}/{{sample}}/{{sample}}.a.depth.txt",
