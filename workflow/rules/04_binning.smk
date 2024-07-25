@@ -67,8 +67,8 @@ rule vacuum_single_assembly:
         embeddings = f"{binning_dir}/{{sample}}/vamb/embeddings.npz"
     output:
         bins = directory(f"{binning_dir}/{{sample}}/vacuum"),
-        clusters = f"",
-        coords = f""
+        clusters = f"{binning_dir}/{{sample}}/vacuum/mcl_clusters_11.tsv",
+        coords = f"{binning_dir}/{{sample}}/vacuum/umap_coords.tsv"
     conda:
         "blobology"
     envmodules:
