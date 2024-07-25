@@ -1,6 +1,3 @@
-#include: "00_utils.smk"
-
-
 rule deinterleave:
     input:
         f"{fastq_tmpdir}" + "/{batch}/{sample}-filter-METAG.fastq.gz",

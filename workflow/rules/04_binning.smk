@@ -1,5 +1,3 @@
-#include: "00_utils.smk"
-
 rule extract_files:
     input:
         f"{binning_dir}/{{sample}}/{{sample}}.tar.gz"

@@ -1,14 +1,19 @@
-rule vacuum_blobology:
-rule flye_reassembly:
-rule tidy_bins_with_assembly_graph:
-rule bandage_view_assembly:
-rule identify_euks:
-rule eukcc:
-rule busco:
+def get_extension_by_binner(wc):
+    extn_map = {
+        "comebin":"fna",
+        "metabat":"fna",
+        "vacuum":"fna",
+        "vamb":"fna"
+    }
+    return extn_map.get(wc.binner)
+
 rule checkm2:
     input:
-        
+        f"{binning_dir}/{{sample}}/{{binner}}"
     output:
+        f"{binning_dir}/{{sample}}/{{binner}}_checkm2"
+    params:
+        extension = get_extension_by_binner
     conda:
         "checkm2"
     shell:
@@ -20,3 +25,11 @@ rule checkm2:
             --database_path {software.checkm_db} \\
             --force -x {params.extension}
         """
+
+rule vacuum_blobology:
+rule flye_reassembly:
+rule tidy_bins_with_assembly_graph:
+rule bandage_view_assembly:
+rule identify_euks:
+rule eukcc:
+rule busco:

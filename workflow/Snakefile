@@ -10,7 +10,8 @@ localrules: all
 
 wildcard_constraints:
         batch="[EIST]\d\d_(\d)+",
-        sample="33000\d\d\d\d\d"
+        sample="33000\d\d\d\d\d",
+        binner="vamb|comebin|metabat|vacuum"
 
 
 def select_samples(wc):

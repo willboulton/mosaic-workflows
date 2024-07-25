@@ -74,7 +74,7 @@ set-resources:
     # Total time mapping: 6488 s i.e. about 2 hours + I think 1 more hour. 
     # Something like 2 1/2 hours. 
 
-    - kallisto:mem=""
+    - kallisto:mem="32GB"
     - kallisto:slurm_partition="compute-64-512,compute-24-96"
     - kallisto:runtime=120
     - kallisto:cpus_per_task=4
@@ -87,6 +87,10 @@ set-resources:
     - vamb_single_assembly:cpus_per_task=1
     - vamb_single_assembly:slurm_extra="--qos=gpu-rtx --gres=gpu:1"
 
+    - checkm2:mem="32G"
+    - checkm2:slurm_partition="compute-64-512,compute-24-96"
+    - checkm2:runtime=240
+    - checkm2:cpus_per_task=16
     
 set-threads:
     - deinterleave=4

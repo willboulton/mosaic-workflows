@@ -1,5 +1,3 @@
-#include: "00_utils.smk"
-
 def collate_fastqs(wc):
     filter_samples = [s for s in samples if s.batch in run_batch]
     return (
@@ -11,7 +9,7 @@ rule concat_fastq:
     input:
         collate_fastqs
     output:
-        f"{assembly_dir}/" + "{batch}/{batch}-EVU.fastq.gz"
+        f"{assembly_dir}/{{batch}}/{{batch}}-EVU.fastq.gz"
     shell:
         """
         cat {input} > {output}
@@ -19,7 +17,7 @@ rule concat_fastq:
 
 rule megahit:
     input:
-        f"{assembly_dir}" + "/{batch}/{batch}-EVU.fastq.gz"
+        f"{assembly_dir}/{{batch}}/{{batch}}-EVU.fastq.gz"
     output:
         directory(f"{assembly_dir}" + "/{batch}/megahit")
     envmodules:
