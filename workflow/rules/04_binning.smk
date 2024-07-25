@@ -4,8 +4,8 @@ rule extract_files:
     input:
         f"{binning_dir}/{{sample}}/{{sample}}.tar.gz"
     output:
-        fna = "{sample}/{sample}.a.fna"
-        depth = "{sample}/{sample}.a.depth.txt"
+        fna = "{sample}/{sample}.a.fna",
+        depth = "{sample}/{sample}.a.depth.txt",
         phylodist = "{sample}/{sample}.a.phylodist.txt"
     shell:
         """
