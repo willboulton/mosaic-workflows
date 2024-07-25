@@ -102,9 +102,9 @@ rule comebin_single_assembly:
         cd {binning_dir}/{wildcards.sample}
         python {software.comebin_src}/scripts/Filter_tooshort.py {wildcards.sample}.a.renamed.fna 1000
         cd {software.comebin_src}
-        scripts/contig_to_scaffold_ids.py {input.fna} {input.map} ${{input.fna}$.}.renamed.fna
+        scripts/contig_to_scaffold_ids.py {input.fna} {input.map} {binning_dir}/{wildcards.sample}/{wildcards.sample}.a.renamed.fna
         bash run_comebin.sh \\
-            -a ${{input.fna}$.}.renamed_1000.fa \\
+            -a {wildcards.sample}.renamed_1000.fa \\
             -p {input.bam} \\
             -o {output} \\
             -t {threads} 
