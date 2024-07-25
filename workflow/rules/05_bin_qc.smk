@@ -11,7 +11,7 @@ rule checkm2:
     input:
         f"{binning_dir}/{{sample}}/{{binner}}"
     output:
-        f"{binning_dir}/{{sample}}/{{binner}}_checkm"
+        directory(f"{binning_dir}/{{sample}}/{{binner}}_checkm")
     params:
         extension = get_extension_by_binner
     conda:
@@ -27,9 +27,10 @@ rule checkm2:
         """
 
 # rule vacuum_blobology:
-# rule flye_reassembly:
-# rule tidy_bins_with_assembly_graph:
-# rule bandage_view_assembly:
 # rule identify_euks:
 # rule eukcc:
 # rule busco:
+
+# rule flye_reassembly:
+# rule tidy_bins_with_assembly_graph:
+# rule bandage_view_assembly:

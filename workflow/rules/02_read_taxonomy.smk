@@ -156,12 +156,11 @@ rule taxometer:
 
 rule tiara:
     input:
-        f"{binning_dir}/" + "{sample}.a.fna"
+        f"{binning_dir}/{{sample}}.a.fna"
     output:
-        f"{taxo_tmpdir}/" + "{sample}.tiara.txt"
+        f"{taxo_tmpdir}/{{sample}}.tiara.txt"
     conda:
         "tiara"
-    threads: 4
     shell:
         """
         tiara -m 2000 -t {threads} -i {input} -o {output}
