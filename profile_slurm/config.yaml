@@ -99,3 +99,4 @@ set-threads:
     - kallisto=4
     - strobealign=4
     - vamb_single_assembly=40
+    - checkm2=16

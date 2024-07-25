@@ -1,8 +1,22 @@
 #include: "00_utils.smk"
 
+rule extract_files:
+    input:
+        f"{binning_dir}/{{sample}}/{{sample}}.tar.gz"
+    output:
+        fna = "{sample}/{sample}.a.fna"
+        depth = "{sample}/{sample}.a.depth.txt"
+        phylodist = "{sample}/{sample}.a.phylodist.txt"
+    shell:
+        """
+        tar -xzf {input} > {output.fna}
+        tar -xzf {input} > {output.phylodist}
+        tar -xzf {input} > {output.depth}
+        """
+
 rule vamb_single_assembly:
     input:
-        tar="/gpfs/data/mock_lab/will/mosaic_tmp/binning_dir/{sample}/{sample}.a.fna",
+        fna=f"{binning_dir}/" + "{sample}/{sample}.a.fna",
         bam="/gpfs/home/qcf21tku/scratch/{sample}/bam/{sample}.sorted.bam"
     output:
         directory(f"{binning_dir}/" + "{sample}/vamb")
@@ -40,8 +54,6 @@ rule metabat_single_assembly:
     shell:
         """
         cd {binning_dir}
-        tar xzf {input.img_file} {params.fna}
-        tar xzf {input.img_file} {params.depth}
 
         metabat2 \\
             -i {params.fna} \\
@@ -49,7 +61,6 @@ rule metabat_single_assembly:
             -m 2000 \\
             -o {wildcards.sample}/metabat/mbat \\
             -t {threads} -v
-        rm -f {wildcards.sample}/{wildcards.sample}.*
         """
 
 rule metabat_coassembly:
