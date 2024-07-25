@@ -116,7 +116,7 @@ rule mmseqs_lca:
 
 rule vamb_convert_coverage:
     input:
-        f"{bam_tmpdir}" + "/{batch}/{sample}.sorted.bam"
+        # f"{bam_tmpdir}" + "/{batch}/{sample}.sorted.bam"
     output:
         jgi_depths="",
         npz=""
