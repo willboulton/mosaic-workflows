@@ -81,10 +81,10 @@ set-resources:
     # kallisto index: 24 GB 4 threads ran OOM
     # on 32 GB similar to strobealign
 
-    - vamb_single_assembly:mem="16G"
+    - vamb_single_assembly:mem="4G"
     - vamb_single_assembly:slurm_partition="gpu-rtx6000-2"
     - vamb_single_assembly:runtime=60
-    - vamb_single_assembly:cpus_per_task=1
+    - vamb_single_assembly:cpus_per_task=16
     - vamb_single_assembly:slurm_extra="--qos=gpu-rtx --gres=gpu:1"
 
     - checkm2:mem="32G"
@@ -102,5 +102,5 @@ set-threads:
     - metabat_single_assembly=4
     - kallisto=4
     - strobealign=4
-    - vamb_single_assembly=40
+    - vamb_single_assembly=16
     - checkm2=16
