@@ -26,10 +26,10 @@ def select_samples_2(wc):
         # [ f"{taxo_tmpdir}/{s.batch}/{s.img_taxon_id}.fastq.cf" for s in filter_samples ] + 
         # [ f"{taxo_tmpdir}/{s.batch}/{s.img_taxon_id}.faa.mms2lca" for s in filter_samples ] + 
         # [ f"{bam_tmpdir}/{s.batch}/{s.img_taxon_id}.sorted.bam" for s in filter_samples ] +
-        [ f"{binning_dir}/{s.img_taxon_id}/metabat_checkm" for s in samples ] + 
-        [ f"{binning_dir}/{s.img_taxon_id}/comebin_checkm" for s in samples ] + 
-        [ f"{binning_dir}/{s.img_taxon_id}/vamb_checkm" for s in samples ] + 
-        [ f"{binning_dir}/{s.img_taxon_id}/vacuum_checkm" for s in samples ]
+        [ f"{binning_dir}/{s.img_taxon_id}/metabat_checkm" for s in filter_samples ] + 
+        [ f"{binning_dir}/{s.img_taxon_id}/comebin_checkm" for s in filter_samples ] + 
+        [ f"{binning_dir}/{s.img_taxon_id}/vamb_checkm" for s in filter_samples ] + 
+        [ f"{binning_dir}/{s.img_taxon_id}/vacuum_checkm" for s in filter_samples ]
     )
 
 onstart:

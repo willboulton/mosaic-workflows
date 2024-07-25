@@ -18,8 +18,6 @@ rule vamb_single_assembly:
         bam="/gpfs/home/qcf21tku/scratch/{sample}/bam/{sample}.sorted.bam"
     output:
         directory(f"{binning_dir}/" + "{sample}/vamb")
-    params:
-        ""
     conda:
         "anvio"
     envmodules:
