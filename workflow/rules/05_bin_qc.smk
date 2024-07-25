@@ -11,7 +11,7 @@ rule checkm2:
     input:
         f"{binning_dir}/{{sample}}/{{binner}}"
     output:
-        f"{binning_dir}/{{sample}}/{{binner}}_checkm2"
+        f"{binning_dir}/{{sample}}/{{binner}}_checkm"
     params:
         extension = get_extension_by_binner
     conda:
