@@ -2,9 +2,9 @@ rule extract_files:
     input:
         f"{binning_dir}/{{sample}}/{{sample}}.tar.gz"
     output:
-        fna = "{sample}/{sample}.a.fna",
-        depth = "{sample}/{sample}.a.depth.txt",
-        phylodist = "{sample}/{sample}.a.phylodist.txt"
+        fna = f"{binning_dir}/{{sample}}/{{sample}}.a.fna",
+        depth = f"{binning_dir}/{{sample}}/{{sample}}.a.depth.txt",
+        phylodist = f"{binning_dir}/{{sample}}/{{sample}}.a.phylodist.txt"
     shell:
         """
         tar -xzf {input} > {output.fna}
@@ -14,7 +14,7 @@ rule extract_files:
 
 rule vamb_single_assembly:
     input:
-        fna=f"{binning_dir}/" + "{sample}/{sample}.a.fna",
+        fna=f"{binning_dir}/{{sample}}/{{sample}}.a.fna",
         bam="/gpfs/home/qcf21tku/scratch/{sample}/bam/{sample}.sorted.bam"
     output:
         directory(f"{binning_dir}/" + "{sample}/vamb")
