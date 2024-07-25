@@ -94,7 +94,7 @@ rule comebin_single_assembly:
         map = f"{binning_dir}/{{sample}}/{{sample}}.a.map.txt",
         bam = f"{bam_tmpdir}/{{sample}}/bam/{{sample}}.sorted.bam",
     output:
-        directory(f"{binning_dir}/{{sample_id}}/comebin")
+        directory(f"{binning_dir}/{{sample}}/comebin")
     conda:
         "comebin_env"
     shell:
