@@ -1,57 +1,43 @@
-rule deinterleave:
+rule extract_files:
     input:
-        f"{fastq_tmpdir}" + "/{batch}/{sample}-filter-METAG.fastq.gz",
+        f"{img_folder}/{{sample}}.tar.gz"
     output:
-        fq1=f"{fastq_tmpdir}" + "/{batch}/{sample}-filter-METAG_1.fastq.gz",
-        fq2=f"{fastq_tmpdir}" + "/{batch}/{sample}-filter-METAG_2.fastq.gz",
-    conda:
-        "bio"
+        fna = f"{binning_dir}/{{sample}}/{{sample}}.a.fna",
+        depth = f"{binning_dir}/{{sample}}/{{sample}}.a.depth.txt",
+        phylodist = f"{binning_dir}/{{sample}}/{{sample}}.a.phylodist.txt",
+        map = f"{binning_dir}/{{sample}}/{{sample}}.a.map.txt",
+        faa = f"{binning_dir}/{{sample}}/{{sample}}.a.faa"
     shell:
         """
-        cd {fastq_tmpdir}/{wildcards.batch}
-        {software.utils}/deinterleave_parallel {input}
+        tar -xzf {input} > {output.fna}
+        tar -xzf {input} > {output.faa}
+        tar -xzf {input} > {output.phylodist}
+        tar -xzf {input} > {output.depth}
+        tar -xzf {input} > {output.map}
         """
+
 
 rule centrifuge_on_contigs:
     input:
-        tar = f"{img_folder}" + "/{sample}.tar.gz"
+        fna = f"{binning_dir}/{{sample}}/{{sample}}.a.fna"
     output:
-        f"{taxo_tmpdir}" + "/{batch}/{sample}.a.cf"
+        f"{taxo_tmpdir}/{{sample}}.a.cf"
     envmodules:
         "centrifuge/1.0.4"
     shell:
         """
         centrifuge -x {software.centrifuge_idx} \\
-            -U <(zcat {input.tar} | tar xfO - {wildcards.sample}/{wildcards.sample}.a.fna) \\
-            -f -p {resources.cpus_per_task} -S {output}
+            -U {input.fna} \\
+            -f -p {threads} -S {output}
         """
 
-rule bwa_mem:
-    input:
-        tar = f"{img_folder}" + "/{sample}.tar.gz",
-        fq = f"{fastq_tmpdir}" + "/{batch}/{sample}-filter-METAG.fastq.gz"
-    output:
-        f"{bam_tmpdir}" + "/{batch}/{sample}.sorted.bam"
-    envmodules:
-        "bwa/0.7.17",
-        "samtools/1.16.1"
-    shell:
-        """
-        cd {bam_tmpdir}/{wildcards.batch}
-        zcat {input.tar} | \\
-            tar xfO - {wildcards.sample}/{wildcards.sample}.a.fna > {wildcards.sample}.a.fna
-        bwa index -a bwtsw {wildcards.sample}.a.fna
-        bwa mem -M -t {threads} \\
-            {wildcards.sample}.a.fna {input.fq} | \\
-        samtools sort --threads {threads} -o {output} 
-        """
 
 rule get_unmapped_reads:
     input:
-        f"{bam_tmpdir}" + "/{batch}/{sample}.sorted.bam"
+        f"{bam_tmpdir}/{{sample}}/bam/{{sample}}.sorted.bam"
     output:
-        fq1=f"{fastq_tmpdir}" + "/{batch}/{sample}-unmapped_1.fastq.gz",
-        fq2=f"{fastq_tmpdir}" + "/{batch}/{sample}-unmapped_2.fastq.gz"
+        fq1=f"{fastq_tmpdir}/{{sample}}-unmapped_1.fastq.gz",
+        fq2=f"{fastq_tmpdir}/{{sample}}-unmapped_2.fastq.gz"
     envmodules:
         "samtools/1.16.1"
     shell:
@@ -66,10 +52,11 @@ rule get_unmapped_reads:
 
 rule centrifuge_on_reads:
     input:
-        fq1=f"{fastq_tmpdir}" + "/{batch}/{sample}-unmapped_1.fastq.gz",
-        fq2=f"{fastq_tmpdir}" + "/{batch}/{sample}-unmapped_2.fastq.gz",
+        fq1=f"{fastq_tmpdir}/{{sample}}-unmapped_1.fastq.gz",
+        fq2=f"{fastq_tmpdir}/{{sample}}-unmapped_2.fastq.gz",
     output:
-        f"{taxo_tmpdir}" + "/{batch}/{sample}.unmapped.fastq.cf"
+        all = f"{taxo_tmpdir}/{{sample}}.unmapped.fastq.cf",
+        euks = f"{taxo_tmpdir}/{{sample}}/{{sample}}.euks.cf"
     envmodules:
         "centrifuge/1.0.4"
     shell:
@@ -77,16 +64,18 @@ rule centrifuge_on_reads:
         centrifuge -x {software.centrifuge_idx} \\
             -1 {input.fq1} \\
             -2 {input.fq2} \\
-            -q -p {resources.cpus_per_task} -S {output}
+            -q -p {threads} -S {output.all}
+
+        grep -P "Eukaryota|Unk|viria" {output.all} | cut -f 1 > {output.euks}
         """
 
 rule mmseqs:
     input:
-        f"{img_folder}" + "/{sample}.tar.gz"
+        f"{binning_dir}/{{sample}}/{{sample}}.a.faa"
     output:
-        f"{taxo_tmpdir}" + "/{batch}/{sample}.faa.mms2"
+        f"{taxo_tmpdir}/{{sample}}/{{sample}}.faa.mms2"
     params:
-        tmpdir = f"{taxo_tmpdir}" + "/{batch}/{sample}_mmseqs"
+        tmpdir = f"{taxo_tmpdir}/{{sample}}/{{sample}}_mmseqs"
     envmodules:
         "MMSeqs2/14"
     shell:
@@ -96,17 +85,17 @@ rule mmseqs:
             {taxo_tmpdir}/{wildcards.batch} \\
             {params.tmpdir} \\
             {software.mmseqs_db} \\
-            {resources.cpus_per_task} \\
+            {threads} \\
             {img_folder}
         """
 
 rule mmseqs_lca:
     input:
-        f"{taxo_tmpdir}" + "/{batch}/{sample}.faa.mms2"
+        f"{taxo_tmpdir}/{{sample}}/{{sample}}.faa.mms2"
     output:
-        f"{taxo_tmpdir}" + "/{batch}/{sample}.faa.mms2lca"
+        f"{taxo_tmpdir}/{{sample}}/{{sample}}.faa.mms2lca"
     params:
-        taxonomy_files = ""
+        taxonomy_files = f"{software.taxdump}"
     conda:
         "bio"
     shell:
@@ -114,51 +103,11 @@ rule mmseqs_lca:
         scripts/mmseqs_lca.py {input} {params.taxonomy_files} {output}
         """
 
-rule vamb_convert_coverage:
-    input:
-        # f"{bam_tmpdir}" + "/{batch}/{sample}.sorted.bam"
-    output:
-        jgi_depths="",
-        npz=""
-    conda:
-        "anvio"
-    shell:
-        """
-        jgi_summarize_bam_contig_depths ---
-        scripts/jgi_to_vamb_abd.py \\
-            {input} \\   # 1. input file
-            2000 \\      # 2. contigLen used in vamb input
-            {output.npz} # 3. output path
-        """
-
-rule taxometer:
-    input:
-        fna = "",
-        bam = ""
-    output:
-        directory("")
-    conda:
-        "vamb"
-    shell:
-        # Perhaps these are better to use - use what's available!
-        #  --bamfiles /path/to/bam/*.bam \
-        #  --taxonomy another_taxonomy.csv \
-        """
-        {software}/vamb taxometer \\
-            --fasta {input.fna} \\
-            --outdir {output} \\
-            --bamfiles {input.bam} \\
-            --taxonomy {input.phylodist} \\
-            --column_contigs contigs \\
-            --column_taxonomy taxonomy \\
-            --delimiter_taxonomy ,
-        """
-
 rule tiara:
     input:
         f"{binning_dir}/{{sample}}.a.fna"
     output:
-        f"{taxo_tmpdir}/{{sample}}.tiara.txt"
+        f"{taxo_tmpdir}/{{sample}}/{{sample}}.a.tiara.txt"
     conda:
         "tiara"
     shell:
@@ -170,29 +119,37 @@ rule tiara:
 # Priority is:
 #  - first trust taxometer from the phylodist file 
 #  - then trust taxometer from mmseqs
+#  - then tiara
 #  - add any remaining contigs from centrifuge
 rule aggregate_taxonomy:
     input:
-        mms2 = "",
-        cent = "",
-        taxo = ""
+        phylodist = f"{binning_dir}/{{sample}}/{{sample}}.a.phylodist.txt",
+        mms2 = f"{taxo_tmpdir}/{{sample}}/{{sample}}.faa.mms2lca",
+        tiara = f"{taxo_tmpdir}/{{sample}}/{{sample}}.a.tiara.txt",
+        cent = f"{taxo_tmpdir}/{{sample}}.unmapped.fastq.cf"
     output:
-        unmapped = "",
-        mapped = ""
+        f"{taxo_tmpdir}/{{sample}}/{{sample}}.a.euks.txt"
     conda:
         "bio"
-    script: 
-        "aggregate_taxonomy.py {input} {output}"
+    shell: 
+        """
+        scripts/aggregate_taxonomy.py \\
+            {input.phylodist} \\
+            {input.mms2} \\
+            {input.tiara} \\
+            {input.cent} \\
+            {output}
+        """
 
 rule split_fastq:
     input:
-        fq = f"{fastq_tmpdir}" + "/{batch}/{sample}-filter-METAG.fastq.gz",
-        bam = f"{bam_tmpdir}" + "",
-        unmapped = f"{taxo_tmpdir}" + "",
-        mapped = f"{taxo_tmpdir}" + ""
+        fq = f"{fastq_tmpdir}/{{sample}}-filter-METAG.fastq.gz",
+        bam = f"{bam_tmpdir}/{{sample}}/bam/{{sample}}.sorted.bam",
+        unmapped = f"{taxo_tmpdir}/{{sample}}/{{sample}}.euks.cf",
+        mapped = f"{taxo_tmpdir}/{{sample}}/{{sample}}.a.euks.txt"
     output:
-        mapped = f"{fastq_tmpdir}" + "/{batch}/{sample}-EVU-mapped.fastq.gz",
-        unmapped = f"{fastq_tmpdir}" + "/{batch}/{sample}-EVU-unmapped.fastq.gz"
+        mapped = f"{fastq_tmpdir}/{{batch}}/{{sample}}-EVU-mapped.fastq.gz",
+        unmapped = f"{fastq_tmpdir}/{{batch}}/{{sample}}-EVU-unmapped.fastq.gz"
     envmodules:
         "bbmap/37.28", 
         "samtools/1.16.1"

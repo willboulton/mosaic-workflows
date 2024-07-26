@@ -19,7 +19,7 @@ rule megahit:
     input:
         f"{assembly_dir}/{{batch}}/{{batch}}-EVU.fastq.gz"
     output:
-        directory(f"{assembly_dir}" + "/{batch}/megahit")
+        directory(f"{assembly_dir}/{{batch}}/megahit")
     envmodules:
         "megahit/1.2.9"
     shell:

@@ -14,6 +14,7 @@ software:
     checkm_db: "/gpfs/home/qcf21tku/scratch/checkm2_db/CheckM2_database/uniref100.KO.1.dmnd"
     kallisto: "/gpfs/home/qcf21tku/software/kallisto/build/src"
     comebin_src: "/gpfs/home/qcf21tku/software/COMEBin/COMEBin"
+    taxdump: "/gpfs/home/qcf21tku/software/taxdump"
 globus:
     nersc_uuid: "6bdc7956-fc0f-4ad2-989c-7aa5ee643a79"
     ada_uuid: "59222a93-92c2-11ee-8c81-fd88ce9321ad"

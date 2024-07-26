@@ -1,6 +1,6 @@
 def get_extension_by_binner(wc):
     extn_map = {
-        "comebin":"fna",
+        "comebin":"fa",
         "metabat":"fna",
         "vacuum":"fna",
         "vamb":"fna"

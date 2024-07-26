@@ -1,19 +1,3 @@
-rule extract_files:
-    input:
-        f"{img_folder}/{{sample}}.tar.gz"
-    output:
-        fna = f"{binning_dir}/{{sample}}/{{sample}}.a.fna",
-        depth = f"{binning_dir}/{{sample}}/{{sample}}.a.depth.txt",
-        phylodist = f"{binning_dir}/{{sample}}/{{sample}}.a.phylodist.txt",
-        map = f"{binning_dir}/{{sample}}/{{sample}}.a.map.txt"
-    shell:
-        """
-        tar -xzf {input} > {output.fna}
-        tar -xzf {input} > {output.phylodist}
-        tar -xzf {input} > {output.depth}
-        tar -xzf {input} > {output.map}
-        """
-
 rule vamb_single_assembly:
     input:
         fna = f"{binning_dir}/{{sample}}/{{sample}}.a.fna",
