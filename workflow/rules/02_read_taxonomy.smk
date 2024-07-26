@@ -105,7 +105,7 @@ rule mmseqs_lca:
 
 rule tiara:
     input:
-        f"{binning_dir}/{{sample}}.a.fna"
+        f"{binning_dir}/{{sample}}/{{sample}}.a.fna"
     output:
         f"{taxo_tmpdir}/{{sample}}/{{sample}}.a.tiara.txt"
     conda:
