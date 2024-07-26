@@ -82,7 +82,7 @@ rule mmseqs:
         """
         scripts/run_mmseqs.sh \\
             {wildcards.sample} \\
-            {taxo_tmpdir}/{wildcards.batch} \\
+            {taxo_tmpdir}/{wildcards.sample} \\
             {params.tmpdir} \\
             {software.mmseqs_db} \\
             {threads} \\
