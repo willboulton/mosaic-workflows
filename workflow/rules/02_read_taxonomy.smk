@@ -3,17 +3,18 @@ rule extract_files:
         f"{img_folder}/{{sample}}.tar.gz"
     output:
         fna = f"{binning_dir}/{{sample}}/{{sample}}.a.fna",
-        depth = f"{binning_dir}/{{sample}}/{{sample}}.a.depth.txt",
+        faa = f"{binning_dir}/{{sample}}/{{sample}}.a.faa",
         phylodist = f"{binning_dir}/{{sample}}/{{sample}}.a.phylodist.txt",
         map = f"{binning_dir}/{{sample}}/{{sample}}.a.map.txt",
-        faa = f"{binning_dir}/{{sample}}/{{sample}}.a.faa"
+        depth = f"{binning_dir}/{{sample}}/{{sample}}.a.depth.txt"
+
     shell:
         """
-        tar -xzf {input} > {output.fna}
-        tar -xzf {input} > {output.faa}
-        tar -xzf {input} > {output.phylodist}
-        tar -xzf {input} > {output.depth}
-        tar -xzf {input} > {output.map}
+        tar -xzfO {input} {wildcards.sample}/{wildcards.sample}.a.fna > {output.fna}
+        tar -xzfO {input} {wildcards.sample}/{wildcards.sample}.a.faa > {output.faa}
+        tar -xzfO {input} {wildcards.sample}/{wildcards.sample}.a.phylodist.txt > {output.phylodist}
+        tar -xzfO {input} {wildcards.sample}/{wildcards.sample}.a.depth.txt > {output.depth}
+        tar -xzfO {input} {wildcards.sample}/{wildcards.sample}.a.map.txt > {output.map}
         """
 
 
@@ -21,7 +22,7 @@ rule centrifuge_on_contigs:
     input:
         fna = f"{binning_dir}/{{sample}}/{{sample}}.a.fna"
     output:
-        f"{taxo_tmpdir}/{{sample}}.a.cf"
+        f"{taxo_tmpdir}/{{sample}}/{{sample}}.a.cf"
     envmodules:
         "centrifuge/1.0.4"
     shell:
@@ -55,18 +56,22 @@ rule centrifuge_on_reads:
         fq1=f"{fastq_tmpdir}/{{sample}}-unmapped_1.fastq.gz",
         fq2=f"{fastq_tmpdir}/{{sample}}-unmapped_2.fastq.gz",
     output:
-        all = f"{taxo_tmpdir}/{{sample}}.unmapped.fastq.cf",
-        euks = f"{taxo_tmpdir}/{{sample}}/{{sample}}.euks.cf"
+        all = f"{taxo_tmpdir}/{{sample}}/{{sample}}.unmapped.fastq.cf",
+        evu = f"{taxo_tmpdir}/{{sample}}/{{sample}}.euks.cf"
     envmodules:
         "centrifuge/1.0.4"
+    conda:
+        "bio"
     shell:
         """
         centrifuge -x {software.centrifuge_idx} \\
-            -1 {input.fq1} \\
-            -2 {input.fq2} \\
+            -1 {input.fq1} -2 {input.fq2} \\
             -q -p {threads} -S {output.all}
 
-        grep -P "Eukaryota|Unk|viria" {output.all} | cut -f 1 > {output.euks}
+        scripts/centrifuge_reads_filter_EVU.py \\
+            {output.all} \\
+            {software.taxdump} \\
+            {output.evu}
         """
 
 rule mmseqs:
@@ -86,7 +91,7 @@ rule mmseqs:
             {params.tmpdir} \\
             {software.mmseqs_db} \\
             {threads} \\
-            {img_folder}
+            {binning_dir}/{wildcards.sample}
         """
 
 rule mmseqs_lca:
@@ -126,7 +131,7 @@ rule aggregate_taxonomy:
         phylodist = f"{binning_dir}/{{sample}}/{{sample}}.a.phylodist.txt",
         mms2 = f"{taxo_tmpdir}/{{sample}}/{{sample}}.faa.mms2lca",
         tiara = f"{taxo_tmpdir}/{{sample}}/{{sample}}.a.tiara.txt",
-        cent = f"{taxo_tmpdir}/{{sample}}.unmapped.fastq.cf"
+        cent = f"{taxo_tmpdir}/{{sample}}/{{sample}}.a.cf"
     output:
         f"{taxo_tmpdir}/{{sample}}/{{sample}}.a.euks.txt"
     conda:
@@ -143,7 +148,7 @@ rule aggregate_taxonomy:
 
 rule split_fastq:
     input:
-        fq = f"{fastq_tmpdir}/{{sample}}-filter-METAG.fastq.gz",
+        fna = f"{binning_dir}/{{sample}}/{{sample}}.a.fna",
         bam = f"{bam_tmpdir}/{{sample}}/bam/{{sample}}.sorted.bam",
         unmapped = f"{taxo_tmpdir}/{{sample}}/{{sample}}.euks.cf",
         mapped = f"{taxo_tmpdir}/{{sample}}/{{sample}}.a.euks.txt"
@@ -153,12 +158,23 @@ rule split_fastq:
     envmodules:
         "bbmap/37.28", 
         "samtools/1.16.1"
+    conda:
+        "blobology"
     shell:
         """
         samtools fastq -@ {threads} -f 12 {input.bam} | \\
-            filterbyname.sh include=true in=stdin.fq.gz names={input.unmapped} out={output.unmapped}
-        
-        filterbyname.sh include=true in={input.fq} names={input.mapped} out={output.mapped}
+        filterbyname.sh \\
+            include=true \\
+            in=stdin.fq.gz \\
+            names={input.unmapped} \\
+            out={output.unmapped}
+
+        seqkit grep -n {input.fna} > {taxo_tmpdir}/{wildcards.sample}.a.euks.fna
+        reformat.sh \\
+            in={input.bam} \\
+            ref={taxo_tmpdir}/{wildcards.sample}.a.euks.fna \\
+            out={output.mapped} \\
+            filterbits=12
         """
 
 

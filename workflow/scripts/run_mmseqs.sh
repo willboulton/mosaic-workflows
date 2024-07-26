@@ -19,8 +19,7 @@ TARGET_DB=$4
 # n. threads
 CPUS_PER_TASK=$5
 
-# folder containing all the zipped sample annotations 
-# e.g. /path/to/33000xxxxx.tar.gz
+# folder containing files from tar.gz that have been unzipped
 IMG_FOLDER=$6
 
 
@@ -32,7 +31,7 @@ if [ ! -d $OUT ]; then
     mkdir $OUT
 fi
 
-zcat ${IMG_FOLDER}/${SAMPLE_ID}.tar.gz | tar xfO - ${SAMPLE_ID}.a.faa > $TMP/${SAMPLE_ID}.a.faa
+cp $IMG_FOLDER/${SAMPLE_ID}.a.faa $TMP/${SAMPLE_ID}.a.faa
 
 QUERY=$TMP/${SAMPLE_ID}_DB
 
