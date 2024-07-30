@@ -102,11 +102,42 @@ set-resources:
     - tiara:runtime=120
     - tiara:cpus_per_task=4
 
+    - comebin_single_assembly:mem="64G"
+    - comebin_single_assembly:slurm_partition="compute-64-512,compute-24-96"
+    - comebin_single_assembly:runtime=720
+    - comebin_single_assembly:cpus_per_task=8
+    - comebin_single_assembly:slurm_extra="'--qos=gpu-rtx --gres=gpu:1'"
+
+    - mmseqs_lca:mem="8G"
+    - mmseqs_lca:slurm_partition="compute-64-512,compute-24-96"
+    - mmseqs_lca:runtime=30
+    - mmseqs_lca:cpus_per_task=1
+
+    - vacuum_single_assembly:mem="16G"
+    - vacuum_single_assembly:slurm_partition="compute-64-512,compute-24-96"
+    - vacuum_single_assembly:runtime=100
+    - vacuum_single_assembly:cpus_per_task=1
+
+    - aggregate_taxonomy:mem="8G"
+    - aggregate_taxonomy:slurm_partition="compute-64-512,compute-24-96"
+    - aggregate_taxonomy:runtime=30
+    - aggregate_taxonomy:cpus_per_task=1
+
+    - concat_fastq:mem="8G"
+    - concat_fastq:slurm_partition="compute-64-512,compute-24-96"
+    - concat_fastq:runtime=60
+    - concat_fastq:cpus_per_task=1
+
+    - split_fastq:mem="16G"
+    - split_fastq:slurm_partition="compute-64-512,compute-24-96"
+    - split_fastq:runtime=240
+    - split_fastq:cpus_per_task=4
+
     - template:mem="64G"
     - template:slurm_partition="compute-64-512,compute-24-96"
     - template:runtime=600
     - template:cpus_per_task=32
-    
+
 set-threads:
     - deinterleave=4
     - centrifuge_on_contigs=16
@@ -121,4 +152,10 @@ set-threads:
     - checkm2=16
     - megahit=32
     - tiara=4
+    - comebin_single_assembly=8
+    - mmseqs_lca=1
+    - vacuum_single_assembly=1
+    - aggregate_taxonomy=1
+    - concat_fastq=1
+    - split_fastq=4
     - template=1
