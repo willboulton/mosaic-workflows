@@ -34,12 +34,15 @@ onstart:
     print("starting")
     print("********")
     shell(f"mkdir -p {binning_dir}")
+    
     for b in run_batch:
-        shell(f"mkdir -p {fastq_tmpdir}/{b}")
-        shell(f"mkdir -p {taxo_tmpdir}/{b}")
-        shell(f"mkdir -p {bam_tmpdir}/{b}")
         shell(f"mkdir -p {assembly_dir}/{b}")
 
+    for s in samples:
+        if s.batch in run_batch:
+            shell(f"mkdir -p {fastq_tmpdir}/{s}")
+            shell(f"mkdir -p {taxo_tmpdir}/{s}")
+            shell(f"mkdir -p {bam_tmpdir}/{s}")
 
 rule all:
     input: select_samples_2

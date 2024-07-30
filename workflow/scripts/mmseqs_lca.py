@@ -3,77 +3,18 @@
 import pandas as pd
 import ete3
 from sys import argv
+from functools import lru_cache
 from collections import Counter
 
-
-def weighted_sum(counter_aggregation, node):
-    
-    # remove root node if it's not the only thing there
-    # as this only drags estimates to be less specific
-    
-    if 1 in counter_aggregation:
-        root_count = counter_aggregation.pop(1)
-    
-    if len(counter_aggregation) == 0:
-        return root_count * node.get_distance(taxid_dict[1])
-    
-    return sum((w * node.get_distance(taxid_dict[n]) for n, w in counter_aggregation.items()))
-
-
-def lineage(node):
+@lru_cache(maxsize = 64000)
+def get_lineage(node):
 
     if node.up:
-        x = lineage(node.up)
+        x = get_lineage(node.up)
         x.append(node)
         return x
 
     return [node]
-
-def minimise_weighted_sum(counter_aggregation):
-    
-    ans = {}
-    
-    def agg_weights(counter_aggregation, node):
-
-        ans[node.name] = weighted_sum(counter_aggregation, node)
-
-        if node.up:
-            agg_weights(counter_aggregation, node.up)
-    
-    for n in counter_aggregation.keys():
-        
-        ans = {}
-        agg_weights(counter_aggregation, taxid_dict[n])
-    
-    #print(ans)
-    min_dist = min([d for n,d in ans.items()])
-    #print("min dist is", min_dist)
-    
-    candidate_nodes = [taxid_dict[n] for n, d in ans.items() if d == min_dist]
-    #print(candidate_nodes)
-    
-    if len(candidate_nodes) == 1:
-        return candidate_nodes[0]
-    
-    lineages = set()
-    for c in candidate_nodes:
-        x = set(lineage(c))
-        x.remove(c)
-        lineages = lineages.union(x)
-
-    #print("lineages:", lineages)
-
-    cn = []
-    for c in candidate_nodes:
-        if not c in lineages:
-            cn.append(c)
-
-    #print(cn)
-
-    if len(cn) == 1:
-        return cn[0]
-
-    return root.get_common_ancestor(cn)
 
 
 def safe_get(n, sep=';'):
@@ -90,18 +31,22 @@ def fix_name(name_str):
     if name_str in ["Archaea", "Bacteria", "Eukaryota"]:
         return name_str
     if "vir" in name_str:
-        return "Viruses"
-    return "other"
+        return "Virus"
+    return "Unknown"
 
 
-if __name__ == "__main__":
+def generate_lineage_string(taxid, name_map):
 
-    # mmseqs input file
-    mmseqs_tsv = argv[1]
+    lineage = get_lineage(taxid_dict[taxid])
+    
+    start = min(len(lineage) - 1, 2)
+    
+    list_of_taxa = [name_map.get(int(n.name), "") for n in lineage[start:]]
+    
+    return ";".join(list_of_taxa)
 
-    # STEP 1: First read in the NCBI taxonomy tree
 
-    taxdump_folder = argv[2]
+def ncbi_taxonomy_data(taxdump_folder):
     df = pd.read_csv(
         f"{taxdump_folder}/nodes.dmp", 
         sep = "|", 
@@ -135,10 +80,90 @@ if __name__ == "__main__":
             
         taxid_dict[parentid].add_child(taxid_dict[taxid])
 
+    return merged_names, taxid_dict
+
+class TaxData():
+    __slots__ = ("leaf", "weight", "depth")
+    
+    def __init__(self, leaf = False, weight = 0, depth = 0):
+        
+        self.leaf = leaf
+        self.weight = weight
+        self.depth = depth
+        
+    def __repr__(self):
+        return f"({self.leaf}, {self.weight}, {self.depth})"
+
+    
+uninformative_taxa = [
+    1, # root node
+    2, # bacteria
+    10239, # viruses
+    131567, # cellular organisms
+    2787823, # unknown 1
+    2787854, # unknown 2
+    2157, # archaea
+    2759 # eukaryota
+]
+
+def aggregate_tax_estimates(counter_aggregation):
+    
+    ans = {}
+    total_weight = sum(w for idx, w in counter_aggregation.items() if not (idx in uninformative_taxa or not idx in taxid_dict))
+    
+    for tax, weight in counter_aggregation.items():
+        depth = len(get_lineage(taxid_dict.get(tax))) if tax in taxid_dict else 0
+        ans[tax] = TaxData(leaf = True, weight = weight, depth = depth)
+    
+    for tax, weight in counter_aggregation.items():
+        
+        lineage_tax = [t.name for t in get_lineage(taxid_dict.get(tax))][:-1] if tax in taxid_dict else [1]
+        #print(lineage_tax, ":\t", weight)
+        for depth, l in enumerate(lineage_tax):
+            if l in ans:
+                ans[l].leaf = False
+                ans[l].weight += weight
+                ans[l].depth = max(ans[l].depth, depth)
+            else:
+                ans[l] = TaxData(leaf = False, weight = weight, depth = depth)
+
+    #print(ans)
+
+    while True:
+        
+        maxdepth = max([t.depth for _, t in ans.items()])
+        
+        for tax in ans:
+            if ans[tax].leaf:
+                if 2 * ans[tax].weight > total_weight:
+                    return tax
+        
+        best_weight_so_far = -1
+        best_tax_id = 1
+        for tax in ans:
+            if ans[tax].leaf and ans[tax].depth == maxdepth:
+                if ans[tax].weight > best_weight_so_far:
+                    best_tax_id = tax
+                
+        best_tax = ans.pop(best_tax_id)
+        parent_id = get_lineage(taxid_dict[best_tax_id])[-2].name
+        ans[parent_id].leaf = True
+
+
+
+if __name__ == "__main__":
+
+    # mmseqs input file
+    mmseqs_tsv = argv[1]
+
+    # STEP 1: First read in the NCBI taxonomy tree
+    taxdump_folder = argv[2]
+    merged_names, taxid_dict = ncbi_taxonomy_data(taxdump_folder)
+
 
     # STEP 2: Next, read in mmseqs tsv file as snakemake input
     dft = pd.read_csv(
-        input_mmseqs_tsv, 
+        mmseqs_tsv, 
         sep = '\t', 
         names = ['gene_id', 'taxid', 'tax_level', 'taxon', 'lineage']
     )
@@ -148,14 +173,13 @@ if __name__ == "__main__":
 
     dft = dft[['contig_id', 'taxid']]
     dft['taxid'] = dft.taxid.apply(int)
-    dft = dft[dft.taxid > 1]
     dft = dft[dft.taxid.isin(taxid_dict)]
     
     dft = dft.groupby(
             'contig_id',
             sort=False,
             dropna=True).agg(
-        lambda x: minimise_weighted_sum(Counter(x)).name
+        lambda x: aggregate_tax_estimates(Counter(x))
     )
 
     dft['contig_id'] = dft.index
@@ -164,9 +188,9 @@ if __name__ == "__main__":
         dft, merged_names[['taxid', 'taxon', 'name']], on = 'taxid'
     )
     name_map = dict(zip(merged_names.taxid, merged_names.name))
-    ans['new_lin'] = ans.taxid.apply(lambda x: ";".join([name_map.get(int(n.name), "") for n in lineage(taxid_dict[x])[2:]]))
+    ans['lineage'] = ans.taxid.apply(lambda x: generate_lineage_string(x, name_map))
 
-    ans['superkingdom'] = ans.new_lin.apply(lambda x: fix_name(safe_get(0)(x)))
+    ans['superkingdom'] = ans.lineage.apply(lambda x: fix_name(safe_get(0)(x)))
 
-    ans = ans[['contig_id', 'taxid', 'superkingdom', 'taxon', 'name']]
+    ans = ans[['contig_id', 'taxid', 'superkingdom', 'lineage', 'taxon', 'name']]
     ans.to_csv(argv[3], sep = '\t', index = False)

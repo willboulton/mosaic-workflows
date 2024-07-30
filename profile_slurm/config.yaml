@@ -91,6 +91,21 @@ set-resources:
     - checkm2:slurm_partition="compute-64-512,compute-24-96"
     - checkm2:runtime=240
     - checkm2:cpus_per_task=16
+
+    - megahit:mem="64G"
+    - megahit:slurm_partition="compute-64-512,compute-24-96"
+    - megahit:runtime=600
+    - megahit:cpus_per_task=32
+
+    - tiara:mem="16G"
+    - tiara:slurm_partition="compute-64-512,compute-24-96"
+    - tiara:runtime=120
+    - tiara:cpus_per_task=4
+
+    - template:mem="64G"
+    - template:slurm_partition="compute-64-512,compute-24-96"
+    - template:runtime=600
+    - template:cpus_per_task=32
     
 set-threads:
     - deinterleave=4
@@ -104,3 +119,6 @@ set-threads:
     - strobealign=4
     - vamb_single_assembly=16
     - checkm2=16
+    - megahit=32
+    - tiara=4
+    - template=1

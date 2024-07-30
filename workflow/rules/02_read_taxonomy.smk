@@ -4,17 +4,17 @@ rule extract_files:
     output:
         fna = f"{binning_dir}/{{sample}}/{{sample}}.a.fna",
         faa = f"{binning_dir}/{{sample}}/{{sample}}.a.faa",
-        phylodist = f"{binning_dir}/{{sample}}/{{sample}}.a.phylodist.txt",
+        phylodist = f"{taxo_tmpdir}/{{sample}}/{{sample}}.a.phylodist.txt",
         map = f"{binning_dir}/{{sample}}/{{sample}}.a.map.txt",
         depth = f"{binning_dir}/{{sample}}/{{sample}}.a.depth.txt"
 
     shell:
         """
-        tar -xzfO {input} {wildcards.sample}/{wildcards.sample}.a.fna > {output.fna}
-        tar -xzfO {input} {wildcards.sample}/{wildcards.sample}.a.faa > {output.faa}
-        tar -xzfO {input} {wildcards.sample}/{wildcards.sample}.a.phylodist.txt > {output.phylodist}
-        tar -xzfO {input} {wildcards.sample}/{wildcards.sample}.a.depth.txt > {output.depth}
-        tar -xzfO {input} {wildcards.sample}/{wildcards.sample}.a.map.txt > {output.map}
+        tar -xzf {input} {wildcards.sample}/{wildcards.sample}.a.fna -O > {output.fna}
+        tar -xzf {input} {wildcards.sample}/{wildcards.sample}.a.faa -O > {output.faa}
+        tar -xzf {input} {wildcards.sample}/{wildcards.sample}.a.phylodist.txt -O > {output.phylodist}
+        tar -xzf {input} {wildcards.sample}/{wildcards.sample}.a.map.txt -O > {output.map}
+        tar -xzf {input} {wildcards.sample}/{wildcards.sample}.a.depth.txt -O > {output.depth}
         """
 
 
@@ -128,7 +128,7 @@ rule tiara:
 #  - add any remaining contigs from centrifuge
 rule aggregate_taxonomy:
     input:
-        phylodist = f"{binning_dir}/{{sample}}/{{sample}}.a.phylodist.txt",
+        phylodist = f"{taxo_tmpdir}/{{sample}}/{{sample}}.a.phylodist.txt",
         mms2 = f"{taxo_tmpdir}/{{sample}}/{{sample}}.faa.mms2lca",
         tiara = f"{taxo_tmpdir}/{{sample}}/{{sample}}.a.tiara.txt",
         cent = f"{taxo_tmpdir}/{{sample}}/{{sample}}.a.cf"
@@ -169,10 +169,10 @@ rule split_fastq:
             names={input.unmapped} \\
             out={output.unmapped}
 
-        seqkit grep -n {input.fna} > {taxo_tmpdir}/{wildcards.sample}.a.euks.fna
+        seqkit grep -n {input.fna} > {taxo_tmpdir}/{wildcards.sample}/{wildcards.sample}.a.euks.fna
         reformat.sh \\
             in={input.bam} \\
-            ref={taxo_tmpdir}/{wildcards.sample}.a.euks.fna \\
+            ref={taxo_tmpdir}/{wildcards.sample}/{wildcards.sample}.a.euks.fna \\
             out={output.mapped} \\
             filterbits=12
         """
