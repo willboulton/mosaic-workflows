@@ -3,7 +3,7 @@ home: "gpfs/home/qcf21tku"
 fastq_tmpdir: "/gpfs/data/mock_lab/will/fastq/tmp_fastq"
 taxo_tmpdir: "/gpfs/data/mock_lab/will/mosaic_tmp/taxo_tmpdir"
 bam_tmpdir: "/gpfs/home/qcf21tku/scratch"
-assembly_dir: "/gpfs/data/mock_lab/will/mosaic_tmp/coassemblies"
+assembly_dir: "/gpfs/data/mock_lab/will/mosaic_tmp/coassemblies_tmp"
 binning_dir: "/gpfs/data/mock_lab/will/mosaic_tmp/binning_dir"
 img_folder: "/gpfs/data/mock_lab/will/mosaic_tmp/img_files_12_3_2024"
 software:
