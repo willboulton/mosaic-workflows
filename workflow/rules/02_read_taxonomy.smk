@@ -143,6 +143,7 @@ rule aggregate_taxonomy:
             {input.mms2} \\
             {input.tiara} \\
             {input.cent} \\
+            {software.taxdump} \\
             {output}
         """
 
