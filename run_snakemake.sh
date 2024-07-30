@@ -5,8 +5,8 @@
 #SBATCH -p compute-64-512,compute-24-96     # partition 
 #SBATCH --time=10-00:00                     # time (DD-HH:MM)
 #SBATCH --job-name=snakemake-main           # Job name
-#SBATCH -o snakemake-%j.out                 # Standard output log
-#SBATCH -e snakemake-%j.err                 # Standard error log
+#SBATCH -o snakemake_logs-%j.out                 # Standard output log
+#SBATCH -e snakemake_logs-%j.err                 # Standard error log
 
 
 . ~/.bashrc
