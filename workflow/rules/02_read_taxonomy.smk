@@ -68,7 +68,7 @@ rule centrifuge_on_reads:
             -1 {input.fq1} -2 {input.fq2} \\
             -q -p {threads} -S {output.all}
 
-        scripts/centrifuge_reads_filter_EVU.py \\
+        {software.workflow}/scripts/centrifuge_reads_filter_EVU.py \\
             {output.all} \\
             {software.taxdump} \\
             {output.evu}
@@ -85,7 +85,7 @@ rule mmseqs:
         "MMSeqs2/14"
     shell:
         """
-        scripts/run_mmseqs.sh \\
+        {software.workflow}/scripts/run_mmseqs.sh \\
             {wildcards.sample} \\
             {taxo_tmpdir}/{wildcards.sample} \\
             {params.tmpdir} \\
@@ -105,7 +105,7 @@ rule mmseqs_lca:
         "bio"
     shell:
         """
-        scripts/mmseqs_lca.py {input} {params.taxonomy_files} {output}
+        {software.workflow}/scripts/mmseqs_lca.py {input} {params.taxonomy_files} {output}
         """
 
 rule tiara:
@@ -138,7 +138,7 @@ rule aggregate_taxonomy:
         "bio"
     shell: 
         """
-        scripts/aggregate_taxonomy.py \\
+        {software.workflow}/scripts/aggregate_taxonomy.py \\
             {input.phylodist} \\
             {input.mms2} \\
             {input.tiara} \\

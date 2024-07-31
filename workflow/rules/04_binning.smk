@@ -59,7 +59,7 @@ rule vacuum_single_assembly:
         "mcl/14-137"
     shell:
         """
-        scripts/vacuum_blobology.py \\
+        {software.workflow}/scripts/vacuum_blobology.py \\
             --embeddings {input.embeddings} \\
             --embeddings_format VAMB \\
             --inflation 1.1 \\
@@ -83,12 +83,17 @@ rule comebin_single_assembly:
         "comebin_env"
     shell:
         """
+        {software.workflow}/scripts/contig_to_scaffold_ids.py \\
+            {input.fna} \\
+            {input.map} \\
+            {binning_dir}/{wildcards.sample}/{wildcards.sample}.a.renamed.fna
+        
         cd {binning_dir}/{wildcards.sample}
         python {software.comebin_src}/scripts/Filter_tooshort.py {wildcards.sample}.a.renamed.fna 1000
         cd {software.comebin_src}
-        scripts/contig_to_scaffold_ids.py {input.fna} {input.map} {binning_dir}/{wildcards.sample}/{wildcards.sample}.a.renamed.fna
+        
         bash run_comebin.sh \\
-            -a {wildcards.sample}.renamed_1000.fa \\
+            -a {binning_dir}/{wildcards.sample}/{wildcards.sample}.a.renamed_1000.fa \\
             -p {input.bam} \\
             -o {output} \\
             -t {threads} 
