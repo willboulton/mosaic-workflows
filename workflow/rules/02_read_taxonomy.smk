@@ -37,7 +37,7 @@ rule get_unmapped_reads:
     input:
         f"{bam_tmpdir}/{{sample}}/bam/{{sample}}.sorted.bam"
     output:
-        f"{fastq_tmpdir}/{{sample}}-unmapped.fastq.gz"
+        f"{fastq_tmpdir}/{{sample}}/{{sample}}-unmapped.fastq.gz"
     envmodules:
         "samtools/1.16.1"
     shell:
