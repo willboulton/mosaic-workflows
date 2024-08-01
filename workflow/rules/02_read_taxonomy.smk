@@ -43,7 +43,7 @@ rule get_unmapped_reads:
     shell:
         # -f 12 indicates both the read and the mate are unmapped. 
         """
-        samtools fastq -@ {threads} -f 12 -0 /dev/null {input} > {output}
+        samtools fastq -@ {threads} -f 12 -0 /dev/null {input} | gzip -c > {output}
         """
 
 rule mmseqs:
