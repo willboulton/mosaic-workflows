@@ -45,9 +45,9 @@ set-resources:
     # bwa index: 3134.908 sec; CPU: 2955.861 sec 4 threads 24 GB 
     # bwa mem - 24 GB 4 threads probably about 10-12 hours... 25000s = 7hrs
 
-    - get_unmapped_reads:mem="4G"
+    - get_unmapped_reads:mem="8G"
     - get_unmapped_reads:slurm_partition="compute-64-512,compute-24-96"
-    - get_unmapped_reads:runtime=60
+    - get_unmapped_reads:runtime=120
     - get_unmapped_reads:cpus_per_task=8
 
     - centrifuge_on_reads:mem="480G"
