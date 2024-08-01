@@ -47,7 +47,7 @@ set-resources:
 
     - get_unmapped_reads:mem="8G"
     - get_unmapped_reads:slurm_partition="compute-64-512,compute-24-96"
-    - get_unmapped_reads:runtime=120
+    - get_unmapped_reads:runtime=240
     - get_unmapped_reads:cpus_per_task=8
 
     - centrifuge_on_reads:mem="480G"
