@@ -2,7 +2,7 @@ def collate_fastqs(wc):
     filter_samples = [s for s in samples if s.batch in run_batch]
     return (
         [   f"{fastq_tmpdir}/{s.batch}/{s.img_taxon_id}-EVU-mapped.fastq.gz" for s in filter_samples ] + 
-        [ f"{fastq_tmpdir}/{s.batch}/{s.img_taxon_id}-EVU-unmapped.fastq.gz" for s in filter_samples ]
+        [ f"{fastq_tmpdir}/{s.batch}/{s.img_taxon_id}-unmapped.fastq.gz" for s in filter_samples ]
     )
 
 rule concat_fastq:

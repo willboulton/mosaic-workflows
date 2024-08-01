@@ -143,6 +143,79 @@ rule deinterleave:
         {software.utils}/deinterleave_parallel {input}
         """
 
+rule split_fastq:
+    input:
+        fna = f"{binning_dir}/{{sample}}/{{sample}}.a.fna",
+        bam = f"{bam_tmpdir}/{{sample}}/bam/{{sample}}.sorted.bam",
+        unmapped = f"{taxo_tmpdir}/{{sample}}/{{sample}}.euks.cf",
+        mapped = f"{taxo_tmpdir}/{{sample}}/{{sample}}.a.euks.txt"
+    output:
+        mapped = f"{fastq_tmpdir}/{{batch}}/{{sample}}-EVU-mapped.fastq.gz",
+        unmapped = f"{fastq_tmpdir}/{{batch}}/{{sample}}-EVU-unmapped.fastq.gz"
+    envmodules:
+        "bbmap/37.28", 
+        "samtools/1.16.1"
+    conda:
+        "blobology"
+    shell:
+        """
+        samtools fastq -@ {threads} -f 12 {input.bam} | \\
+        filterbyname.sh \\
+            include=true \\
+            in=stdin.fq.gz \\
+            names={input.unmapped} \\
+            out={output.unmapped}
+
+        seqkit grep -n {input.fna} > {taxo_tmpdir}/{wildcards.sample}/{wildcards.sample}.a.euks.fna
+        reformat.sh \\
+            in={input.bam} \\
+            ref={taxo_tmpdir}/{wildcards.sample}/{wildcards.sample}.a.euks.fna \\
+            out={output.mapped} \\
+            filterbits=12
+        """
+
+rule get_unmapped_reads:
+    input:
+        f"{bam_tmpdir}/{{sample}}/bam/{{sample}}.sorted.bam"
+    output:
+        fq1=f"{fastq_tmpdir}/{{sample}}-unmapped_1.fastq.gz",
+        fq2=f"{fastq_tmpdir}/{{sample}}-unmapped_2.fastq.gz"
+    envmodules:
+        "samtools/1.16.1"
+    shell:
+        # -f 12 indicates both the read and the mate are unmapped. 
+        """
+        samtools fastq -@ {threads} -f 12 \\
+            -1 {output.fq1} \\
+            -2 {output.fq2} \\
+            -0 /dev/null -s /dev/null -n {input}
+        """
+
+
+rule centrifuge_on_reads:
+    input:
+        fq1=f"{fastq_tmpdir}/{{sample}}-unmapped_1.fastq.gz",
+        fq2=f"{fastq_tmpdir}/{{sample}}-unmapped_2.fastq.gz",
+    output:
+        all = f"{taxo_tmpdir}/{{sample}}/{{sample}}.unmapped.fastq.cf",
+        evu = f"{taxo_tmpdir}/{{sample}}/{{sample}}.euks.cf"
+    envmodules:
+        "centrifuge/1.0.4"
+    conda:
+        "bio"
+    shell:
+        """
+        centrifuge -x {software.centrifuge_idx} \\
+            -1 {input.fq1} -2 {input.fq2} \\
+            -q -p {threads} -S {output.all}
+
+        {software.workflow}/scripts/centrifuge_reads_filter_EVU.py \\
+            {output.all} \\
+            {software.taxdump} \\
+            {output.evu}
+        """
+
+
 rule get_img_file:
 
 rule get_coverage_file:

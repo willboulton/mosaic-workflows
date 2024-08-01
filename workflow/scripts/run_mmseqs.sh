@@ -24,11 +24,11 @@ IMG_FOLDER=$6
 
 
 if [ ! -d $TMP ]; then
-    mkdir $TMP
+    mkdir -p $TMP
 fi
 
 if [ ! -d $OUT ]; then
-    mkdir $OUT
+    mkdir -p $OUT
 fi
 
 cp $IMG_FOLDER/${SAMPLE_ID}.a.faa $TMP/${SAMPLE_ID}.a.faa
