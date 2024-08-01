@@ -108,7 +108,7 @@ set-resources:
     - comebin_single_assembly:cpus_per_task=8
     - comebin_single_assembly:slurm_extra=r"--qos=gpu-rtx --gres=gpu:1"
 
-    - mmseqs_lca:mem="8G"
+    - mmseqs_lca:mem="16G"
     - mmseqs_lca:slurm_partition="compute-64-512,compute-24-96"
     - mmseqs_lca:runtime=120
     - mmseqs_lca:cpus_per_task=1
