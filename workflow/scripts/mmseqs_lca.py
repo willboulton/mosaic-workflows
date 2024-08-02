@@ -147,6 +147,8 @@ def aggregate_tax_estimates(counter_aggregation):
 
     
     leaves = { k:v for k,v in ans.items() if v.leaf }
+    if len(leaves) == 0:
+        print(ans, leaves)
     
     while True:
 
