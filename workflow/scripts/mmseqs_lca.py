@@ -107,7 +107,7 @@ uninformative_taxa = [
 ]
 
 def aggregate_tax_estimates(counter_aggregation):
-    
+
     global done
     done += 1
     if (done % 10000 == 0):
@@ -115,18 +115,18 @@ def aggregate_tax_estimates(counter_aggregation):
 
     if len(counter_aggregation) == 1:
         return list(counter_aggregation.keys())[0]
-    
+
     ans = {}
     total_weight = sum(w for idx, w in counter_aggregation.items() if ((not idx in uninformative_taxa) and idx in taxid_dict))
-    
+
     for tax, weight in counter_aggregation.items():
         depth = len(get_lineage(taxid_dict.get(tax))) if tax in taxid_dict else 0
         ans[tax] = TaxData(leaf = True, weight = weight, depth = depth)
-    
+
     for tax, weight in counter_aggregation.items():
-        
+
         lineage_tax = [t.name for t in get_lineage(taxid_dict.get(tax))][:-1] if tax in taxid_dict else [1]
-        #print(lineage_tax, ":\t", weight)
+
         for depth, l in enumerate(lineage_tax):
             if l in ans:
                 ans[l].leaf = False
@@ -135,24 +135,23 @@ def aggregate_tax_estimates(counter_aggregation):
             else:
                 ans[l] = TaxData(leaf = False, weight = weight, depth = depth)
 
-    #print(ans)
 
     while True:
-        
+
         maxdepth = max([t.depth for _, t in ans.items()])
-        
+
         for tax in ans:
             if ans[tax].leaf:
                 if 2 * ans[tax].weight > total_weight:
                     return tax
-        
+
         best_weight_so_far = -1
         best_tax_id = 1
         for tax in ans:
             if ans[tax].leaf and ans[tax].depth == maxdepth:
                 if ans[tax].weight > best_weight_so_far:
                     best_tax_id = tax
-                
+
         best_tax = ans.pop(best_tax_id)
         parent_id = get_lineage(taxid_dict[best_tax_id])[-2].name
         ans[parent_id].leaf = True

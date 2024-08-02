@@ -110,7 +110,7 @@ set-resources:
 
     - mmseqs_lca:mem="16G"
     - mmseqs_lca:slurm_partition="compute-64-512,compute-24-96"
-    - mmseqs_lca:runtime=120
+    - mmseqs_lca:runtime=240
     - mmseqs_lca:cpus_per_task=1
 
     - vacuum_single_assembly:mem="16G"
