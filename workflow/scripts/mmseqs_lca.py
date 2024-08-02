@@ -6,7 +6,7 @@ from sys import argv
 from functools import lru_cache
 from collections import Counter
 
-@lru_cache(maxsize = 64000)
+@lru_cache(maxsize = 256000)
 def get_lineage(node):
 
     if node.up:
@@ -111,10 +111,13 @@ def aggregate_tax_estimates(counter_aggregation):
     global done
     done += 1
     if (done % 10000 == 0):
-        print(f"{done} of {filtered_rows}")
+        print(f"{done} of {n_annotated_contigs}")
+
+    if len(counter_aggregation) == 1:
+        return list(counter_aggregation.keys())[0]
     
     ans = {}
-    total_weight = sum(w for idx, w in counter_aggregation.items() if not (idx in uninformative_taxa or not idx in taxid_dict))
+    total_weight = sum(w for idx, w in counter_aggregation.items() if ((not idx in uninformative_taxa) and idx in taxid_dict))
     
     for tax, weight in counter_aggregation.items():
         depth = len(get_lineage(taxid_dict.get(tax))) if tax in taxid_dict else 0
@@ -193,7 +196,8 @@ if __name__ == "__main__":
     ).agg(Counter).reset_index()
     
     print("finished counter aggregations")
-    print(f"{len(dft)} contigs")
+    n_annotated_contigs = len(dft)
+    print(f"{n_annotated_contigs} contigs")
 
     done = 0
     dft['taxid'] = dft.taxid.apply(aggregate_tax_estimates)
