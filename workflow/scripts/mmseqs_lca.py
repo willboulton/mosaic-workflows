@@ -6,7 +6,7 @@ from sys import argv
 from functools import lru_cache
 from collections import Counter
 
-@lru_cache(maxsize = 256000)
+@lru_cache(maxsize = None)
 def get_lineage(node):
 
     if node.up:
@@ -111,7 +111,7 @@ def aggregate_tax_estimates(counter_aggregation):
     global done
     done += 1
     if (done % 10000 == 0):
-        print(f"{done} of {n_annotated_contigs}")
+        print(f"\t{done} of {n_annotated_contigs}")
 
     if len(counter_aggregation) == 1:
         return list(counter_aggregation.keys())[0]
