@@ -127,6 +127,8 @@ def aggregate_tax_estimates(counter_aggregation):
     if ignored_weight > 5 * total_weight:
         total_weight += ignored_weight
 
+    ans = {}
+
     for tax, weight in counter_aggregation.items():
         depth = len(get_lineage(taxid_dict.get(tax))) if tax in taxid_dict else 0
         ans[tax] = TaxData(leaf = True, weight = weight, depth = depth)
@@ -144,7 +146,7 @@ def aggregate_tax_estimates(counter_aggregation):
                 ans[l] = TaxData(leaf = False, weight = weight, depth = depth)
 
     
-    leaves = {k:v for k,v in ans.items() if v.leaf }
+    leaves = { k:v for k,v in ans.items() if v.leaf }
     
     while True:
 
