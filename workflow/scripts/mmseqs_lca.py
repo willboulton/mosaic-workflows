@@ -151,6 +151,7 @@ def aggregate_tax_estimates(counter_aggregation):
         print(leaves, ans)
         for a in ans:
             print([t.name for t in get_lineage(taxid_dict.get(a))])
+            print(counter_aggregation)
 
     while True:
 
