@@ -107,7 +107,8 @@ uninformative_taxa = [
 ]
 
 def aggregate_tax_estimates(counter_aggregation):
-
+    
+    global done
     done += 1
     if (done % 10000 == 0):
         print(f"{done} of {filtered_rows}")
@@ -163,7 +164,7 @@ if __name__ == "__main__":
     # STEP 1: First read in the NCBI taxonomy tree
     taxdump_folder = argv[2]
     merged_names, taxid_dict = ncbi_taxonomy_data(taxdump_folder)
-    print("read ncbi taxonomy")
+    print(f"read ncbi taxonomy: {len(merged_names)} rows")
 
     # STEP 2: Next, read in mmseqs tsv file as snakemake input
     dft = pd.read_csv(
@@ -185,7 +186,6 @@ if __name__ == "__main__":
     filtered_rows = len(dft)
     
     print(f"removed taxids < 2: {filtered_rows} rows")
-    global done
     done = 0
     dft = dft.groupby(
             'contig_id',
