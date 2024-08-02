@@ -96,12 +96,16 @@ class TaxData():
 
     
 uninformative_taxa = [
+    0, # unclassified
     1, # root node
-    2, # bacteria
-    10239, # viruses
     131567, # cellular organisms
     2787823, # unknown 1
-    2787854, # unknown 2
+    2787854 # unknown 2
+]
+
+superkingdoms = [
+    2, # bacteria
+    10239, # viruses
     2157, # archaea
     2759 # eukaryota
 ]
@@ -116,8 +120,12 @@ def aggregate_tax_estimates(counter_aggregation):
     if len(counter_aggregation) == 1:
         return list(counter_aggregation.keys())[0]
 
-    ans = {}
-    total_weight = sum(w for idx, w in counter_aggregation.items() if ((not idx in uninformative_taxa) and idx in taxid_dict))
+    total_weight = sum(w for idx, w in counter_aggregation.items() if not (idx in superkingdoms or not idx in taxid_dict))
+    ignored_weight = sum(w for idx, w in counter_aggregation.items() if not ((not idx in superkingdoms) or not idx in taxid_dict))
+    
+    # if the ignored weight is too much, we include it again
+    if ignored_weight > 5 * total_weight:
+        total_weight += ignored_weight
 
     for tax, weight in counter_aggregation.items():
         depth = len(get_lineage(taxid_dict.get(tax))) if tax in taxid_dict else 0
@@ -135,26 +143,25 @@ def aggregate_tax_estimates(counter_aggregation):
             else:
                 ans[l] = TaxData(leaf = False, weight = weight, depth = depth)
 
-
+    
+    leaves = {k:v for k,v in ans.items() if v.leaf }
+    
     while True:
 
-        maxdepth = max([t.depth for _, t in ans.items()])
-
-        for tax in ans:
-            if ans[tax].leaf:
-                if 2 * ans[tax].weight > total_weight:
-                    return tax
+        maxdepth = max(t.depth for _,t in leaves.items())
+        for l in leaves:
+            if 2 * leaves[l].weight > total_weight:
+                return l
 
         best_weight_so_far = -1
         best_tax_id = 1
-        for tax in ans:
-            if ans[tax].leaf and ans[tax].depth == maxdepth:
-                if ans[tax].weight > best_weight_so_far:
-                    best_tax_id = tax
+        for l in leaves:
+            if leaves[l].depth == maxdepth and leaves[l].weight > best_weight_so_far:
+                best_tax_id = l
 
-        best_tax = ans.pop(best_tax_id)
+        test_tax = leaves.pop(best_tax_id)
         parent_id = get_lineage(taxid_dict[best_tax_id])[-2].name
-        ans[parent_id].leaf = True
+        leaves[parent_id] = ans[parent_id]
 
 
 
@@ -183,11 +190,11 @@ if __name__ == "__main__":
 
     dft = dft[['contig_id', 'taxid']]
     dft['taxid'] = dft.taxid.apply(int)
-    dft = dft[dft.taxid > 1]
+    dft = dft[~dft.taxid.isin(uninformative_taxa)]
     dft = dft[dft.taxid.isin(taxid_dict)]
     filtered_rows = len(dft)
     
-    print(f"removed taxids < 2: {filtered_rows} rows")
+    print(f"removed taxids: {filtered_rows} rows")
     dft = dft.groupby(
         'contig_id',
         sort=False,
