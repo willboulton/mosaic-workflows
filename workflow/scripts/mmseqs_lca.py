@@ -107,6 +107,10 @@ uninformative_taxa = [
 ]
 
 def aggregate_tax_estimates(counter_aggregation):
+
+    done += 1
+    if (done % 10000 == 0):
+        print(f"{done} of {filtered_rows}")
     
     ans = {}
     total_weight = sum(w for idx, w in counter_aggregation.items() if not (idx in uninformative_taxa or not idx in taxid_dict))
@@ -159,7 +163,7 @@ if __name__ == "__main__":
     # STEP 1: First read in the NCBI taxonomy tree
     taxdump_folder = argv[2]
     merged_names, taxid_dict = ncbi_taxonomy_data(taxdump_folder)
-
+    print("read ncbi taxonomy")
 
     # STEP 2: Next, read in mmseqs tsv file as snakemake input
     dft = pd.read_csv(
@@ -167,14 +171,22 @@ if __name__ == "__main__":
         sep = '\t', 
         names = ['gene_id', 'taxid', 'tax_level', 'taxon', 'lineage']
     )
+
+    total_rows = len(dft)
+    print(f"read mmseqs tsv file: {total_rows} rows")
     
     dft['contig_id'] = dft.gene_id.apply(lambda x: "_".join(x.split("_")[:2]))
     
 
     dft = dft[['contig_id', 'taxid']]
     dft['taxid'] = dft.taxid.apply(int)
+    dft[dft.taxid > 1]
     dft = dft[dft.taxid.isin(taxid_dict)]
+    filtered_rows = len(dft)
     
+    print(f"removed taxids < 2: {filtered_rows} rows")
+    global done
+    done = 0
     dft = dft.groupby(
             'contig_id',
             sort=False,
@@ -182,15 +194,19 @@ if __name__ == "__main__":
         lambda x: aggregate_tax_estimates(Counter(x))
     )
 
+    print("finished aggregations")
+
     dft['contig_id'] = dft.index
     
     ans = pd.merge(
         dft, merged_names[['taxid', 'taxon', 'name']], on = 'taxid'
     )
+    print("merging answer with ncbi taxonomy")
     name_map = dict(zip(merged_names.taxid, merged_names.name))
     ans['lineage'] = ans.taxid.apply(lambda x: generate_lineage_string(x, name_map))
 
     ans['superkingdom'] = ans.lineage.apply(lambda x: fix_name(safe_get(0)(x)))
 
+    print("saving output file")
     ans = ans[['contig_id', 'taxid', 'superkingdom', 'lineage', 'taxon', 'name']]
     ans.to_csv(argv[3], sep = '\t', index = False)
