@@ -148,8 +148,10 @@ def aggregate_tax_estimates(counter_aggregation):
     
     leaves = { k:v for k,v in ans.items() if v.leaf }
     if len(leaves) == 0:
-        print(ans, leaves)
-    
+        print(leaves, ans)
+        for a in ans:
+            print([t.name for t in get_lineage(a)])
+
     while True:
 
         maxdepth = max(t.depth for _,t in leaves.items())
