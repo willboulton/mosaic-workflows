@@ -181,27 +181,28 @@ if __name__ == "__main__":
 
     dft = dft[['contig_id', 'taxid']]
     dft['taxid'] = dft.taxid.apply(int)
-    dft[dft.taxid > 1]
+    dft = dft[dft.taxid > 1]
     dft = dft[dft.taxid.isin(taxid_dict)]
     filtered_rows = len(dft)
     
     print(f"removed taxids < 2: {filtered_rows} rows")
-    done = 0
     dft = dft.groupby(
-            'contig_id',
-            sort=False,
-            dropna=True).agg(
-        lambda x: aggregate_tax_estimates(Counter(x))
-    )
+        'contig_id',
+        sort=False,
+        dropna=True
+    ).agg(Counter).reset_index()
+    
+    print("finished counter aggregations")
+    print(f"{len(dft)} contigs")
 
-    print("finished aggregations")
-
-    dft['contig_id'] = dft.index
+    done = 0
+    dft['taxid'] = dft.taxid.apply(aggregate_tax_estimates)
+    print("finished taxonomy aggregations")
     
     ans = pd.merge(
         dft, merged_names[['taxid', 'taxon', 'name']], on = 'taxid'
     )
-    print("merging answer with ncbi taxonomy")
+    print("merged answer with ncbi taxonomy")
     name_map = dict(zip(merged_names.taxid, merged_names.name))
     ans['lineage'] = ans.taxid.apply(lambda x: generate_lineage_string(x, name_map))
 
