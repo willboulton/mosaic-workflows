@@ -215,6 +215,30 @@ rule centrifuge_on_reads:
             {output.evu}
         """
 
+rule split_fastq:
+    input:
+        fna = f"{binning_dir}/{{sample}}/{{sample}}.a.fna",
+        bam = f"{bam_tmpdir}/{{sample}}/bam/{{sample}}.sorted.bam",
+        mapped = f"{taxo_tmpdir}/{{sample}}/{{sample}}.a.euks.txt"
+    output:
+        mapped = f"{fastq_tmpdir}/{{batch}}/{{sample}}-EVU-mapped.fastq.gz"
+    envmodules:
+        "bbmap/37.28", 
+        "samtools/1.16.1"
+    conda:
+        "blobology"
+    shell:
+        """
+        seqkit grep -f {input.mapped} \\
+            -o {taxo_tmpdir}/{wildcards.sample}/{wildcards.sample}.a.euks.fna \\
+            {input.fna} 
+            
+        reformat.sh \\
+            in={input.bam} \\
+            ref={taxo_tmpdir}/{wildcards.sample}/{wildcards.sample}.a.euks.fna \\
+            out={output.mapped} \\
+            filterbits=12
+        """
 
 rule get_img_file:
 

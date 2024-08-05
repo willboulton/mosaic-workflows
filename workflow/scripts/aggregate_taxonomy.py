@@ -138,10 +138,14 @@ if __name__ == "__main__":
     print("getting concensus kingdom from all tools")
     df_total['gp_concensus'] = df_total.apply(combine_estimates, axis = 1)
 
+    print("merging contig ids with scaffold ids")
+    df_map = pd.read_csv(argv[6], sep = '\t', names = ['scaffold_id', 'contig_id'])
+    df_total = pd.merge(df_total, df_map, how = 'inner', on = 'contig_id')
+
     print(df_total.head())
     print(len(df_total))
     # write EV contigs to file
     print("saving output")
     df_total[df_total.gp_concensus.isin(
         ["EV", "UNK"]
-    )][['contig_id']].drop_duplicates().to_csv(argv[6], header = False, index = False)
+    )][['scaffold_id']].drop_duplicates().to_csv(argv[7], header = False, index = False)
