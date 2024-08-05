@@ -60,7 +60,7 @@ if __name__ == "__main__":
     
     df_phylo['contig_id'] = df_phylo.gene_id.apply(lambda x: "_".join(x.split("_")[:2]))
     df_phylo['superkingdom_phylo'] = df_phylo.lineage.apply(lambda x: x.split(";")[0])
-    df_phylo = phylo[['contig_id', 'superkingdom_phylo']].groupby('contig_id').agg(
+    df_phylo = df_phylo[['contig_id', 'superkingdom_phylo']].groupby('contig_id').agg(
         lambda x: pd.Series.mode(x)[0]
     ).reset_index()
 
