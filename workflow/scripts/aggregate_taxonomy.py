@@ -66,7 +66,7 @@ if __name__ == "__main__":
     ).reset_index()
 
     print(df_phylo.head())
-    print(len(df_phylo)
+    print(len(df_phylo))
 
     # read mmseqs
     print("reading mmseqs")
