@@ -6,7 +6,7 @@ import pandas as pd
 def coarse_classify(sk):
     
     if sk in ["Eukaryota", "Virus", "Viruses", "eukarya"]:
-        return "EUV"
+        return "EV"
     if sk in ['Unknown', 'unknown', 'organelle']:
         return "UNK"
     if sk in ['Archaea', "Bacteria", "prokarya", "archaea", "bacteria"]:
@@ -140,6 +140,6 @@ if __name__ == "__main__":
 
     print(df_total.head())
     print(len(df_total))
-    # write EVU contigs to file
+    # write EV contigs to file
     print("saving output")
-    df_total[df_total.gp_concensus == "EVU"][['contig_id']].to_csv(argv[6], header = None)
+    df_total[df_total.gp_concensus.isin("EV", "UNK")][['contig_id']].to_csv(argv[6], header = None)
