@@ -142,4 +142,6 @@ if __name__ == "__main__":
     print(len(df_total))
     # write EV contigs to file
     print("saving output")
-    df_total[df_total.gp_concensus.isin(["EV", "UNK"])][['contig_id']].drop_duplicates().to_csv(argv[6], header = None)
+    df_total[df_total.gp_concensus.isin(
+        ["EV", "UNK"]
+    )][['contig_id']].drop_duplicates().to_csv(argv[6], header = False, index = False)
