@@ -53,6 +53,7 @@ def combine_estimates(row):
 if __name__ == "__main__":
 
     # read phylodist
+    print("reading phylodist")
     df_phylo = pd.read_csv(argv[1], 
         sep = '\t', 
         names = ["gene_id", 'hit1', 'hit2', 'pc_id', "lineage"]
@@ -65,6 +66,7 @@ if __name__ == "__main__":
     ).reset_index()
 
     # read mmseqs
+    print("reading mmseqs")
     df_mmseqs = pd.read_csv(
         argv[2],
         names = ['contig_id', 'taxid', 'superkingdom_mmseqs', 'lineage', 'taxon', 'name'], 
@@ -74,6 +76,7 @@ if __name__ == "__main__":
     df_mmseqs = df_mmseqs[['contig_id', 'superkingdom_mmseqs']]
     
     # read tiara
+    print("reading tiara")
     df_tiara = pd.read_csv(
         argv[3], 
         sep = '\t'
@@ -85,6 +88,7 @@ if __name__ == "__main__":
   
 
     # read centrifuge
+    print("reading centrifuge")
     df_cent = pd.read_csv(
         argv[4], 
         sep = '\t'
@@ -94,18 +98,21 @@ if __name__ == "__main__":
 
     taxa_superkingdom = taxa_superkingdom.fillna("Unknown")
 
+    print("combining centrifuge with taxonomy")
     df_cent = pd.merge(
         df_cent,
-        taxa,
+        taxa_superkingdom,
         left_on = 'taxID', 
         right_on = 'tax_id', 
         how = 'left'
     ).fillna("Unknown")
 
+    
     df_cent = df_cent[['readID', 'superkingdom']].rename(
         columns = {'readID':'contig_id', 'superkingdom':'superkingdom_cent'}
     )
 
+    print("merging dataframes")
     df_total = pd.merge(df_phylo, df_mmseqs, on = 'contig_id', how = 'outer').fillna("Unknown")
     df_total = pd.merge(df_total, df_tiara, on = 'contig_id', how = 'outer').fillna("Unknown")
     df_total = pd.merge(df_total, df_cent, on = 'contig_id', how = 'outer').fillna("Unknown")
@@ -115,7 +122,9 @@ if __name__ == "__main__":
     df_total['gp_tiara'] = df_total.superkingdom_tiara.apply(coarse_classify)
     df_total['gp_cent'] = df_total.superkingdom_cent.apply(coarse_classify)
 
+    print("getting concensus kingdom from all tools")
     df_total['gp_concensus'] = df_total.apply(combine_estimates, axis = 1)
 
     # write EVU contigs to file
+    print("saving output")
     df_total[df_total.gp_concensus == "EVU"][['contig_id']].to_csv(argv[6], header = None)
