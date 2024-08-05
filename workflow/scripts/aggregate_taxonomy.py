@@ -73,7 +73,7 @@ if __name__ == "__main__":
     df_mmseqs = pd.read_csv(
         argv[2],
         names = ['contig_id', 'taxid', 'superkingdom_mmseqs', 'lineage', 'taxon', 'name'], 
-        header = None, 
+        header = 0, 
         sep = '\t'
     )
     df_mmseqs = df_mmseqs[['contig_id', 'superkingdom_mmseqs']]
