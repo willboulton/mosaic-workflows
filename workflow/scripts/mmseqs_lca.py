@@ -6,7 +6,7 @@ from sys import argv
 from functools import lru_cache
 from collections import Counter
 
-@lru_cache(maxsize = None)
+#@lru_cache(maxsize = None)
 def get_lineage(node):
 
     if node.up:
@@ -147,6 +147,7 @@ def aggregate_tax_estimates(counter_aggregation):
 
     
     leaves = { k:v for k,v in ans.items() if v.leaf }
+    # this is just debugging but nevertheless leave it in
     if len(leaves) == 0:
         print(leaves, ans)
         for a in ans:
