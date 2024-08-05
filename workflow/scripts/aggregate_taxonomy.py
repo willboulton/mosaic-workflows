@@ -65,6 +65,9 @@ if __name__ == "__main__":
         lambda x: pd.Series.mode(x)[0]
     ).reset_index()
 
+    print(df_phylo.head())
+    print(len(df_phylo)
+
     # read mmseqs
     print("reading mmseqs")
     df_mmseqs = pd.read_csv(
@@ -74,6 +77,9 @@ if __name__ == "__main__":
         sep = '\t'
     )
     df_mmseqs = df_mmseqs[['contig_id', 'superkingdom_mmseqs']]
+
+    print(df_mmseqs.head())
+    print(len(df_mmseqs))
     
     # read tiara
     print("reading tiara")
@@ -85,6 +91,9 @@ if __name__ == "__main__":
         'class_fst_stage': 'superkingdom_tiara',
         'class_snd_stage': 'dk'
     })[['contig_id', 'superkingdom_tiara']]
+
+    print(df_tiara.head())
+    print(len(df_tiara))
   
 
     # read centrifuge
@@ -112,6 +121,9 @@ if __name__ == "__main__":
         columns = {'readID':'contig_id', 'superkingdom':'superkingdom_cent'}
     )
 
+    print(df_cent.head())
+    print(len(df_cent))
+
     print("merging dataframes")
     df_total = pd.merge(df_phylo, df_mmseqs, on = 'contig_id', how = 'outer').fillna("Unknown")
     df_total = pd.merge(df_total, df_tiara, on = 'contig_id', how = 'outer').fillna("Unknown")
@@ -122,9 +134,12 @@ if __name__ == "__main__":
     df_total['gp_tiara'] = df_total.superkingdom_tiara.apply(coarse_classify)
     df_total['gp_cent'] = df_total.superkingdom_cent.apply(coarse_classify)
 
+
     print("getting concensus kingdom from all tools")
     df_total['gp_concensus'] = df_total.apply(combine_estimates, axis = 1)
 
+    print(df_total.head())
+    print(len(df_total))
     # write EVU contigs to file
     print("saving output")
     df_total[df_total.gp_concensus == "EVU"][['contig_id']].to_csv(argv[6], header = None)
