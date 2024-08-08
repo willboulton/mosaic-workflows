@@ -136,7 +136,7 @@ rule split_fastq:
         samtools index {input.bam}
         LEN=$(samtools view -h {input.bam} | head -n 2 | tail -n 1 | cut -f 3 -d ":")
         samtools view -h -F 12 -@ {threads} \\
-            --regions-file <(sed -i "s|$|\t0\t$LEN|g" {input.euks}) {input.bam} | \\
+            --regions-file <(sed -i "s|$|\\t0\\t$LEN|g" {input.euks}) {input.bam} | \\
             samtools fastq -@ {threads} -1 {output.paired_mapped} -2 {output.paired_mapped} -s {output.singletons}
         rm -f {input.bam}.bai
         """
