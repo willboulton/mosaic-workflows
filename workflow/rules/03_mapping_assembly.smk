@@ -10,7 +10,7 @@ def collate_fastqs(wc):
 
 rule concat_fastq:
     input:
-        collate_fastqs
+        unpack(collate_fastqs)
     output:
         paired_mapped = f"{assembly_dir}/{{batch}}/{{batch}}-EVU.fastq.gz", 
         singletons = f"{assembly_dir}/{{batch}}/{{batch}}-EVU-singletons.fastq.gz"
