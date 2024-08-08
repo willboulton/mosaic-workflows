@@ -1,23 +1,29 @@
 def collate_fastqs(wc):
     filter_samples = [s for s in samples if s.batch in run_batch]
-    return (
-        [ f"{fastq_tmpdir}/{s.batch}/{s.img_taxon_id}-EVU-mapped.fastq.gz" for s in filter_samples ] + 
-        [ f"{fastq_tmpdir}/{s.img_taxon_id}/{s.img_taxon_id}-unmapped.fastq.gz" for s in filter_samples ]
-    )
+    return ({ 
+        "paired_mapped": (
+            [ f"{fastq_tmpdir}/{s.batch}/{s.img_taxon_id}-EVU-paired-mapped.fastq.gz" for s in filter_samples ] + 
+            [ f"{fastq_tmpdir}/{s.img_taxon_id}/{s.img_taxon_id}-unmapped.fastq.gz" for s in filter_samples ]
+        ), 
+        "singletons": [ f"{fastq_tmpdir}/{s.img_taxon_id}/{s.img_taxon_id}-EVU-singletons.fastq.gz" for s in filter_samples ]
+    })
 
 rule concat_fastq:
     input:
         collate_fastqs
     output:
-        f"{assembly_dir}/{{batch}}/{{batch}}-EVU.fastq.gz"
+        paired_mapped = f"{assembly_dir}/{{batch}}/{{batch}}-EVU.fastq.gz", 
+        singletons = f"{assembly_dir}/{{batch}}/{{batch}}-EVU-singletons.fastq.gz"
     shell:
         """
-        cat {input} > {output}
+        cat {input.paired_mapped} > {output.paired_mapped}
+        cat {input.singletons} > {output.singletons}
         """
 
 rule megahit:
     input:
-        f"{assembly_dir}/{{batch}}/{{batch}}-EVU.fastq.gz"
+        interleaved = f"{assembly_dir}/{{batch}}/{{batch}}-EVU.fastq.gz", 
+        singletons = f"{assembly_dir}/{{batch}}/{{batch}}-EVU-singletons.fastq.gz"
     output:
         directory(f"{assembly_dir}/{{batch}}/megahit")
     envmodules:
@@ -29,7 +35,8 @@ rule megahit:
             --presets meta-large \\
             --tmp-dir {assembly_dir}/{wildcards.batch}_tmp \\
             -t {threads} \\
-            --12 {input} \\
+            --12 {input.interleaved} \\
+            -r {input.singletons} \\
             -o {output}
         """
 

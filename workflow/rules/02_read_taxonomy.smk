@@ -127,13 +127,18 @@ rule split_fastq:
         euks = f"{taxo_tmpdir}/{{sample}}/{{sample}}.a.euks.txt",
         bam = f"{bam_tmpdir}/{{sample}}/bam/{{sample}}.sorted.bam"
     output:
-        f"{fastq_tmpdir}/{{batch}}/{{sample}}-EVU-mapped.fastq.gz"
+        paired_mapped = f"{fastq_tmpdir}/{{batch}}/{{sample}}-EVU-paired-mapped.fastq.gz", 
+        singletons = f"{fastq_tmpdir}/{{batch}}/{{sample}}-EVU-singletons.fastq.gz"
     envmodules:
         "samtools/1.16.1"
     shell:
         """
-        samtools view -F 12 -@ {threads} --regions-file {input.euks} {input.bam} | \
-            samtools fastq -@ {threads} -0 /dev/null | gzip -c > {output}
+        samtools index {input.bam}
+        LEN=$(samtools view -h {input.bam} | head -n 2 | tail -n 1 | cut -f 3 -d ":")
+        samtools view -h -F 12 -@ {threads} \\
+            --regions-file <(sed -i "s|$|\t0\t$LEN|g" {input.euks}) {input.bam} | \\
+            samtools fastq -@ {threads} -1 {output.paired_mapped} -2 {output.paired_mapped} -s {output.singletons}
+        rm -f {input.bam}.bai
         """
 
 
