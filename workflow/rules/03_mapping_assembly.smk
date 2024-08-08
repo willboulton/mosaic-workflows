@@ -2,7 +2,7 @@ def collate_fastqs(wc):
     filter_samples = [s for s in samples if s.batch in run_batch]
     return ({ 
         "paired_mapped": (
-            [ f"{fastq_tmpdir}/{s.batch}/{s.img_taxon_id}-EVU-paired-mapped.fastq.gz" for s in filter_samples ] + 
+            [ f"{fastq_tmpdir}/{s.img_taxon_id}/{s.img_taxon_id}-EVU-paired-mapped.fastq.gz" for s in filter_samples ] + 
             [ f"{fastq_tmpdir}/{s.img_taxon_id}/{s.img_taxon_id}-unmapped.fastq.gz" for s in filter_samples ]
         ), 
         "singletons": [ f"{fastq_tmpdir}/{s.img_taxon_id}/{s.img_taxon_id}-EVU-singletons.fastq.gz" for s in filter_samples ]

@@ -127,8 +127,8 @@ rule split_fastq:
         euks = f"{taxo_tmpdir}/{{sample}}/{{sample}}.a.euks.txt",
         bam = f"{bam_tmpdir}/{{sample}}/bam/{{sample}}.sorted.bam"
     output:
-        paired_mapped = f"{fastq_tmpdir}/{{batch}}/{{sample}}-EVU-paired-mapped.fastq.gz", 
-        singletons = f"{fastq_tmpdir}/{{batch}}/{{sample}}-EVU-singletons.fastq.gz"
+        paired_mapped = f"{fastq_tmpdir}/{{sample}}/{{sample}}-EVU-paired-mapped.fastq.gz", 
+        singletons = f"{fastq_tmpdir}/{{sample}}/{{sample}}-EVU-singletons.fastq.gz"
     envmodules:
         "samtools/1.16.1"
     shell:
