@@ -30,6 +30,7 @@ rule megahit:
         "megahit/1.2.9"
     shell:
         """
+        mkdir -p {assembly_dir}/{wildcards.batch}_tmp
         megahit \\
             --min-contig-len 500 \\
             --presets meta-large \\
