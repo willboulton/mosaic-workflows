@@ -43,7 +43,7 @@ rule get_unmapped_reads:
     shell:
         # -f 12 indicates both the read and the mate are unmapped. 
         """
-        samtools fastq -@ {threads} -f 12 -0 /dev/null {input} | gzip -c > {output}
+        samtools fastq -@ {threads} -f 12 -0 /dev/null {input} -1 {output} -2 {output}
         """
 
 rule mmseqs:
@@ -133,12 +133,10 @@ rule split_fastq:
         "samtools/1.16.1"
     shell:
         """
-        samtools index {input.bam}
-        LEN=$(samtools view -h {input.bam} | head -n 2 | tail -n 1 | cut -f 3 -d ":")
-        samtools view -h -F 12 -@ {threads} \\
-            --regions-file <(sed "s|$|\\t0\\t$LEN|g" {input.euks}) {input.bam} | \\
-        samtools fastq -@ {threads} -1 {output.paired_mapped} -2 {output.paired_mapped} -s {output.singletons}
-        rm -f {input.bam}.bai
+        {software.workflow}/scripts/split_fastq.sh \\
+            {input.bam} {input.euks} \\
+            {output.paired_mapped} {output.singletons} \\
+            {threads}
         """
 
 

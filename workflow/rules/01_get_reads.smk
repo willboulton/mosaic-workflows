@@ -75,7 +75,7 @@ def load_ncbi_taxonomy(taxdump_dir):
     
     return taxid_to_parent, taxid_to_rank
 
-@lru_cache(maxsize = 64000)
+#@lru_cache(maxsize = 64000)
 def get_lineage(taxid, taxid_to_parent):
     lineage = set()
     current_taxid = taxid
