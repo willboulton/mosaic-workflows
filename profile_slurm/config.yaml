@@ -128,7 +128,7 @@ set-resources:
     - concat_fastq:runtime=60
     - concat_fastq:cpus_per_task=1
 
-    - split_fastq:mem="16G"
+    - split_fastq:mem="24G"
     - split_fastq:slurm_partition="compute-64-512,compute-24-96"
     - split_fastq:runtime=240
     - split_fastq:cpus_per_task=4
