@@ -92,7 +92,7 @@ set-resources:
     - checkm2:runtime=240
     - checkm2:cpus_per_task=16
 
-    - megahit:mem="64G"
+    - megahit:mem="256G"
     - megahit:slurm_partition="compute-64-512,compute-24-96"
     - megahit:runtime=600
     - megahit:cpus_per_task=32
