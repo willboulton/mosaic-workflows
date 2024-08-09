@@ -11,7 +11,7 @@ rule vamb_single_assembly:
         "cuda/11.8"
     shell:
         """
-        vamb \
+        vamb \\
             --minfasta 50000 \\
             --norefcheck \\
             -p {threads} \

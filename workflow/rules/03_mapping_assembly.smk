@@ -31,7 +31,7 @@ rule megahit:
     shell:
         """
         megahit \\
-            --min-contig-length 500 \\
+            --min-contig-len 500 \\
             --presets meta-large \\
             --tmp-dir {assembly_dir}/{wildcards.batch}_tmp \\
             -t {threads} \\

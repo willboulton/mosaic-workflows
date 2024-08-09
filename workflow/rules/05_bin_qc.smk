@@ -27,6 +27,10 @@ rule checkm2:
         """
 
 # rule vacuum_blobology:
+# run aggregate_taxonomy per bin
+# disregard checkm2 bins
+# filter by size
+# 
 # rule identify_euks:
 # rule eukcc:
 # rule busco:
