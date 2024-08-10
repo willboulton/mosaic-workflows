@@ -32,6 +32,8 @@ rule megahit:
         """
         mkdir -p {assembly_dir}/{wildcards.batch}_tmp
         megahit \\
+            --memory 180e9 \\
+            --mem-flag 1 \\
             --min-contig-len 500 \\
             --presets meta-large \\
             --tmp-dir {assembly_dir}/{wildcards.batch}_tmp \\
@@ -43,9 +45,10 @@ rule megahit:
 
 rule kallisto_coassembly:
 
+rule concat_contigs:
+
 rule kallisto_x_sample:
-    
-rule assembly_checkpoint_tidyup:
+
 
 # Output files from this module:
 #  - The assembly contigs and scaffolds

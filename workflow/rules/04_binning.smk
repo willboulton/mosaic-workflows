@@ -101,7 +101,3 @@ rule comebin_single_assembly:
 
 rule comebin_coassembly:
 rule comebin_multiassembly:
-rule metawrap:
-rule euk_bin_size_filtering:
-rule virus_sorting:
-rule virsorter2:
