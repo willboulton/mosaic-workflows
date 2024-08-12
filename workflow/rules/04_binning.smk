@@ -83,7 +83,7 @@ rule comebin_single_assembly:
         fna = f"{binning_dir}/{{sample}}/{{sample}}.a.fna",
         map = f"{binning_dir}/{{sample}}/{{sample}}.a.map.txt",
         bam = f"{bam_tmpdir}/{{sample}}/bam/{{sample}}.sorted.bam",
-        bam_dir = f"{bam_tmpdir}/{{sample}}/bam
+        bam_dir = f"{bam_tmpdir}/{{sample}}/bam"
     output:
         directory(f"{binning_dir}/{{sample}}/comebin")
     conda:
