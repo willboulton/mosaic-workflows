@@ -1,5 +1,5 @@
 module comebin:
-    snakefile: f"{software.COMEBin_src}/Snakefile"
+    snakefile: f"{software.comebin_src}/Snakefile"
 
 use rule * from comebin
 
