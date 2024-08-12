@@ -53,7 +53,7 @@ rule megahit:
             --mem-flag 1 \\
             --min-contig-len 500 \\
             --presets meta-large \\
-            --tmp-dir {assembly_dir}/{wildcards.batch}_tmp \\
+            --tmp-dir {assembly_dir}/{wildcards.batch}_tmp/ \\
             -t {threads} \\
             --12 {input.interleaved} \\
             -r {input.singletons} \\

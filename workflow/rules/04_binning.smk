@@ -1,7 +1,7 @@
-module comebin:
-    snakefile: f"{software.comebin_src}/Snakefile"
-
-use rule * from comebin
+#module comebin:
+#    snakefile: f"{software.comebin_src}/Snakefile"
+#
+#use rule * from comebin
 
 
 rule vamb_single_assembly:
