@@ -19,10 +19,11 @@ rule concat_fasta:
     input: unpack(collate_fastas)
     output: f"{binning_dir}/{{batch}}/{{batch}}.euks.fna"
     conda: "blobology"
-    run:
-        shell("touch {output}")
-        for fna, euk in zip(input.fna, input.euk):
-            shell(f"seqkit grep -f {euk} {fna} | sed 's/>/>{{sample}}_/g' >> {output}")
+    shell:
+        """
+        touch {output}
+        seqkit grep -f {input.euks} {input.fna} | seqkit replace -p ^ -r {sample}_ >> {output}
+        """
 
 rule concat_fastq:
     input:
