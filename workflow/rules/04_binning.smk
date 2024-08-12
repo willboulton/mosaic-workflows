@@ -83,6 +83,7 @@ rule comebin_single_assembly:
         fna = f"{binning_dir}/{{sample}}/{{sample}}.a.fna",
         map = f"{binning_dir}/{{sample}}/{{sample}}.a.map.txt",
         bam = f"{bam_tmpdir}/{{sample}}/bam/{{sample}}.sorted.bam",
+        bam_dir = f"{bam_tmpdir}/{{sample}}/bam
     output:
         directory(f"{binning_dir}/{{sample}}/comebin")
     conda:
@@ -94,11 +95,11 @@ rule comebin_single_assembly:
         seqkit replace -p '(.+)$' -r '{{kv}}' -k {wildcards.sample}_kv {input.fna} | \\
         seqkit seq -m 1001 > {binning_dir}/{wildcards.sample}/{wildcards.sample}.a.renamed_1000.fa
         rm -f {wildcards.sample}_kv
-        
+
         cd {software.comebin_src}/COMEBin
         bash run_comebin.sh \\
             -a {binning_dir}/{wildcards.sample}/{wildcards.sample}.a.renamed_1000.fa \\
-            -p {input.bam} \\
+            -p {input.bam_dir} \\
             -o {output} \\
             -t {threads} 
         """
