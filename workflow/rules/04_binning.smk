@@ -88,7 +88,7 @@ rule comebin_single_assembly:
     conda:
         "comebin_env"
     shell:
-        """
+        r"""
         mkfifo {wildcards.sample}_kv && \\
         awk '{print $2 "\t" $1}' {input.map} > {wildcards.sample}_kv &
         seqkit replace -p '(.+)$' -r '{kv}' -k {wildcards.samples}_kv {input.fna} | \\
