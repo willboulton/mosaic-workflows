@@ -92,21 +92,22 @@ set-resources:
     - checkm2:runtime=240
     - checkm2:cpus_per_task=16
 
-    - megahit:mem="256G"
-    - megahit:slurm_partition="compute-64-512"
-    - megahit:runtime=600
-    - megahit:cpus_per_task=32
+    - megahit:mem="312G"
+    - megahit:slurm_partition="hmem-4T,hmem-754,compute-64-512"
+    - megahit:runtime=1200
+    - megahit:cpus_per_task=48
+    - megahit:slurm_extra=r"--qos=hmem"
 
     - tiara:mem="16G"
     - tiara:slurm_partition="compute-64-512,compute-24-96"
     - tiara:runtime=120
     - tiara:cpus_per_task=4
 
-    - comebin_single_assembly:mem="64G"
-    - comebin_single_assembly:slurm_partition="gpu-rtx6000-2"
-    - comebin_single_assembly:runtime=720
-    - comebin_single_assembly:cpus_per_task=8
-    - comebin_single_assembly:slurm_extra=r"--qos=gpu-rtx --gres=gpu:1"
+#    - comebin_single_assembly:mem="64G"
+#    - comebin_single_assembly:slurm_partition="gpu-rtx6000-2"
+#    - comebin_single_assembly:runtime=720
+#    - comebin_single_assembly:cpus_per_task=8
+#    - comebin_single_assembly:slurm_extra=r"--qos=gpu-rtx --gres=gpu:1"
 
     - mmseqs_lca:mem="16G"
     - mmseqs_lca:slurm_partition="compute-64-512,compute-24-96"

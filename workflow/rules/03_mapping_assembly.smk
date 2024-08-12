@@ -8,6 +8,22 @@ def collate_fastqs(wc):
         "singletons": [ f"{fastq_tmpdir}/{s.img_taxon_id}/{s.img_taxon_id}-EVU-singletons.fastq.gz" for s in filter_samples ]
     })
 
+def collate_fastas(wc):
+    filter_samples = [s for s in samples if s.batch in run_batch]
+    return ({
+        "fna": [ f"{binning_dir}/{s.img_taxon_id}/{s.img_taxon_id}.a.fna" for s in filter_samples ], 
+        "euks": [ f"{taxo_tmpdir}/{s.img_taxon_id}/{s.img_taxon_id}.a.euks.txt" for s in filter_samples ]
+    })
+
+rule concat_fasta:
+    input: unpack(collate_fastas)
+    output: f"{binning_dir}/{{batch}}/{{batch}}.euks.fna"
+    conda: "blobology"
+    run:
+        shell("touch {output}")
+        for fna, euk in zip(input.fna, input.euk):
+            shell(f"seqkit grep -f {euk} {fna} | sed 's/>/>{{sample}}_/g' >> {output}")
+
 rule concat_fastq:
     input:
         unpack(collate_fastqs)
@@ -32,7 +48,7 @@ rule megahit:
         """
         mkdir -p {assembly_dir}/{wildcards.batch}_tmp
         megahit \\
-            --memory 180e9 \\
+            --memory 256e9 \\
             --mem-flag 1 \\
             --min-contig-len 500 \\
             --presets meta-large \\
@@ -40,7 +56,7 @@ rule megahit:
             -t {threads} \\
             --12 {input.interleaved} \\
             -r {input.singletons} \\
-            -o {output}
+            -o {output} --continue
         """
 
 rule kallisto_coassembly:

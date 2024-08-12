@@ -13,7 +13,7 @@ software:
     mmseqs_db: "/gpfs/data/mock_lab/reference-data/MOSAIC/MOSAIC_PROT_REF_DB/MOSAIC_NR_u50_o100_DB"
     checkm_db: "/gpfs/home/qcf21tku/scratch/checkm2_db/CheckM2_database/uniref100.KO.1.dmnd"
     kallisto: "/gpfs/home/qcf21tku/software/kallisto/build/src"
-    comebin_src: "/gpfs/home/qcf21tku/software/COMEBin/COMEBin"
+    comebin_src: "/gpfs/home/qcf21tku/software/COMEBin"
     taxdump: "/gpfs/home/qcf21tku/software/taxdump"
     workflow: "/gpfs/home/qcf21tku/my_code/mosaic-workflows/workflow"
 globus:

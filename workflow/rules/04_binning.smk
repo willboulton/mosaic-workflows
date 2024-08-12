@@ -89,8 +89,8 @@ rule comebin_single_assembly:
             {binning_dir}/{wildcards.sample}/{wildcards.sample}.a.renamed.fna
         
         cd {binning_dir}/{wildcards.sample}
-        python {software.comebin_src}/scripts/Filter_tooshort.py {wildcards.sample}.a.renamed.fna 1000
-        cd {software.comebin_src}
+        python {software.comebin_src}/COMEBin/scripts/Filter_tooshort.py {wildcards.sample}.a.renamed.fna 1000
+        cd {software.comebin_src}/COMEBin
         
         bash run_comebin.sh \\
             -a {binning_dir}/{wildcards.sample}/{wildcards.sample}.a.renamed_1000.fa \\

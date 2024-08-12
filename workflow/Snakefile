@@ -6,6 +6,11 @@ include: "rules/03_mapping_assembly.smk"
 include: "rules/04_binning.smk"
 include: "rules/05_bin_qc.smk"
 
+module comebin:
+    snakefile: f"{software.COMEBin_src}/Snakefile"
+
+use rule * from comebin
+
 localrules: all
 
 wildcard_constraints:
@@ -24,8 +29,8 @@ def select_samples_2(wc):
     filter_samples = [s for s in samples if s.batch in run_batch]
     return (
         list(set(f"{assembly_dir}/{s.batch}/megahit" for s in filter_samples)) #+ 
-        #[ f"{binning_dir}/{s.img_taxon_id}/metabat_checkm" for s in filter_samples ] + 
-        #[ f"{binning_dir}/{s.img_taxon_id}/comebin_checkm" for s in filter_samples ] + 
+        [ f"{binning_dir}/{s.img_taxon_id}/metabat_checkm" for s in filter_samples ] + 
+        [ f"{binning_dir}/{s.img_taxon_id}/comebin_checkm" for s in filter_samples ] #+ 
         #[ f"{binning_dir}/{s.img_taxon_id}/vamb_checkm" for s in filter_samples ] + 
         #[ f"{binning_dir}/{s.img_taxon_id}/vacuum_checkm" for s in filter_samples ]
     )
