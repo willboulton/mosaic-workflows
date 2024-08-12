@@ -6,11 +6,6 @@ include: "rules/03_mapping_assembly.smk"
 include: "rules/04_binning.smk"
 include: "rules/05_bin_qc.smk"
 
-module comebin:
-    snakefile: f"{software.COMEBin_src}/Snakefile"
-
-use rule * from comebin
-
 localrules: all
 
 wildcard_constraints:

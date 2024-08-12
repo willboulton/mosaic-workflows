@@ -1,3 +1,9 @@
+module comebin:
+    snakefile: f"{software.COMEBin_src}/Snakefile"
+
+use rule * from comebin
+
+
 rule vamb_single_assembly:
     input:
         fna = f"{binning_dir}/{{sample}}/{{sample}}.a.fna",
