@@ -20,7 +20,7 @@ with open(contig_file, 'r') as fh_in:
                 if l_in[0] == ">":
                     
                     newline = l_in.replace(contig, scaffold)
-                    fh_out.writeline(newline)
+                    fh_out.write(newline)
                     
                     if newline == l_in:
                         exit("ERROR: Contig id did not match scaffold id - exiting")

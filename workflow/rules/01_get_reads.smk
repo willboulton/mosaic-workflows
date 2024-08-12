@@ -245,3 +245,16 @@ rule get_img_file:
 rule get_coverage_file:
 
 rule append_coverage_file:
+
+rule comebin_single_assembly:
+    # old preprocessing 
+    shell:
+        """
+        {software.workflow}/scripts/contig_to_scaffold_ids.py \\
+        {input.fna} \\
+        {input.map} \\
+        {binning_dir}/{wildcards.sample}/{wildcards.sample}.a.renamed.fna
+        
+        cd {binning_dir}/{wildcards.sample}
+        python {software.comebin_src}/COMEBin/scripts/Filter_tooshort.py {wildcards.sample}.a.renamed.fna 1000
+        """

@@ -49,7 +49,7 @@ rule megahit:
         """
         mkdir -p {assembly_dir}/{wildcards.batch}_tmp
         megahit \\
-            --memory 256e9 \\
+            --memory 400e9 \\
             --mem-flag 1 \\
             --min-contig-len 500 \\
             --presets meta-large \\

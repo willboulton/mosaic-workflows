@@ -89,15 +89,13 @@ rule comebin_single_assembly:
         "comebin_env"
     shell:
         """
-        {software.workflow}/scripts/contig_to_scaffold_ids.py \\
-            {input.fna} \\
-            {input.map} \\
-            {binning_dir}/{wildcards.sample}/{wildcards.sample}.a.renamed.fna
+        mkfifo {wildcards.sample}_kv && \\
+        awk '{print $2 "\t" $1}' {input.map} > {wildcards.sample}_kv &
+        seqkit replace -p '(.+)$' -r '{kv}' -k {wildcards.samples}_kv {input.fna} | \\
+        seqkit seq -m 1001 > {binning_dir}/{wildcards.sample}/{wildcards.sample}.a.renamed_1000.fa
+        rm -f {wildcards.samples}_kv
         
-        cd {binning_dir}/{wildcards.sample}
-        python {software.comebin_src}/COMEBin/scripts/Filter_tooshort.py {wildcards.sample}.a.renamed.fna 1000
         cd {software.comebin_src}/COMEBin
-        
         bash run_comebin.sh \\
             -a {binning_dir}/{wildcards.sample}/{wildcards.sample}.a.renamed_1000.fa \\
             -p {input.bam} \\

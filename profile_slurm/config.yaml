@@ -92,9 +92,9 @@ set-resources:
     - checkm2:runtime=240
     - checkm2:cpus_per_task=16
 
-    - megahit:mem="312G"
+    - megahit:mem="464G"
     - megahit:slurm_partition="hmem-4T,hmem-754,compute-64-512"
-    - megahit:runtime=1200
+    - megahit:runtime=2880
     - megahit:cpus_per_task=48
     - megahit:slurm_extra=r"--qos=hmem"
 
