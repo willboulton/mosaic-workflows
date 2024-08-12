@@ -151,7 +151,7 @@ set-threads:
     - strobealign=4
     - vamb_single_assembly=16
     - checkm2=16
-    - megahit=32
+    - megahit=48
     - tiara=4
     - comebin_single_assembly=8
     - mmseqs_lca=1

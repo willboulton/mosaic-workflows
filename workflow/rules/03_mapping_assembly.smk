@@ -57,15 +57,30 @@ rule megahit:
             -t {threads} \\
             --12 {input.interleaved} \\
             -r {input.singletons} \\
-            -o {output} --continue
+            --continue -o {output} 
         """
 
-rule kallisto_coassembly:
-
-rule concat_contigs:
+rule kallisto_index:
+    input:
+        f"{binning_dir}/{{batch}}/{{batch}}.euks.fna"
+    output:
+        f"{binning_dir}/{{batch}}/{{batch}}.euks.fna.kindex"
+    shell:
+        """
+        {software.kallisto}/kallisto index -i {output} -t {threads} {output}
+        """
 
 rule kallisto_x_sample:
-
+    input:
+    output:
+    shell:
+        """
+        {software.kallisto}/kallisto quant \\
+            -i {input.kindex} \\
+            -o {output} \\
+            -t {threads} \\
+            --plaintext {input.fq1} {input.fq2}
+        """
 
 # Output files from this module:
 #  - The assembly contigs and scaffolds
