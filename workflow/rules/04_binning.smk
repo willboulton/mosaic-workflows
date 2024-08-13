@@ -1,7 +1,13 @@
 #module comebin:
 #    snakefile: f"{software.comebin_src}/Snakefile"
-#
-#use rule * from comebin
+
+#use rule comebin from comebin as comebin_single_assembly with:
+#    input:
+#        fna = f"{binning_dir}/{{sample}}/{{sample}}.a.fna",
+#        map = f"{binning_dir}/{{sample}}/{{sample}}.a.map.txt",
+#        bam_dir = f"{bam_tmpdir}/{{sample}}/bam"
+#    output:
+#        directory(f"{binning_dir}/{{sample}}/comebin/comebin_res")    
 
 
 rule vamb_single_assembly:
@@ -77,32 +83,6 @@ rule vacuum_single_assembly:
 
 rule vacuum_coassembly:
 rule vacuum_multiassembly:
-
-rule comebin_single_assembly:
-    input:
-        fna = f"{binning_dir}/{{sample}}/{{sample}}.a.fna",
-        map = f"{binning_dir}/{{sample}}/{{sample}}.a.map.txt",
-        bam = f"{bam_tmpdir}/{{sample}}/bam/{{sample}}.sorted.bam",
-        bam_dir = f"{bam_tmpdir}/{{sample}}/bam"
-    output:
-        directory(f"{binning_dir}/{{sample}}/comebin")
-    conda:
-        "comebin_env"
-    shell:
-        """
-        mkfifo {wildcards.sample}_kv && \\
-        awk '{{print $2 "\\t" $1}}' {input.map} > {wildcards.sample}_kv &
-        seqkit replace -p '(.+)$' -r '{{kv}}' -k {wildcards.sample}_kv {input.fna} | \\
-        seqkit seq -m 1001 > {binning_dir}/{wildcards.sample}/{wildcards.sample}.a.renamed_1000.fa
-        rm -f {wildcards.sample}_kv
-
-        cd {software.comebin_src}/COMEBin
-        bash run_comebin.sh \\
-            -a {binning_dir}/{wildcards.sample}/{wildcards.sample}.a.renamed_1000.fa \\
-            -p {input.bam_dir} \\
-            -o {output} \\
-            -t {threads} 
-        """
 
 rule comebin_coassembly:
 rule comebin_multiassembly:

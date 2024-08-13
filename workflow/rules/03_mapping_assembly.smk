@@ -22,7 +22,11 @@ rule concat_fasta:
     shell:
         """
         touch {output}
-        seqkit grep -f {input.euks} {input.fna} | seqkit replace -p ^ -r {sample}_ >> {output}
+        paste {input.euks} {input.fna} > {wildcards.batch}_concat_fastq_tmp
+        while read -r euk, fna; do
+            seqkit grep -f $euk $fna | seqkit replace -p ^ -r {wildcards.sample}_ >> {output}
+        done < {wildcards.batch}_concat_fastq_tmp
+        rm -f {wildcards.batch}_concat_fastq_tmp
         """
 
 rule concat_fastq:
@@ -70,9 +74,29 @@ rule kallisto_index:
         {software.kallisto}/kallisto index -i {output} -t {threads} {output}
         """
 
+rule deinterleave:
+    input:
+        f"{fastq_tmpdir}/{{sample}}/{{sample}}-filter-METAG.fastq.gz",
+    output:
+        fq1=f"{fastq_tmpdir}/{{sample}}/{{sample}}-filter-METAG_1.fastq.gz",
+        fq2=f"{fastq_tmpdir}/{{sample}}/{{sample}}-filter-METAG_2.fastq.gz",
+    conda:
+        "bio"
+    shell:
+        """
+        cd {fastq_tmpdir}/{wildcards.batch}
+        {software.utils}/deinterleave_parallel {input}
+        """
+
+
 rule kallisto_x_sample:
     input:
+        fna = f"{binning_dir}/{{batch}}/{{batch}}.euks.fna",
+        index = f"{binning_dir}/{{batch}}/{{batch}}.euks.fna.kindex", 
+        fq1 = f"{fastq_tmpdir}/{{batch}}/{{sample}}-filter-METAG_1.fastq.gz",
+        fq2 = f"{fastq_tmpdir}/{{batch}}/{{sample}}-filter-METAG_2.fastq.gz"
     output:
+        f"{binning_dir}/{{batch}}/{{batch}}.euks_quant.kallisto.tsv"
     shell:
         """
         {software.kallisto}/kallisto quant \\
