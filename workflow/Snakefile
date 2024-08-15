@@ -33,7 +33,8 @@ def select_samples_2(wc):
 
 
 def select_samples_3(wc):
-    return [ f"{taxo_tmpdir}/{s.img_taxon_id}/{s.img_taxon_id}.a.euks.txt" for s in samples ]
+    filter_samples = [ s for s in samples if s.batch in run_batch ]
+    return [ f"{taxo_tmpdir}/{s.img_taxon_id}/{s.img_taxon_id}.a.euks.txt" for s in filter_samples ]
     
 
 onstart:

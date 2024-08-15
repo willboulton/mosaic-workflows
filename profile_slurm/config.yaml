@@ -17,7 +17,7 @@ executor: slurm
 jobname: "{rule}.{jobid}"
 max-jobs-per-second: 1
 max-status-checks-per-second: 10
-jobs: 256 # max number of jobs running in parallel
+jobs: 24 # max number of jobs running in parallel
 # Set resources for particular jobs
 # Default cluster resources
 default-resources:

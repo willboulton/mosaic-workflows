@@ -21,3 +21,6 @@ globus:
     ada_uuid: "59222a93-92c2-11ee-8c81-fd88ce9321ad"
 run_batch:
     - "E04_1"
+    - "E01_1"
+    - "E02_2"
+    - "E01_2"
