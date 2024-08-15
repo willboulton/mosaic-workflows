@@ -4,6 +4,7 @@ include: "rules/00_utils.smk"
 include: "rules/02_read_taxonomy.smk"
 include: "rules/03_mapping_assembly.smk"
 include: "rules/04_binning.smk"
+include: "rules/comebin.smk"
 include: "rules/05_bin_qc.smk"
 
 localrules: all
@@ -30,6 +31,11 @@ def select_samples_2(wc):
         #[ f"{binning_dir}/{s.img_taxon_id}/vacuum_checkm" for s in filter_samples ]
     )
 
+
+def select_samples_3(wc):
+    return [ f"{taxo_tmpdir}/{{sample}}/{{sample}}.a.euks.txt" for s in samples ]
+    
+
 onstart:
     print("starting")
     print("********")
@@ -45,4 +51,4 @@ onstart:
             shell(f"mkdir -p {bam_tmpdir}/{s.img_taxon_id}")
 
 rule all:
-    input: select_samples_2
+    input: select_samples_3

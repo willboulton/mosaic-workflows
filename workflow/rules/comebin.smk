@@ -83,7 +83,7 @@ rule cbin_03_leiden_clustering:
         bam_dir = f"{bam_tmpdir}/{{sample}}/bam",
         res = f"{binning_dir}/{{sample}}/comebin/comebin_res"
     output:
-        directory(f"{binning_dir}/{{sample}}/comebin/comebin")
+        directory(f"{binning_dir}/{{sample}}/comebin")
     conda: "comebin_env"
     shell:
         """
@@ -93,7 +93,8 @@ rule cbin_03_leiden_clustering:
             -p {input.bam_dir} \\
             -o {binning_dir}/{wildcards.sample}/comebin \\
             -t {threads} 
-        mv {output}/* {binning_dir}/{wildcards.sample}/comebin/
+        mv {output}/comebin_res_bins/*.fa {binning_dir}/{wildcards.sample}/comebin
+        rm -f {contigs_file}.*
         """
 
 
