@@ -17,7 +17,7 @@ executor: slurm
 jobname: "{rule}.{jobid}"
 max-jobs-per-second: 1
 max-status-checks-per-second: 10
-jobs: 24 # max number of jobs running in parallel
+jobs: 2 # max number of jobs running in parallel
 max-jobs-per-second: 1
 # Set resources for particular jobs
 # Default cluster resources
@@ -119,6 +119,11 @@ set-resources:
     - vacuum_single_assembly:slurm_partition="compute-64-512,compute-24-96"
     - vacuum_single_assembly:runtime=100
     - vacuum_single_assembly:cpus_per_task=1
+
+    - extract_files:mem="16G"
+    - extract_files:slurm_partition="compute-64-512,compute-24-96"
+    - extract_files:runtime=25
+    - extract_files:cpus_per_task=1
 
     - aggregate_taxonomy:mem="8G"
     - aggregate_taxonomy:slurm_partition="compute-64-512,compute-24-96"
