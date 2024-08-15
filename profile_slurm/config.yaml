@@ -18,7 +18,6 @@ jobname: "{rule}.{jobid}"
 max-jobs-per-second: 1
 max-status-checks-per-second: 10
 jobs: 2 # max number of jobs running in parallel
-max-jobs-per-second: 1
 # Set resources for particular jobs
 # Default cluster resources
 default-resources:
