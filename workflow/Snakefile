@@ -7,7 +7,7 @@ include: "rules/04_binning.smk"
 include: "rules/comebin.smk"
 include: "rules/05_bin_qc.smk"
 
-localrules: all, extract_files, tiara, mmseqs
+localrules: all
 
 wildcard_constraints:
         batch="[EIST]\d\d_(\d)+",
