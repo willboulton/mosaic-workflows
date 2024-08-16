@@ -57,8 +57,8 @@ set-resources:
 
     - mmseqs:mem="240G"
     - mmseqs:slurm_partition="compute-64-512"
-    - mmseqs:runtime=90
-    - mmseqs:cpus_per_task=16
+    - mmseqs:runtime=180
+    - mmseqs:cpus_per_task=24
 
     - metabat_single_assembly:mem="8G"
     - metabat_single_assembly:slurm_partition="compute-64-512,compute-24-96"
@@ -121,7 +121,7 @@ set-resources:
 
     - extract_files:mem="16G"
     - extract_files:slurm_partition="compute-64-512,compute-24-96"
-    - extract_files:runtime=25
+    - extract_files:runtime=45
     - extract_files:cpus_per_task=1
 
     - aggregate_taxonomy:mem="8G"
