@@ -1,5 +1,3 @@
-from functools import lru_cache
-
 def weighted_sum(counter_aggregation, node):
     
     # remove root node if it's not the only thing there
@@ -75,7 +73,7 @@ def load_ncbi_taxonomy(taxdump_dir):
     
     return taxid_to_parent, taxid_to_rank
 
-#@lru_cache(maxsize = 64000)
+
 def get_lineage(taxid, taxid_to_parent):
     lineage = set()
     current_taxid = taxid
