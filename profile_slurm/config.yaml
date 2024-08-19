@@ -126,7 +126,7 @@ set-resources:
 
     - aggregate_taxonomy:mem="8G"
     - aggregate_taxonomy:slurm_partition="compute-64-512,compute-24-96"
-    - aggregate_taxonomy:runtime=30
+    - aggregate_taxonomy:runtime=60
     - aggregate_taxonomy:cpus_per_task=1
 
     - concat_fastq:mem="8G"
