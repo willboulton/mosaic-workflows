@@ -22,7 +22,7 @@ rule concat_fasta:
     shell:
         """
         touch {output}
-        paste <(tr ' ' '\n' "{input.euks}") <(tr ' ' '\n' "{input.fna}") > {wildcards.batch}_concat_fastq_tmp
+        paste <(tr ' ' '\\n' "{input.euks}") <(tr ' ' '\\n' "{input.fna}") > {wildcards.batch}_concat_fastq_tmp
         while read -r euk fna; do
             sample=$(basename $(dirname $euk))
             seqkit grep -f $euk $fna | seqkit replace -p ^ -r ${{sample}}_ >> {output}
