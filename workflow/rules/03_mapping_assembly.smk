@@ -23,7 +23,7 @@ rule concat_fasta:
         """
         touch {output}
         paste {input.euks} {input.fna} > {wildcards.batch}_concat_fastq_tmp
-        while read -r euk, fna; do
+        while read -r euk fna; do
             seqkit grep -f $euk $fna | seqkit replace -p ^ -r {wildcards.sample}_ >> {output}
         done < {wildcards.batch}_concat_fastq_tmp
         rm -f {wildcards.batch}_concat_fastq_tmp
