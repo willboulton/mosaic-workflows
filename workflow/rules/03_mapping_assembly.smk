@@ -1,5 +1,5 @@
 def collate_fastqs(wc):
-    filter_samples = [s for s in samples if s.batch in run_batch]
+    filter_samples = [s for s in samples if s.batch == wc.batch]
     return ({ 
         "paired_mapped": (
             [ f"{fastq_tmpdir}/{s.img_taxon_id}/{s.img_taxon_id}-EVU-paired-mapped.fastq.gz" for s in filter_samples ] + 
@@ -9,7 +9,7 @@ def collate_fastqs(wc):
     })
 
 def collate_fastas(wc):
-    filter_samples = [s for s in samples if s.batch in run_batch]
+    filter_samples = [s for s in samples if s.batch == wc.batch]
     return ({
         "fna": [ f"{binning_dir}/{s.img_taxon_id}/{s.img_taxon_id}.a.fna" for s in filter_samples ], 
         "euks": [ f"{taxo_tmpdir}/{s.img_taxon_id}/{s.img_taxon_id}.a.euks.txt" for s in filter_samples ]
