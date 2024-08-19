@@ -16,29 +16,22 @@ def collate_fastas(wc):
         "map": [ f"{binning_dir}/{s.img_taxon_id}/{s.img_taxon_id}.a.map.txt" for s in filter_samples ]
     })
 
+
 rule concat_fasta:
     input: unpack(collate_fastas)
     output: f"{binning_dir}/{{batch}}/{{batch}}.euks.fna"
     conda: "blobology"
     shell:
         """
-        touch {output}
         paste \\
             <(echo "{input.euks}" | tr ' ' '\\n') \\
             <(echo "{input.fna}" | tr ' ' '\\n') \\
-            <(echo "{input.map}" | tr ' ' '\\n') > {wildcards.batch}_concat_fastq_tmp
-        
-        while read -r euk fna map; do
-            sample=$(basename $(dirname $euk))
-            seqkit grep -f <(grep -xf $euk $map | cut -f 2) $fna | seqkit replace -p ^ -r ${{sample}}_ >> {output}
-        done < {wildcards.batch}_concat_fastq_tmp
-        
-        rm -f {wildcards.batch}_concat_fastq_tmp
-        if [ ! -s {output} ]; then
-            rm -f {output}
-            exit 1
-        fi
+            <(echo "{input.map}" | tr ' ' '\\n') \\
+            <(echo "{input.map}" | tr ' ' '\\n' | sed 's|.a.map.txt||g') | \\
+        {software.utils}/parallel -j {threads} -k --colsep '\\t' \\
+        "seqkit grep -f <(grep -xf {{1}} {{3}} | cut -f 2) {{2}} | seqkit replace -p ^ -r {{4/}}_" > {output}
         """
+
 
 rule concat_fastq:
     input:

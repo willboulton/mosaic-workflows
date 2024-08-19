@@ -238,6 +238,31 @@ rule split_fastq:
             filterbits=12
         """
 
+rule concat_fasta:
+    input: unpack(collate_fastas)
+    output: f"{binning_dir}/{{batch}}/{{batch}}.euks.fna"
+    conda: "blobology"
+    shell:
+        """
+        touch {output}
+        paste \\
+            <(echo "{input.euks}" | tr ' ' '\\n') \\
+            <(echo "{input.fna}" | tr ' ' '\\n') \\
+            <(echo "{input.map}" | tr ' ' '\\n') > {wildcards.batch}_concat_fastq_tmp
+        
+        while read -r euk fna map; do
+            sample=$(basename $(dirname $euk))
+            seqkit grep -f <(grep -xf $euk $map | cut -f 2) $fna | seqkit replace -p ^ -r ${{sample}}_ >> {output}
+        done < {wildcards.batch}_concat_fastq_tmp
+        
+        rm -f {wildcards.batch}_concat_fastq_tmp
+        if [ ! -s {output} ]; then
+            rm -f {output}
+            exit 1
+        fi
+        """
+
+
 rule get_img_file:
 
 rule get_coverage_file:
