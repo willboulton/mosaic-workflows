@@ -142,7 +142,7 @@ set-resources:
     - concat_fasta:mem="32G"
     - concat_fasta:slurm_partition="compute-64-512,compute-24-96"
     - concat_fasta:runtime=60
-    - concat_fasta:cpus_per_task=4
+    - concat_fasta:cpus_per_task=3
 
 
     - template:mem="64G"
