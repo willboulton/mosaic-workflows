@@ -29,7 +29,7 @@ rule concat_fasta:
             <(echo "{input.map}" | tr ' ' '\\n') \\
             <(echo "{input.map}" | tr ' ' '\\n' | sed 's|.a.map.txt||g') | \\
         {software.utils}/parallel -j {threads} -k --colsep '\\t' \\
-        "seqkit grep -nf <(grep -wf {{1}} {{3}} | cut -f 2) {{2}} | seqkit replace -p ^ -r {{4/}}_" > {output}
+        "seqkit replace --f-pattern-file <(grep -wFf {{1}} {{3}} | cut -f 2) --f-by-name -p ^ -r {{4/}}_ {{2}}" > {output}
         """
 
 
