@@ -12,7 +12,8 @@ def collate_fastas(wc):
     filter_samples = [s for s in samples if s.batch == wc.batch]
     return ({
         "fna": [ f"{binning_dir}/{s.img_taxon_id}/{s.img_taxon_id}.a.fna" for s in filter_samples ], 
-        "euks": [ f"{taxo_tmpdir}/{s.img_taxon_id}/{s.img_taxon_id}.a.euks.txt" for s in filter_samples ]
+        "euks": [ f"{taxo_tmpdir}/{s.img_taxon_id}/{s.img_taxon_id}.a.euks.txt" for s in filter_samples ],
+        "map": [ f"{binning_dir}/{s.img_taxon_id}/{s.img_taxon_id}.a.map.txt" for s in filter_samples ]
     })
 
 rule concat_fasta:
@@ -22,14 +23,20 @@ rule concat_fasta:
     shell:
         """
         touch {output}
-        paste <(echo "{input.euks}" | tr ' ' '\\n') <(echo "{input.fna}" | tr ' ' '\\n') > {wildcards.batch}_concat_fastq_tmp
-        while read -r euk fna; do
+        paste \\
+            <(echo "{input.euks}" | tr ' ' '\\n') \\
+            <(echo "{input.fna}" | tr ' ' '\\n') \\
+            <(echo "{input.map}" | tr ' ' '\\n') > {wildcards.batch}_concat_fastq_tmp
+        
+        while read -r euk fna map; do
             sample=$(basename $(dirname $euk))
-            seqkit grep -f $euk $fna | seqkit replace -p ^ -r ${{sample}}_ >> {output}
+            seqkit grep -f <(grep -xf $euk $map | cut -f 2) $fna | seqkit replace -p ^ -r ${{sample}}_ >> {output}
         done < {wildcards.batch}_concat_fastq_tmp
+        
         rm -f {wildcards.batch}_concat_fastq_tmp
-        if [ -s {output} ]; then
+        if [ ! -s {output} ]; then
             rm -f {output}
+            exit 1
         fi
         """
 
