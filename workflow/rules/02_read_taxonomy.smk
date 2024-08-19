@@ -52,7 +52,7 @@ rule mmseqs:
     output:
         f"{taxo_tmpdir}/{{sample}}/{{sample}}.faa.mms2.tsv"
     params:
-        tmpdir = f"{taxo_tmpdir}/{{sample}}/{{sample}}_mmseqs"
+        tmpdir = f"{bam_tmpdir}/{{sample}}/{{sample}}_mmseqs"
     envmodules:
         "MMSeqs2/14"
     shell:
