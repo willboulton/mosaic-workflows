@@ -95,8 +95,7 @@ rule deinterleave:
 
 rule kallisto_x_sample:
     input:
-        fna = f"{binning_dir}/{{batch}}/{{batch}}.euks.fna",
-        index = f"{binning_dir}/{{batch}}/{{batch}}.euks.fna.kindex", 
+        kindex = f"{binning_dir}/{{batch}}/{{batch}}.euks.fna.kindex", 
         fq1 = f"{fastq_tmpdir}/{{batch}}/{{sample}}-filter-METAG_1.fastq.gz",
         fq2 = f"{fastq_tmpdir}/{{batch}}/{{sample}}-filter-METAG_2.fastq.gz"
     output:
