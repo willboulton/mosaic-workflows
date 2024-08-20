@@ -40,6 +40,10 @@ def select_samples_4(wc):
     filter_samples = [ s for s in samples if s.batch in run_batch ]
     return list(set(f"{binning_dir}/{s.batch}/{s.batch}.euks.fna" for s in filter_samples))
 
+def select_samples_5(wc):
+    filter_samples = [ s for s in samples if s.batch in run_batch ]
+    return [ f"{binning_dir}/{s.batch}/{s.img_taxon_id}_x_{s.batch}_euks_kallisto" for s in filter_samples ]    
+    
 onstart:
     print("starting")
     print("********")
@@ -47,6 +51,7 @@ onstart:
     
     for b in run_batch:
         shell(f"mkdir -p {assembly_dir}/{b}")
+        shell(f"mkdir -p {binning_dir}/{b}")
 
     for s in samples:
         if s.batch in run_batch:
@@ -55,4 +60,4 @@ onstart:
             shell(f"mkdir -p {bam_tmpdir}/{s.img_taxon_id}")
 
 rule all:
-    input: select_samples_4
+    input: select_samples_5
