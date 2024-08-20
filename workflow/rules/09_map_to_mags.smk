@@ -21,7 +21,7 @@ rule kallisto_quant:
     shell:
     """
     {software.kallisto}/kallisto quant \\
-    --index {input.index} --output-dir {} \\
+    --index {input.index} --output-dir {output} \\
     --threads {threads} \\
     {input.fq1} {input.fq2}
     """

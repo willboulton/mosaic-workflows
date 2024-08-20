@@ -74,10 +74,10 @@ set-resources:
     # Total time mapping: 6488 s i.e. about 2 hours + I think 1 more hour. 
     # Something like 2 1/2 hours. 
 
-    - kallisto_index:mem="32GB"
+    - kallisto_index:mem="64GB"
     - kallisto_index:slurm_partition="compute-64-512,compute-24-96"
-    - kallisto_index:runtime=120
-    - kallisto_index:cpus_per_task=4
+    - kallisto_index:runtime=360
+    - kallisto_index:cpus_per_task=8
 
 
     - kallisto_x_sample:mem="32GB"

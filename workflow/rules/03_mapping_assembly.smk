@@ -75,7 +75,7 @@ rule kallisto_index:
         f"{binning_dir}/{{batch}}/{{batch}}.euks.fna.kindex"
     shell:
         """
-        {software.kallisto}/kallisto index -i {output} -t {threads} {input}
+        {software.kallisto}/kallisto index --distinguish -i {output} -t {threads} {input}
         """
 
 rule deinterleave:
