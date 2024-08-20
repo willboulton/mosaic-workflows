@@ -74,10 +74,16 @@ set-resources:
     # Total time mapping: 6488 s i.e. about 2 hours + I think 1 more hour. 
     # Something like 2 1/2 hours. 
 
-    - kallisto:mem="32GB"
-    - kallisto:slurm_partition="compute-64-512,compute-24-96"
-    - kallisto:runtime=120
-    - kallisto:cpus_per_task=4
+    - kallisto_index:mem="32GB"
+    - kallisto_index:slurm_partition="compute-64-512,compute-24-96"
+    - kallisto_index:runtime=20
+    - kallisto_index:cpus_per_task=4
+
+
+    - kallisto_x_sample:mem="32GB"
+    - kallisto_x_sample:slurm_partition="compute-64-512,compute-24-96"
+    - kallisto_x_sample:runtime=120
+    - kallisto_x_sample:cpus_per_task=4
     # kallisto index: 24 GB 4 threads ran OOM
     # on 32 GB similar to strobealign
 
