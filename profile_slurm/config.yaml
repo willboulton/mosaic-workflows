@@ -76,7 +76,7 @@ set-resources:
 
     - kallisto_index:mem="32GB"
     - kallisto_index:slurm_partition="compute-64-512,compute-24-96"
-    - kallisto_index:runtime=20
+    - kallisto_index:runtime=120
     - kallisto_index:cpus_per_task=4
 
 
