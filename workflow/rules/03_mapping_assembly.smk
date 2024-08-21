@@ -109,7 +109,7 @@ rule kallisto_x_sample:
             --plaintext {input.fq1} {input.fq2}
         """
 
-rule strobalign_x_sample:
+rule strobealign_x_sample:
     input:
         fq = f"{fastq_tmpdir}/{{sample}}-filter-METAG.fastq.gz",
         ref = f"{binning_dir}/{{batch}}/{{batch}}.euks.fna"
