@@ -65,10 +65,10 @@ set-resources:
     - metabat_single_assembly:runtime=90
     - metabat_single_assembly:cpus_per_task=4
 
-    - strobealign:mem=""
-    - strobealign:slurm_partition="compute-64-512,compute-24-96"
-    - strobealign:runtime=120
-    - strobealign:cpus_per_task=4
+    - strobealign_x_sample:mem="48G"
+    - strobealign_x_sample:slurm_partition="compute-64-512,compute-24-96"
+    - strobealign_x_sample:runtime=240
+    - strobealign_x_sample:cpus_per_task=8
     # strobealign indexing took 71 seconds on 4 threads, 24 GB mem
     # strobealign mapping might take: 
     # Total time mapping: 6488 s i.e. about 2 hours + I think 1 more hour. 
@@ -79,11 +79,10 @@ set-resources:
     - kallisto_index:runtime=360
     - kallisto_index:cpus_per_task=8
 
-
     - kallisto_x_sample:mem="32GB"
     - kallisto_x_sample:slurm_partition="compute-64-512,compute-24-96"
     - kallisto_x_sample:runtime=120
-    - kallisto_x_sample:cpus_per_task=4
+    - kallisto_x_sample:cpus_per_task=8
     # kallisto index: 24 GB 4 threads ran OOM
     # on 32 GB similar to strobealign
 
@@ -164,8 +163,9 @@ set-threads:
     - centrifuge_on_reads=16
     - mmseqs=16
     - metabat_single_assembly=4
-    - kallisto=4
-    - strobealign=4
+    - kallisto_index=8
+    - kallisto_x_sample=8
+    - strobealign_x_sample=8
     - vamb_single_assembly=16
     - checkm2=16
     - megahit=48

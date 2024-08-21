@@ -29,7 +29,7 @@ rule concat_fasta:
             <(echo "{input.map}" | tr ' ' '\\n') \\
             <(echo "{input.map}" | tr ' ' '\\n' | sed 's|.a.map.txt||g') | \\
         {software.utils}/parallel -j {threads} -k --colsep '\\t' \\
-        "seqkit seq -m 1001 | seqkit grep -Inf <(grep -wFf {{1}} {{3}} | cut -f 2) {{2}} | seqkit replace -p ^ -r {{4/}}_" > {output}
+        "seqkit seq -m 1001 {{2}} | seqkit grep -Inf <(grep -wFf {{1}} {{3}} | cut -f 2) | seqkit replace -p ^ -r {{4/}}_" > {output}
         """
 
 
@@ -106,9 +106,22 @@ rule kallisto_x_sample:
             -i {input.kindex} \\
             -o {output} \\
             -t {threads} \\
-            --plaintext {input.fq1} {input.fq2} \\
-            --pseudobam
+            --plaintext {input.fq1} {input.fq2}
         """
+
+rule strobalign_x_sample:
+    input:
+        fq = f"{fastq_tmpdir}/{{sample}}-filter-METAG.fastq.gz",
+        ref = f"{binning_dir}/{{batch}}/{{batch}}.euks.fna"
+    output:
+        f"{binning_dir}/{{batch}}/{{sample}}_x_{{batch}}_euks_strobalign.tsv"
+    conda:
+        "anvio"
+    shell:
+        """
+        strobealign -t {threads} --aemb {input.ref} --interleaved {input.fq} > {output}
+        """
+        
 
 # Output files from this module:
 #  - The assembly contigs and scaffolds
