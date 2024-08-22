@@ -19,7 +19,7 @@ rule metabat_single_assembly:
 
 rule metabat_coassembly:
     input:
-        fna = f"{assembly_dir}/{{batch}}/megahit/contigs_final.fa",
+        fna = f"{assembly_dir}/{{batch}}/megahit/final.contigs.fa",
         depth = f"{binning_dir}/{{batch}}/{{batch}}.euks_coa.jgi_cov.tsv"
     output:
         directory(f"{binning_dir}/{{batch}}/metabat_coa")
@@ -38,7 +38,7 @@ rule metabat_coassembly:
 
 rule metabat_multiassembly:
     input:
-        fna = f"{assembly_dir}/{{batch}}/megahit/contigs_final.fa",
+        fna = f"{assembly_dir}/{{batch}}/megahit/final.contigs.fa",
         depth = f"{binning_dir}/{{batch}}/{{batch}}.euks_multi.jgi_cov.tsv"
     output:
         directory(f"{binning_dir}/{{batch}}/metabat_multi")
@@ -97,7 +97,7 @@ rule vacuum_single_assembly:
         "mcl/14-137"
     shell:
         """
-        {software.workflow}/scripts/vacuum_blobology.py \\
+        {software.workflow}/scripts/vcuum_blobology.py \\
             --embeddings {input.embeddings} \\
             --embeddings_format VAMB \\
             --inflation 1.1 \\
@@ -112,3 +112,15 @@ rule vacuum_multiassembly:
 
 rule comebin_coassembly:
 rule comebin_multiassembly:
+
+rule split_bins:
+    input:
+        f""
+    output:
+        directory("")
+    conda:
+        "blobology"
+    shell:
+        """
+        seqkit grep -r -p {input} > {}
+        """
