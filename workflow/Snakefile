@@ -5,7 +5,7 @@ include: "rules/02_read_taxonomy.smk"
 include: "rules/03_mapping_assembly.smk"
 include: "rules/04_binning.smk"
 include: "rules/comebin.smk"
-include: "rules/05_bin_qc.smk"
+#include: "rules/05_bin_qc.smk"
 
 localrules: all
 

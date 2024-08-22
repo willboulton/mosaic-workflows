@@ -138,7 +138,7 @@ rule vamb_coverage_npz_x_sample:
         "anvio"
     shell:
         """
-        jgi_summarize_bam_contig_depths --outputDepth {output} {input}
+        {software.workflow}/scripts/jgi_to_vamb_abd.py {input} 2000 {output}
         """
 
 rule vamb_coverage_npz_coassembly:
@@ -150,7 +150,7 @@ rule vamb_coverage_npz_coassembly:
         "anvio"
     shell:
         """
-        scripts/jgi_to_vamb_abd.py {input} 2000 {output}
+        {software.workflow}/scripts/jgi_to_vamb_abd.py {input} 2000 {output}
         """
 
 
