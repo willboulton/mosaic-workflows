@@ -80,8 +80,52 @@ rule vamb_single_assembly:
         """
 
 rule vamb_coassembly:
-rule vamb_multiassembly:
+    input:
+        fna = f"{binning_dir}/{{sample}}/{{sample}}.a.fna",
+        bam = f"{bam_tmpdir}/{{sample}}/bam/{{sample}}.sorted.bam"
+    output:
+        bins = directory(f"{binning_dir}/{{sample}}/vamb"), 
+        embeddings = f"{binning_dir}/{{sample}}/vamb/embeddings.npz"
+    conda:
+        "anvio"
+    envmodules:
+        "cuda/11.8"
+    shell:
+        """
+        vamb \\
+            --minfasta 50000 \\
+            --norefcheck \\
+            -p {threads} \
+            -m 2000 \\
+            --cuda \\
+            --bamfiles {input.bam} \\
+            --fasta {input.fna} \\
+            --outdir {output.bins}
+        """
 
+rule vamb_multiassembly:
+    input:
+        fna = f"{binning_dir}/{{sample}}/{{sample}}.a.fna",
+        bam = f"{bam_tmpdir}/{{sample}}/bam/{{sample}}.sorted.bam"
+    output:
+        bins = directory(f"{binning_dir}/{{sample}}/vamb"), 
+        embeddings = f"{binning_dir}/{{sample}}/vamb/embeddings.npz"
+    conda:
+        "anvio"
+    envmodules:
+        "cuda/11.8"
+    shell:
+        """
+        vamb \\
+            --minfasta 50000 \\
+            --norefcheck \\
+            -p {threads} \
+            -m 2000 \\
+            --cuda \\
+            --bamfiles {input.bam} \\
+            --fasta {input.fna} \\
+            --outdir {output.bins}
+        """
 
 rule vacuum_single_assembly:
     input:
