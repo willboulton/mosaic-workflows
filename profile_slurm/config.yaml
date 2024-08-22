@@ -74,6 +74,12 @@ set-resources:
     # Total time mapping: 6488 s i.e. about 2 hours + I think 1 more hour. 
     # Something like 2 1/2 hours. 
 
+    - strobealign_x_coassembly:mem="48G"
+    - strobealign_x_coassembly:slurm_partition="compute-64-512,compute-24-96"
+    - strobealign_x_coassembly:runtime=240
+    - strobealign_x_coassembly:cpus_per_task=8
+
+
     - kallisto_index:mem="64GB"
     - kallisto_index:slurm_partition="compute-64-512,compute-24-96"
     - kallisto_index:runtime=360
