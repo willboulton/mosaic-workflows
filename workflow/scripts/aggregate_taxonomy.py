@@ -48,13 +48,11 @@ def combine_estimates(row):
         # phylo, mmseqs, tiara all different
         else: 
             return row.gp_cent
-            
 
-if __name__ == "__main__":
+def read_phylodist(filepath):
 
-    # read phylodist
     print("reading phylodist")
-    df_phylo = pd.read_csv(argv[1], 
+    df_phylo = pd.read_csv(filepath, 
         sep = '\t', 
         names = ["gene_id", 'hit1', 'hit2', 'pc_id', "lineage"]
     )
@@ -65,18 +63,30 @@ if __name__ == "__main__":
         lambda x: pd.Series.mode(x)[0]
     ).reset_index()
 
-    print(df_phylo.head())
-    print(len(df_phylo))
+    return df_phylo
 
-    # read mmseqs
+def read_mmseqs(filepath):
+    
     print("reading mmseqs")
     df_mmseqs = pd.read_csv(
-        argv[2],
+        filepath,
         names = ['contig_id', 'taxid', 'superkingdom_mmseqs', 'lineage', 'taxon', 'name'], 
         header = 0, 
         sep = '\t'
     )
     df_mmseqs = df_mmseqs[['contig_id', 'superkingdom_mmseqs']]
+    return df_mmseqs
+
+if __name__ == "__main__":
+
+    # read phylodist
+    df_phylo = read_phylodist(argv[1])
+
+    print(df_phylo.head())
+    print(len(df_phylo))
+
+    # read mmseqs
+    df_mmseqs = read_mmseqs(argv[2])
 
     print(df_mmseqs.head())
     print(len(df_mmseqs))

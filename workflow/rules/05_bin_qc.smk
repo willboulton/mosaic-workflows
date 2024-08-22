@@ -26,13 +26,21 @@ rule checkm2:
             --force -x {params.extension}
         """
 
-# rule vacuum_blobology:
+
 # run aggregate_taxonomy per bin
 # disregard checkm2 bins
 # filter by size
-# 
-# rule identify_euks:
-# rule eukcc:
+rule identify_superkingdom:
+    pass
+
+
+rule sort_bins:
+    pass
+
+rule eukcc:
+    pass
+
+
 # rule busco:
 
 # rule flye_reassembly:

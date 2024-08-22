@@ -82,12 +82,12 @@ rule strobealign_x_sample:
         """
         strobealign -t {threads} {input.ref} --interleaved {input.fq} | samtools sort -@ {threads} -o {output}
         """
-        
+        # strobealign -t {threads} --aemb {input.ref} --interleaved {input.fq} > {output}
 
 rule strobealign_x_coassembly:
     input:
         fq = f"{fastq_tmpdir}/{{sample}}-filter-METAG.fastq.gz",
-        ref = f"{binning_dir}/{{batch}}/{{batch}}.euks.fna"
+        ref = f"{assembly_dir}/{{batch}}/megahit/final.contigs.fa"
     output:
         f"{bam_tmpdir}/{{batch}}/bam_coa/{{sample}}_x_{{batch}}_euks_coa.sorted.bam"
     conda:
@@ -97,6 +97,60 @@ rule strobealign_x_coassembly:
     shell:
         """
         strobealign -t {threads} {input.ref} --interleaved {input.fq} | samtools sort -@ {threads} -o {output}
+        """
+        # strobealign -t {threads} --aemb {input.ref} --interleaved {input.fq} > {output}
+
+rule jgi_summarize_bam_x_sample:
+    input:
+        lambda wc: [ 
+            f"{bam_tmpdir}/{s.batch}/bam_multia/{s.img_taxon_id}_x_{s.batch}_euks_strobalign.sorted.bam"
+        for s in samples if s.batch == wc.batch ]
+    output:
+        f"{binning_dir}/{{batch}}/{{batch}}.euks_multi.jgi_cov.tsv"
+    conda:
+        "anvio"
+    shell:
+        """
+        jgi_summarize_bam_contig_depths --outputDepth {output} {input}
+        """
+
+rule jgi_summarize_bam_coassembly:
+    input:
+        lambda wc: [ 
+            f"{bam_tmpdir}/{s.batch}/bam_multia/{s.img_taxon_id}_x_{s.batch}_euks_coa.sorted.bam"
+        for s in samples if s.batch == wc.batch ]
+    output:
+        f"{binning_dir}/{{batch}}/{{batch}}.euks_coa.jgi_cov.tsv"
+    conda:
+        "anvio"
+    shell:
+        """
+        jgi_summarize_bam_contig_depths --outputDepth {output} {input}
+        """
+
+
+rule vamb_coverage_npz_x_sample:
+    input:
+        f"{binning_dir}/{{batch}}/{{batch}}.euks_multi.jgi_cov.tsv"
+    output:
+        f"{binning_dir}/{{batch}}/{{batch}}.euks_multi.jgi_cov.npz"
+    conda:
+        "anvio"
+    shell:
+        """
+        jgi_summarize_bam_contig_depths --outputDepth {output} {input}
+        """
+
+rule vamb_coverage_npz_coassembly:
+    input:
+        f"{binning_dir}/{{batch}}/{{batch}}.euks_coa.jgi_cov.tsv"
+    output:
+        f"{binning_dir}/{{batch}}/{{batch}}.euks_coa.jgi_cov.npz"
+    conda:
+        "anvio"
+    shell:
+        """
+        scripts/jgi_to_vamb_abd.py {input} 2000 {output}
         """
 
 

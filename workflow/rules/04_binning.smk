@@ -1,14 +1,59 @@
-#module comebin:
-#    snakefile: f"{software.comebin_src}/Snakefile"
+rule metabat_single_assembly:
+    input:
+        fna = f"{binning_dir}/{{sample}}/{{sample}}.a.fna",
+        depth = f"{binning_dir}/{{sample}}/{{sample}}.a.depth.txt"
+    output:
+        directory(f"{binning_dir}/{{sample}}/metabat")
+    conda:
+        "anvio"
+    shell:
+        """
+        cd {binning_dir}
+        metabat2 \\
+            -i {input.fna} \\
+            -a {input.depth} --cvExt \\
+            -m 2000 \\
+            -o {wildcards.sample}/metabat/mbat \\
+            -t {threads} -v
+        """
 
-#use rule comebin from comebin as comebin_single_assembly with:
-#    input:
-#        fna = f"{binning_dir}/{{sample}}/{{sample}}.a.fna",
-#        map = f"{binning_dir}/{{sample}}/{{sample}}.a.map.txt",
-#        bam_dir = f"{bam_tmpdir}/{{sample}}/bam"
-#    output:
-#        directory(f"{binning_dir}/{{sample}}/comebin/comebin_res")    
+rule metabat_coassembly:
+    input:
+        fna = f"{coassembly_dir}/{{batch}}/megahit/contigs_final.fa",
+        depth = f"{binning_dir}/{{batch}}/{{batch}}.euks_coa.jgi_cov.tsv"
+    output:
+        directory(f"{binning_dir}/{{batch}}/metabat_coa")
+    conda:
+        "anvio"
+    shell:
+        """
+        cd {binning_dir}
+        metabat2 \\
+            -i {input.fna} \\
+            -a {input.depth} \\
+            -m 2000 \\
+            -o {wildcards.batch}/metabat_coa/mbat_coa \\
+            -t {threads} -v
+        """
 
+rule metabat_multiassembly:
+    input:
+        fna = f"{coassembly_dir}/{{batch}}/megahit/contigs_final.fa",
+        depth = f"{binning_dir}/{{batch}}/{{batch}}.euks_multi.jgi_cov.tsv"
+    output:
+        directory(f"{binning_dir}/{{batch}}/metabat_multi")
+    conda:
+        "anvio"
+    shell:
+        """
+        cd {binning_dir}
+        metabat2 \\
+            -i {input.fna} \\
+            -a {input.depth} \\
+            -m 2000 \\
+            -o {wildcards.batch}/metabat/mbat_multi \\
+            -t {threads} -v
+        """
 
 rule vamb_single_assembly:
     input:
@@ -34,29 +79,10 @@ rule vamb_single_assembly:
             --outdir {output.bins}
         """
 
-
 rule vamb_coassembly:
 rule vamb_multiassembly:
-rule metabat_single_assembly:
-    input:
-        fna = f"{binning_dir}/{{sample}}/{{sample}}.a.fna",
-        depth = f"{binning_dir}/{{sample}}/{{sample}}.a.depth.txt"
-    output:
-        directory(f"{binning_dir}/{{sample}}/metabat")
-    conda:
-        "anvio"
-    shell:
-        """
-        cd {binning_dir}
-        metabat2 \\
-            -i {input.fna} \\
-            -a {input.depth} --cvExt \\
-            -m 2000 \\
-            -o {wildcards.sample}/metabat/mbat \\
-            -t {threads} -v
-        """
 
-rule metabat_coassembly:
+
 rule vacuum_single_assembly:
     input:
         fna = f"{binning_dir}/{{sample}}/{{sample}}.a.fna",
