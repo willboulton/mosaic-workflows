@@ -127,19 +127,6 @@ rule bwa_mem:
         samtools sort --threads {threads} -o {output} 
         """
 
-rule deinterleave:
-    input:
-        f"{fastq_tmpdir}/{{batch}}/{{sample}}-filter-METAG.fastq.gz",
-    output:
-        fq1=f"{fastq_tmpdir}/{{batch}}/{{sample}}-filter-METAG_1.fastq.gz",
-        fq2=f"{fastq_tmpdir}/{{batch}}/{{sample}}-filter-METAG_2.fastq.gz",
-    conda:
-        "bio"
-    shell:
-        """
-        cd {fastq_tmpdir}/{wildcards.batch}
-        {software.utils}/deinterleave_parallel {input}
-        """
 
 rule split_fastq:
     input:
@@ -281,3 +268,47 @@ rule comebin_single_assembly:
         cd {binning_dir}/{wildcards.sample}
         python {software.comebin_src}/COMEBin/scripts/Filter_tooshort.py {wildcards.sample}.a.renamed.fna 1000
         """
+
+
+rule kallisto_index:
+    input:
+        f"{binning_dir}/{{batch}}/{{batch}}.euks.fna"
+    output:
+        f"{binning_dir}/{{batch}}/{{batch}}.euks.fna.kindex"
+    shell:
+        """
+        {software.kallisto}/kallisto index --distinguish -i {output} -t {threads} {input}
+        """
+
+rule deinterleave:
+    input:
+        f"{fastq_tmpdir}/{{sample}}/{{sample}}-filter-METAG.fastq.gz",
+    output:
+        fq1=f"{fastq_tmpdir}/{{sample}}/{{sample}}-filter-METAG_1.fastq.gz",
+        fq2=f"{fastq_tmpdir}/{{sample}}/{{sample}}-filter-METAG_2.fastq.gz",
+    conda:
+        "bio"
+    shell:
+        """
+        cd {fastq_tmpdir}/{wildcards.batch}
+        {software.utils}/deinterleave_parallel {input}
+        """
+
+
+rule kallisto_x_sample:
+    input:
+        kindex = f"{binning_dir}/{{batch}}/{{batch}}.euks.fna.kindex", 
+        fq1 = f"{fastq_tmpdir}/{{batch}}/{{sample}}-filter-METAG_1.fastq.gz",
+        fq2 = f"{fastq_tmpdir}/{{batch}}/{{sample}}-filter-METAG_2.fastq.gz"
+    output:
+        directory(f"{binning_dir}/{{batch}}/{{sample}}_x_{{batch}}_euks_kallisto")
+    shell:
+        """
+        {software.kallisto}/kallisto quant \\
+            -i {input.kindex} \\
+            -o {output} \\
+            -t {threads} \\
+            --plaintext {input.fq1} {input.fq2}
+        """
+
+# strobealign -t {threads} --aemb {input.ref} --interleaved {input.fq} > {output}

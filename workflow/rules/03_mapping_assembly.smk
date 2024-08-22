@@ -68,60 +68,37 @@ rule megahit:
             --continue -o {output} 
         """
 
-rule kallisto_index:
-    input:
-        f"{binning_dir}/{{batch}}/{{batch}}.euks.fna"
-    output:
-        f"{binning_dir}/{{batch}}/{{batch}}.euks.fna.kindex"
-    shell:
-        """
-        {software.kallisto}/kallisto index --distinguish -i {output} -t {threads} {input}
-        """
-
-rule deinterleave:
-    input:
-        f"{fastq_tmpdir}/{{sample}}/{{sample}}-filter-METAG.fastq.gz",
-    output:
-        fq1=f"{fastq_tmpdir}/{{sample}}/{{sample}}-filter-METAG_1.fastq.gz",
-        fq2=f"{fastq_tmpdir}/{{sample}}/{{sample}}-filter-METAG_2.fastq.gz",
-    conda:
-        "bio"
-    shell:
-        """
-        cd {fastq_tmpdir}/{wildcards.batch}
-        {software.utils}/deinterleave_parallel {input}
-        """
-
-
-rule kallisto_x_sample:
-    input:
-        kindex = f"{binning_dir}/{{batch}}/{{batch}}.euks.fna.kindex", 
-        fq1 = f"{fastq_tmpdir}/{{batch}}/{{sample}}-filter-METAG_1.fastq.gz",
-        fq2 = f"{fastq_tmpdir}/{{batch}}/{{sample}}-filter-METAG_2.fastq.gz"
-    output:
-        directory(f"{binning_dir}/{{batch}}/{{sample}}_x_{{batch}}_euks_kallisto")
-    shell:
-        """
-        {software.kallisto}/kallisto quant \\
-            -i {input.kindex} \\
-            -o {output} \\
-            -t {threads} \\
-            --plaintext {input.fq1} {input.fq2}
-        """
-
 rule strobealign_x_sample:
     input:
         fq = f"{fastq_tmpdir}/{{sample}}-filter-METAG.fastq.gz",
         ref = f"{binning_dir}/{{batch}}/{{batch}}.euks.fna"
     output:
-        f"{binning_dir}/{{batch}}/{{sample}}_x_{{batch}}_euks_strobalign.tsv"
+        f"{bam_tmpdir}/{{batch}}/bam_multia/{{sample}}_x_{{batch}}_euks_strobalign.sorted.bam"
     conda:
         "anvio"
+    envmodules:
+        "samtools/1.16.1"
     shell:
         """
-        strobealign -t {threads} --aemb {input.ref} --interleaved {input.fq} > {output}
+        strobealign -t {threads} {input.ref} --interleaved {input.fq} | samtools sort -@ {threads} -o {output}
         """
         
+
+rule strobealign_x_coassembly:
+    input:
+        fq = f"{fastq_tmpdir}/{{sample}}-filter-METAG.fastq.gz",
+        ref = f"{binning_dir}/{{batch}}/{{batch}}.euks.fna"
+    output:
+        f"{bam_tmpdir}/{{batch}}/bam_coa/{{sample}}_x_{{batch}}_euks_coa.sorted.bam"
+    conda:
+        "anvio"
+    envmodules:
+        "samtools/1.16.1"
+    shell:
+        """
+        strobealign -t {threads} {input.ref} --interleaved {input.fq} | samtools sort -@ {threads} -o {output}
+        """
+
 
 # Output files from this module:
 #  - The assembly contigs and scaffolds
