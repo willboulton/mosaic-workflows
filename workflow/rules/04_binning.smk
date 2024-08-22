@@ -19,7 +19,7 @@ rule metabat_single_assembly:
 
 rule metabat_coassembly:
     input:
-        fna = f"{coassembly_dir}/{{batch}}/megahit/contigs_final.fa",
+        fna = f"{assembly_dir}/{{batch}}/megahit/contigs_final.fa",
         depth = f"{binning_dir}/{{batch}}/{{batch}}.euks_coa.jgi_cov.tsv"
     output:
         directory(f"{binning_dir}/{{batch}}/metabat_coa")
@@ -38,7 +38,7 @@ rule metabat_coassembly:
 
 rule metabat_multiassembly:
     input:
-        fna = f"{coassembly_dir}/{{batch}}/megahit/contigs_final.fa",
+        fna = f"{assembly_dir}/{{batch}}/megahit/contigs_final.fa",
         depth = f"{binning_dir}/{{batch}}/{{batch}}.euks_multi.jgi_cov.tsv"
     output:
         directory(f"{binning_dir}/{{batch}}/metabat_multi")
