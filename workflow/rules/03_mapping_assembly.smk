@@ -73,7 +73,7 @@ rule strobealign_x_sample:
         fq = f"{fastq_tmpdir}/{{sample}}-filter-METAG.fastq.gz",
         ref = f"{binning_dir}/{{batch}}/{{batch}}.euks.fna"
     output:
-        f"{bam_tmpdir}/{{batch}}/bam_multia/{{sample}}_x_{{batch}}_euks_strobalign.sorted.bam"
+        f"{bam_tmpdir}/{{batch}}/bam_multi/{{sample}}_x_{{batch}}_euks_strobalign.sorted.bam"
     conda:
         "anvio"
     envmodules:
@@ -103,7 +103,7 @@ rule strobealign_x_coassembly:
 rule jgi_summarize_bam_x_sample:
     input:
         lambda wc: [ 
-            f"{bam_tmpdir}/{s.batch}/bam_multia/{s.img_taxon_id}_x_{s.batch}_euks_strobalign.sorted.bam"
+            f"{bam_tmpdir}/{s.batch}/bam_multi/{s.img_taxon_id}_x_{s.batch}_euks_strobalign.sorted.bam"
         for s in samples if s.batch == wc.batch ]
     output:
         f"{binning_dir}/{{batch}}/{{batch}}.euks_multi.jgi_cov.tsv"
@@ -117,7 +117,7 @@ rule jgi_summarize_bam_x_sample:
 rule jgi_summarize_bam_coassembly:
     input:
         lambda wc: [ 
-            f"{bam_tmpdir}/{s.batch}/bam_multia/{s.img_taxon_id}_x_{s.batch}_euks_coa.sorted.bam"
+            f"{bam_tmpdir}/{s.batch}/bam_multi/{s.img_taxon_id}_x_{s.batch}_euks_coa.sorted.bam"
         for s in samples if s.batch == wc.batch ]
     output:
         f"{binning_dir}/{{batch}}/{{batch}}.euks_coa.jgi_cov.tsv"
