@@ -172,6 +172,7 @@ set-threads:
     - kallisto_index=8
     - kallisto_x_sample=8
     - strobealign_x_sample=8
+    - strobealign_x_coassembly=8
     - vamb_single_assembly=16
     - checkm2=16
     - megahit=48
