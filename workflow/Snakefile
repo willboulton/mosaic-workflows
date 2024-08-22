@@ -42,8 +42,8 @@ def select_samples_4(wc):
 
 def select_samples_5(wc):
     filter_samples = [ s for s in samples if s.batch in run_batch ]
-    return ([ f"{bam_tmpdir}/{s.batch}/{s.img_taxon_id}_x_{s.batch}_euks_strobalign.sorted.bam" for s in filter_samples ] + 
-            [ f"{bam_tmpdir}/{s.batch}/{s.img_taxon_id}_x_{s.batch}_euks_coa.sorted.bam" for s in filter_samples ]
+    return ([ f"{bam_tmpdir}/{s.batch}/bam_multia/{s.img_taxon_id}_x_{s.batch}_euks_strobalign.sorted.bam" for s in filter_samples ] + 
+            [ f"{bam_tmpdir}/{s.batch}/bam_coa/{s.img_taxon_id}_x_{s.batch}_euks_coa.sorted.bam" for s in filter_samples ]
     )
 
 
