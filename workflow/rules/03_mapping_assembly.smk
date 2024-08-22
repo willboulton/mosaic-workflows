@@ -117,7 +117,7 @@ rule jgi_summarize_bam_x_sample:
 rule jgi_summarize_bam_coassembly:
     input:
         lambda wc: [ 
-            f"{bam_tmpdir}/{s.batch}/bam_multi/{s.img_taxon_id}_x_{s.batch}_euks_coa.sorted.bam"
+            f"{bam_tmpdir}/{s.batch}/bam_coa/{s.img_taxon_id}_x_{s.batch}_euks_coa.sorted.bam"
         for s in samples if s.batch == wc.batch ]
     output:
         f"{binning_dir}/{{batch}}/{{batch}}.euks_coa.jgi_cov.tsv"
