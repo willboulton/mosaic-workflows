@@ -58,8 +58,8 @@ def select_samples_7(wc):
     return (
         list(set(f"{binning_dir}/{s.batch}/vamb_coa" for s in filter_samples)) + 
         list(set(f"{binning_dir}/{s.batch}/vamb_multi" for s in filter_samples)) + 
-        list(set(f"{binning_dir}/{s.batch}/metabat_coa" for s in filter_samples)) + 
-        list(set(f"{binning_dir}/{s.batch}/metabat_multi" for s in filter_samples)) 
+        list(set(f"{bam_tmpdir}/{s.batch}/metabat_coa" for s in filter_samples)) + 
+        list(set(f"{bam_tmpdir}/{s.batch}/metabat_multi" for s in filter_samples)) 
     )
 
 onstart:
