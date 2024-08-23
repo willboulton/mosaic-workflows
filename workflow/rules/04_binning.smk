@@ -81,7 +81,7 @@ rule vamb_single_assembly:
 
 rule vamb_coassembly:
     input:
-        fna = f"{assembly_dir}/{{batch}}/final.contigs.fa",
+        fna = f"{assembly_dir}/{{batch}}/megahit/final.contigs.fa",
         cov = f"{binning_dir}/{{batch}}/{{batch}}.euks_coa.jgi_cov.npz"
     output:
         bins = directory(f"{binning_dir}/{{batch}}/vamb_coa"), 
