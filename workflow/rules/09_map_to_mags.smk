@@ -1,27 +1,22 @@
-rule kallisto_map_reads_to_mags:
+rule strobealign_index:
     input:
-        pass 
-
-rule kallisto_index:
-    input:
-        pass
+        fna=f""
     output:
-        pass
+        f".sti"
     shell:
     """
-    {software.kallisto}/kallisto index --index 3300060026.kindex --distinguish \\
-    <(zcat 3300060026.tar.gz | tar xfO - 3300060026/3300060026.a.fna | head) 
+    strobealign --create-index -t {threads} {input.fna} -r 150 
     """
 
-rule kallisto_quant:
+
+rule strobealign_map_reads_to_mags:
     input:
-        pass
+        ref=f"",
+        fq=f"", 
+        idx=f".sti"
     output:
-        pass
     shell:
-    """
-    {software.kallisto}/kallisto quant \\
-    --index {input.index} --output-dir {output} \\
-    --threads {threads} \\
-    {input.fq1} {input.fq2}
-    """
+        """
+        strobealign --use-index {input.idx} -t {threads} --aemb {input.ref} --interleaved {input.fq} > {output}
+        """
+

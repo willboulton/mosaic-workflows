@@ -38,11 +38,8 @@ rule sort_bins:
     pass
 
 rule eukcc:
-    pass
-
-
-# rule busco:
-
-# rule flye_reassembly:
-# rule tidy_bins_with_assembly_graph:
-# rule bandage_view_assembly:
+    input:
+        f"{binning_dir}/{{batch}}/{{binner}}_{{coa|multi}}"
+    output:
+        f"{binning_dir}/{{batch}}/{{binner}}_{{coa|multi}}_checked"
+    

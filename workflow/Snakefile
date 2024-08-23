@@ -56,10 +56,10 @@ def select_samples_6(wc):
 def select_samples_7(wc):
     filter_samples = [ s for s in samples if s.batch in run_batch ]
     return (
-        list(set(f"{binning_dir}/{s.batch}/vamb_coa" for s in filter_samples)) + 
-        list(set(f"{binning_dir}/{s.batch}/vamb_multi" for s in filter_samples)) + 
-        list(set(f"{bam_tmpdir}/{s.batch}/metabat_coa" for s in filter_samples)) + 
-        list(set(f"{bam_tmpdir}/{s.batch}/metabat_multi" for s in filter_samples)) 
+        list(set(f"{bam_tmpdir}/{s.batch}/vamb_coa" for s in filter_samples)) + 
+        list(set(f"{bam_tmpdir}/{s.batch}/vamb_multi" for s in filter_samples)) #+ 
+        #list(set(f"{bam_tmpdir}/{s.batch}/metabat_coa" for s in filter_samples)) + 
+        #list(set(f"{bam_tmpdir}/{s.batch}/metabat_multi" for s in filter_samples)) 
     )
 
 onstart:

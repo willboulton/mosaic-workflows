@@ -84,8 +84,8 @@ rule vamb_coassembly:
         fna = f"{assembly_dir}/{{batch}}/megahit/final.contigs.fa",
         cov = f"{binning_dir}/{{batch}}/{{batch}}.euks_coa.jgi_cov.npz"
     output:
-        bins = directory(f"{binning_dir}/{{batch}}/vamb_coa"), 
-        embeddings = f"{binning_dir}/{{batch}}/vamb_coa/embeddings.npz"
+        bins = directory(f"{bam_tmpdir}/{{batch}}/vamb_coa"), 
+        embeddings = f"{bam_tmpdir}/{{batch}}/vamb_coa/embeddings.npz"
     conda:
         "anvio"
     envmodules:
@@ -93,7 +93,7 @@ rule vamb_coassembly:
     shell:
         """
         vamb \\
-            --minfasta 50000 \\
+            --minfasta 500000 \\
             --norefcheck \\
             -p {threads} \
             -m 2000 \\
@@ -108,8 +108,8 @@ rule vamb_multiassembly:
         fna = f"{binning_dir}/{{batch}}/{{batch}}.euks.fna",
         cov = f"{binning_dir}/{{batch}}/{{batch}}.euks_multi.jgi_cov.npz"
     output:
-        bins = directory(f"{binning_dir}/{{batch}}/vamb_multi"), 
-        embeddings = f"{binning_dir}/{{batch}}/vamb_multi/embeddings.npz"
+        bins = directory(f"{bam_tmpdir}/{{batch}}/vamb_multi"), 
+        embeddings = f"{bam_tmpdir}/{{batch}}/vamb_multi/embeddings.npz"
     conda:
         "anvio"
     envmodules:
@@ -117,7 +117,7 @@ rule vamb_multiassembly:
     shell:
         """
         vamb \\
-            --minfasta 50000 \\
+            --minfasta 500000 \\
             --norefcheck \\
             -p {threads} \
             -m 2000 \\
