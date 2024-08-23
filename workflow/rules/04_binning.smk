@@ -93,7 +93,7 @@ rule vamb_coassembly:
     shell:
         """
         vamb \\
-            --minfasta 500000 \\
+            --minfasta 200000 \\
             --norefcheck \\
             -p {threads} \
             -m 2000 \\
@@ -117,7 +117,7 @@ rule vamb_multiassembly:
     shell:
         """
         vamb \\
-            --minfasta 500000 \\
+            --minfasta 200000 \\
             --norefcheck \\
             -p {threads} \
             -m 2000 \\
