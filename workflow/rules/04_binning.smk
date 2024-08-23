@@ -98,7 +98,7 @@ rule vamb_coassembly:
             -p {threads} \
             -m 2000 \\
             --cuda \\
-            --bamfiles {input.bam} \\
+            --RPKM {input.cov} \\
             --fasta {input.fna} \\
             --outdir {output.bins}
         """
@@ -122,7 +122,7 @@ rule vamb_multiassembly:
             -p {threads} \
             -m 2000 \\
             --cuda \\
-            --bamfiles {input.bam} \\
+            --RPKM {input.cov} \\
             --fasta {input.fna} \\
             --outdir {output.bins}
         """
