@@ -312,3 +312,54 @@ rule kallisto_x_sample:
         """
 
 # strobealign -t {threads} --aemb {input.ref} --interleaved {input.fq} > {output}
+
+rule vacuum_single_assembly:
+    input:
+        fna = f"{binning_dir}/{{sample}}/{{sample}}.a.fna",
+        embeddings = f"{binning_dir}/{{sample}}/vamb/embeddings.npz"
+    output:
+        bins = directory(f"{binning_dir}/{{sample}}/vacuum"),
+        clusters = f"{binning_dir}/{{sample}}/vacuum/mcl_clusters_11.tsv",
+        coords = f"{binning_dir}/{{sample}}/vacuum/umap_coords.tsv"
+    conda:
+        "blobology"
+    envmodules:
+        "mcl/14-137"
+    shell:
+        """
+        {software.workflow}/scripts/vacuum_blobology.py \\
+            --embeddings {input.embeddings} \\
+            --embeddings_format VAMB \\
+            --inflation 1.1 \\
+            --fasta_in {input.fna} \\
+            --fasta_out {output.bins} \\
+            --umap_out {output.coords} \\
+            --mcl_out {output.clusters} 
+        """
+
+
+rule comebin_single_assembly:
+    input:
+        fna = f"{binning_dir}/{{sample}}/{{sample}}.a.renamed_1000.fna",
+        map = f"{binning_dir}/{{sample}}/{{sample}}.a.map.txt",
+        bam = f"{bam_tmpdir}/{{sample}}/bam/{{sample}}.sorted.bam",
+        bam_dir = f"{bam_tmpdir}/{{sample}}/bam"
+    output:
+        directory(f"{binning_dir}/{{sample}}/comebin_old")
+    conda:
+        "comebin_env"
+    shell:
+        """
+        mkfifo {wildcards.sample}_kv && \\
+        awk '{{print $2 "\\t" $1}}' {input.map} > {wildcards.sample}_kv &&
+        seqkit replace -p '(.+)$' -r '{{kv}}' -k {wildcards.sample}_kv {input.fna} | \\
+        seqkit seq -m 1001 > {binning_dir}/{wildcards.sample}/{wildcards.sample}.a.renamed_1000.fa
+        rm -f {wildcards.sample}_kv
+
+        cd {software.comebin_src}/COMEBin
+        bash run_comebin.sh \\
+            -a {input.fna} \\
+            -p {input.bam_dir} \\
+            -o {output} \\
+            -t {threads} 
+        """    

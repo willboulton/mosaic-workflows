@@ -100,6 +100,8 @@ rule strobealign_x_coassembly:
         """
         # strobealign -t {threads} --aemb {input.ref} --interleaved {input.fq} > {output}
 
+
+
 rule jgi_summarize_bam_x_sample:
     input:
         lambda wc: [ 

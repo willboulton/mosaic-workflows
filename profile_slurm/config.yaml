@@ -21,7 +21,6 @@ jobs: 18 # max number of jobs running in parallel
 # Set resources for particular jobs
 # Default cluster resources
 default-resources:
-    - globus_workers=3
     - mem="4G"
     - slurm_partition="compute-64-512,compute-24-96"
     - runtime="4h" # days:hours:mins, or number in minutes

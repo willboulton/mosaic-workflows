@@ -81,11 +81,11 @@ rule vamb_single_assembly:
 
 rule vamb_coassembly:
     input:
-        fna = f"{binning_dir}/{{sample}}/{{sample}}.a.fna",
-        bam = f"{bam_tmpdir}/{{sample}}/bam/{{sample}}.sorted.bam"
+        fna = f"{assembly_dir}/{{batch}}/final.contigs.fa",
+        cov = f"{binning_dir}/{{batch}}/{{batch}}.euks_coa.jgi_cov.npz"
     output:
-        bins = directory(f"{binning_dir}/{{sample}}/vamb"), 
-        embeddings = f"{binning_dir}/{{sample}}/vamb/embeddings.npz"
+        bins = directory(f"{binning_dir}/{{batch}}/vamb_coa"), 
+        embeddings = f"{binning_dir}/{{batch}}/vamb_coa/embeddings.npz"
     conda:
         "anvio"
     envmodules:
@@ -105,11 +105,11 @@ rule vamb_coassembly:
 
 rule vamb_multiassembly:
     input:
-        fna = f"{binning_dir}/{{sample}}/{{sample}}.a.fna",
-        bam = f"{bam_tmpdir}/{{sample}}/bam/{{sample}}.sorted.bam"
+        fna = f"{binning_dir}/{{batch}}/{{batch}}_euks.fna",
+        cov = f"{binning_dir}/{{batch}}/{{batch}}.euks_multi.jgi_cov.npz"
     output:
-        bins = directory(f"{binning_dir}/{{sample}}/vamb"), 
-        embeddings = f"{binning_dir}/{{sample}}/vamb/embeddings.npz"
+        bins = directory(f"{binning_dir}/{{batch}}/vamb_multi"), 
+        embeddings = f"{binning_dir}/{{batch}}/vamb_multi/embeddings.npz"
     conda:
         "anvio"
     envmodules:
@@ -127,29 +127,6 @@ rule vamb_multiassembly:
             --outdir {output.bins}
         """
 
-rule vacuum_single_assembly:
-    input:
-        fna = f"{binning_dir}/{{sample}}/{{sample}}.a.fna",
-        embeddings = f"{binning_dir}/{{sample}}/vamb/embeddings.npz"
-    output:
-        bins = directory(f"{binning_dir}/{{sample}}/vacuum"),
-        clusters = f"{binning_dir}/{{sample}}/vacuum/mcl_clusters_11.tsv",
-        coords = f"{binning_dir}/{{sample}}/vacuum/umap_coords.tsv"
-    conda:
-        "blobology"
-    envmodules:
-        "mcl/14-137"
-    shell:
-        """
-        {software.workflow}/scripts/vcuum_blobology.py \\
-            --embeddings {input.embeddings} \\
-            --embeddings_format VAMB \\
-            --inflation 1.1 \\
-            --fasta_in {input.fna} \\
-            --fasta_out {output.bins} \\
-            --umap_out {output.coords} \\
-            --mcl_out {output.clusters} 
-        """
 
 rule vacuum_coassembly:
 rule vacuum_multiassembly:
