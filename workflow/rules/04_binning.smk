@@ -105,7 +105,7 @@ rule vamb_coassembly:
 
 rule vamb_multiassembly:
     input:
-        fna = f"{binning_dir}/{{batch}}/{{batch}}_euks.fna",
+        fna = f"{binning_dir}/{{batch}}/{{batch}}.euks.fna",
         cov = f"{binning_dir}/{{batch}}/{{batch}}.euks_multi.jgi_cov.npz"
     output:
         bins = directory(f"{binning_dir}/{{batch}}/vamb_multi"), 
