@@ -92,6 +92,7 @@ rule vamb_coassembly:
         "cuda/11.8"
     shell:
         """
+        mkdir -p {output.bins}
         vamb \\
             --minfasta 200000 \\
             --norefcheck \\
@@ -116,6 +117,7 @@ rule vamb_multiassembly:
         "cuda/11.8"
     shell:
         """
+        mkdir -p {output.bins}
         vamb \\
             --minfasta 200000 \\
             --norefcheck \\
