@@ -51,7 +51,7 @@ rule metabat_multiassembly:
             -i {input.fna} \\
             -a {input.depth} \\
             -m 2000 \\
-            -o {wildcards.batch}/metabat/mbat_multi \\
+            -o {wildcards.batch}/metabat_multi/mbat_multi \\
             -t {threads} -v
         """
 
