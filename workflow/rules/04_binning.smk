@@ -22,12 +22,12 @@ rule metabat_coassembly:
         fna = f"{assembly_dir}/{{batch}}/megahit/final.contigs.fa",
         depth = f"{binning_dir}/{{batch}}/{{batch}}.euks_coa.jgi_cov.tsv"
     output:
-        directory(f"{binning_dir}/{{batch}}/metabat_coa")
+        directory(f"{bam_tmpdir}/{{batch}}/metabat_coa")
     conda:
         "anvio"
     shell:
         """
-        cd {binning_dir}
+        cd {bam_tmpdir}
         metabat2 \\
             -i {input.fna} \\
             -a {input.depth} \\
@@ -41,12 +41,12 @@ rule metabat_multiassembly:
         fna = f"{binning_dir}/{{batch}}/{{batch}}.euks.fna",
         depth = f"{binning_dir}/{{batch}}/{{batch}}.euks_multi.jgi_cov.tsv"
     output:
-        directory(f"{binning_dir}/{{batch}}/metabat_multi")
+        directory(f"{bam_tmpdir}/{{batch}}/metabat_multi")
     conda:
         "anvio"
     shell:
         """
-        cd {binning_dir}
+        cd {bam_tmpdir}
         metabat2 \\
             -i {input.fna} \\
             -a {input.depth} \\
