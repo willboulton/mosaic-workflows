@@ -80,4 +80,4 @@ onstart:
             shell(f"mkdir -p {bam_tmpdir}/{s.img_taxon_id}")
 
 rule all:
-    input: select_samples_6
+    input: select_samples_7
