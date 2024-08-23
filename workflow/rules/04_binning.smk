@@ -38,7 +38,7 @@ rule metabat_coassembly:
 
 rule metabat_multiassembly:
     input:
-        fna = f"{assembly_dir}/{{batch}}/{{batch}}.euks.fna",
+        fna = f"{binning_dir}/{{batch}}/{{batch}}.euks.fna",
         depth = f"{binning_dir}/{{batch}}/{{batch}}.euks_multi.jgi_cov.tsv"
     output:
         directory(f"{binning_dir}/{{batch}}/metabat_multi")
