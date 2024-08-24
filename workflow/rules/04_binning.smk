@@ -84,7 +84,7 @@ rule vamb_coassembly:
         fna = f"{assembly_dir}/{{batch}}/megahit/final.contigs.fa",
         cov = f"{binning_dir}/{{batch}}/{{batch}}.euks_coa.jgi_cov.npz"
     output:
-        bins = directory(f"{bam_tmpdir}/{{batch}}/vamb_coa/vae_clusters.tsv"), 
+        bins = directory(f"{bam_tmpdir}/{{batch}}/vamb_coa"), 
         embeddings = f"{bam_tmpdir}/{{batch}}/vamb_coa/latent.npz"
     conda:
         "anvio"
@@ -110,7 +110,7 @@ rule vamb_multiassembly:
         cov = f"{binning_dir}/{{batch}}/{{batch}}.euks_multi.jgi_cov.npz"
     output:
         bins = directory(f"{bam_tmpdir}/{{batch}}/vamb_multi"), 
-        embeddings = f"{bam_tmpdir}/{{batch}}/vamb_multi/embeddings.npz"
+        embeddings = f"{bam_tmpdir}/{{batch}}/vamb_multi/latent.npz"
     conda:
         "anvio"
     envmodules:
