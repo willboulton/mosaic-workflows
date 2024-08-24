@@ -108,7 +108,7 @@ rule vamb_multiassembly:
         fna = f"{binning_dir}/{{batch}}/{{batch}}.euks.fna",
         cov = f"{binning_dir}/{{batch}}/{{batch}}.euks_multi.jgi_cov.npz"
     output:
-        embeddings = f"{bam_tmpdir}/{{batch}}/vamb_multi/embeddings.npz"
+        embeddings = f"{bam_tmpdir}/{{batch}}/vamb_multi/latent.npz"
     conda:
         "anvio"
     envmodules:
