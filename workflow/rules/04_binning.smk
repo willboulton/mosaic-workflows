@@ -92,7 +92,7 @@ rule vamb_coassembly:
         "cuda/11.8"
     shell:
         """
-        cd {bam_tmpdir}
+        cd {bam_tmpdir}/{wildcards.batch}
         vamb \\
             --minfasta 200000 \\
             --norefcheck \\
@@ -101,7 +101,7 @@ rule vamb_coassembly:
             --cuda \\
             --rpkm {input.cov} \\
             --fasta {input.fna} \\
-            --outdir {wildcards.batch}/vamb_coa
+            --outdir vamb_coa
         """
 
 rule vamb_multiassembly:
@@ -117,7 +117,7 @@ rule vamb_multiassembly:
         "cuda/11.8"
     shell:
         """
-        cd {bam_tmpdir}
+        cd {bam_tmpdir}/{wildcards.batch}
         vamb \\
             --minfasta 200000 \\
             --norefcheck \\
@@ -126,7 +126,7 @@ rule vamb_multiassembly:
             --cuda \\
             --rpkm {input.cov} \\
             --fasta {input.fna} \\
-            --outdir {wildcards.batch}/vamb_multi
+            --outdir vamb_multi
         """
 
 
