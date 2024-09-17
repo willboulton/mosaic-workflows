@@ -126,7 +126,7 @@ rule strobealign_single_sample:
         fq = f"{fastq_tmpdir}/{{sample}}-filter-METAG.fastq.gz",
         ref = f"{binning_dir}/{{sample}}/{{sample}}.a.fna"
     output:
-        f"{bam_tmpdir}/{{sample}}.sorted.bam"
+        f"{bam_tmpdir}/{{sample}}/bam/{{sample}}.sorted.bam"
     conda:
         "anvio"
     envmodules:
