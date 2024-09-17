@@ -27,10 +27,10 @@ default-resources:
     - cpus_per_task=1
 
 set-resources:
-    - deinterleave:mem="2G"
-    - deinterleave:slurm_partition="compute-64-512,compute-24-96"
-    - deinterleave:runtime=240
-    - deinterleave:cpus_per_task=4
+    #- deinterleave:mem="2G"
+    #- deinterleave:slurm_partition="compute-64-512,compute-24-96"
+    #- deinterleave:runtime=240
+    #- deinterleave:cpus_per_task=4
     
     - centrifuge_on_contigs:mem="180G"
     - centrifuge_on_contigs:slurm_partition="compute-64-512"
@@ -49,10 +49,10 @@ set-resources:
     - get_unmapped_reads:runtime=240
     - get_unmapped_reads:cpus_per_task=8
 
-    - centrifuge_on_reads:mem="480G"
-    - centrifuge_on_reads:slurm_partition="compute-64-512"
-    - centrifuge_on_reads:runtime=720
-    - centrifuge_on_reads:cpus_per_task=16
+    #- centrifuge_on_reads:mem="480G"
+    #- centrifuge_on_reads:slurm_partition="compute-64-512"
+    #- centrifuge_on_reads:runtime=720
+    #- centrifuge_on_reads:cpus_per_task=16
 
     - mmseqs:mem="240G"
     - mmseqs:slurm_partition="compute-64-512"
@@ -89,15 +89,15 @@ set-resources:
     - strobealign_x_coassembly:cpus_per_task=8
 
 
-    - kallisto_index:mem="64GB"
-    - kallisto_index:slurm_partition="compute-64-512,compute-24-96"
-    - kallisto_index:runtime=360
-    - kallisto_index:cpus_per_task=8
+    #- kallisto_index:mem="64GB"
+    #- kallisto_index:slurm_partition="compute-64-512,compute-24-96"
+    #- kallisto_index:runtime=360
+    #- kallisto_index:cpus_per_task=8
 
-    - kallisto_x_sample:mem="32GB"
-    - kallisto_x_sample:slurm_partition="compute-64-512,compute-24-96"
-    - kallisto_x_sample:runtime=120
-    - kallisto_x_sample:cpus_per_task=8
+    #- kallisto_x_sample:mem="32GB"
+    #- kallisto_x_sample:slurm_partition="compute-64-512,compute-24-96"
+    #- kallisto_x_sample:runtime=120
+    #- kallisto_x_sample:cpus_per_task=8
     # kallisto index: 24 GB 4 threads ran OOM
     # on 32 GB similar to strobealign
 
@@ -183,17 +183,17 @@ set-resources:
     - template:cpus_per_task=32
 
 set-threads:
-    - deinterleave=4
+    #- deinterleave=4
     - centrifuge_on_contigs=16
     - bwa_mem=8
     - get_unmapped_reads=8
-    - centrifuge_on_reads=16
+    #- centrifuge_on_reads=16
     - mmseqs=16
     - metabat_single_assembly=4
     - metabat_coassembly=4
     - metabat_multiassembly=4
-    - kallisto_index=8
-    - kallisto_x_sample=8
+    #- kallisto_index=8
+    #- kallisto_x_sample=8
     - strobealign_x_sample=8
     - strobealign_x_coassembly=8
     - vamb_single_assembly=16

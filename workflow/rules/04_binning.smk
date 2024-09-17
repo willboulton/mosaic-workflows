@@ -60,8 +60,7 @@ rule vamb_single_assembly:
         fna = f"{binning_dir}/{{sample}}/{{sample}}.a.fna",
         bam = f"{bam_tmpdir}/{{sample}}/bam/{{sample}}.sorted.bam"
     output:
-        bins = directory(f"{binning_dir}/{{sample}}/vamb"), 
-        embeddings = f"{binning_dir}/{{sample}}/vamb/embeddings.npz"
+        directory(f"{binning_dir}/{{sample}}/vamb")
     conda:
         "anvio"
     envmodules:
@@ -71,13 +70,15 @@ rule vamb_single_assembly:
         vamb \\
             --minfasta 50000 \\
             --norefcheck \\
-            -p {threads} \
+            -p {threads} \\
             -m 2000 \\
             --cuda \\
             --bamfiles {input.bam} \\
             --fasta {input.fna} \\
-            --outdir {output.bins}
+            --outdir {output}
         """
+
+
 
 rule vamb_coassembly:
     input:
@@ -96,7 +97,7 @@ rule vamb_coassembly:
         rm -rf vamb_coa && vamb \\
             --minfasta 200000 \\
             --norefcheck \\
-            -p {threads} \
+            -p {threads} \\
             -m 2000 \\
             --cuda \\
             --rpkm {input.cov} \\
@@ -121,7 +122,7 @@ rule vamb_multiassembly:
         rm -rf vamb_multi && vamb \\
             --minfasta 200000 \\
             --norefcheck \\
-            -p {threads} \
+            -p {threads} \\
             -m 2000 \\
             --cuda \\
             --rpkm {input.cov} \\
@@ -131,10 +132,46 @@ rule vamb_multiassembly:
 
 
 rule vacuum_coassembly:
+    input:
+        embeddings = f"{bam_tmpdir}/{{batch}}/vamb_multi/latent.npz",
+        fna = f"{binning_dir}/{{batch}}/{{batch}}.euks.fna"
+    output:
+        
+    conda: "blobology"
+    shell:
+        """
+        {software.workflow}/scripts/vacuum_blobology.py \\
+            
+        """
+
+
 rule vacuum_multiassembly:
+    input:
+    output:
+    conda: "blobology"
+    shell:
+        """
+        
+        """
+
 
 rule comebin_coassembly:
+    input:
+    output:
+    conda:
+        "comebin_env"
+    shell:
+        """
+        """
+
 rule comebin_multiassembly:
+    input:
+    output:
+    conda:
+        "comebin_env"
+    shell:
+        """
+        """
 
 rule split_bins:
     input:

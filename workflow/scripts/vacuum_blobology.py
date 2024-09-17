@@ -41,6 +41,9 @@ def parse_args():
     parser.add_argument('--contig_map', type = str, default = '', 
                         help = 'Mapping file in case you want to rename scaffold ids to contigs ids.')
 
+    parser.add_argument('--contignames', type = str, default = '', 
+                        help = 'File containing the contig ids in the same order as they appear in the embeddings file.')
+
     
     args = parser.parse_args()
     return args
@@ -63,6 +66,7 @@ if __name__ == "__main__":
     elif args.embeddings_format == "COMEBin":
         print("Loading COMEBin latent space")
         mat = pd.read_csv(args.embeddings, sep = '\t').to_numpy()
+        contignames = pd.DataFrame(mat.index, names = ['contig_id'])
         print("COMEBin Latent space loaded")
     else:
         exit("unknown file, only VAMB npz, or COMEBin tsv allowed")
@@ -79,10 +83,24 @@ if __name__ == "__main__":
             coords
         )
 
+    if args.embeddings_format == "VAMB" and not args.contignames:
+        print("VAMB embedding matrix doesn't provide contig names, you need --contignames.")
+        exit()
+    
+    # provided by vamb
+    if args.contignames:
+        contignames = pd.read_csv(args.contignames, names = ['contig_id'])
+    
     elif extn in ["tsv", "txt"]:
-        pass
+        df_coords = pd.DataFrame(coords, columns = ['umap_0', 'umap_1'])
+        df_coords['contig_id'] = contignames.contig_id
+        df_coords = df_coords[['contig_id', 'umap_0', 'umap_1']]
+        df_coords.to_csv(args.umap_out, sep = '\t', index = False)
     elif extn == "csv":
-        pass
+        df_coords = pd.DataFrame(coords, columns = ['umap_0', 'umap_1'])
+        df_coords['contig_id'] = contignames.contig_id
+        df_coords = df_coords[['contig_id', 'umap_0', 'umap_1']]
+        df_coords.to_csv(args.umap_out, sep = ',', index = False)
     else:
         exit(f"The parameter --umap_out, {args.umap_out} must have an extension one of npy, tsv, txt, or csv")
         
@@ -129,15 +147,18 @@ if __name__ == "__main__":
             
             with open(tmpf2.name, 'r') as mcl_results:
                 mcl_clusters = [
-                    [int(x) for x in cluster.split("\t")] for cluster in mcl_results.read().split("\n")
+                    [int(x) for x in cluster.split("\t") if x.strip() != ""] for cluster in mcl_results.read().split("\n")
                 ]
             
-            contig_ids = pd.read_csv(args.contig_map, header = False).to_list()
+            #contig_ids = pd.read_csv(args.contig_map, header = False).to_list()
             mcl_clusters = [
-                [contig_ids[x] for x in cluster] for cluster in mcl_clusters
+                [contignames.contig_id.iloc[x] for x in cluster] for cluster in mcl_clusters if len(cluster) > 0
             ]
 
             with open(f"{args.mcl_out}", 'w') as mcl_clusters_out:
+                
+                mcl_clusters_out.write(f"mcl_bin_id\tcontig_id\n")
+                
                 for idx, cluster in enumerate(mcl_clusters):                
                     for c in cluster:
                         mcl_clusters_out.write(f"mcl.{idx + 1}\t{c}\n")

@@ -41,5 +41,5 @@ rule eukcc:
     input:
         f"{binning_dir}/{{batch}}/{{binner}}_{{coa|multi}}"
     output:
-        f"{binning_dir}/{{batch}}/{{binner}}_{{coa|multi}}_checked"
+        f"{binning_dir}/{{batch}}/{{binner}}_{{coa|multi}}_eukcc"
     

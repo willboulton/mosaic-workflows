@@ -125,7 +125,8 @@ rule aggregate_taxonomy:
 rule split_fastq:
     input:
         euks = f"{taxo_tmpdir}/{{sample}}/{{sample}}.a.euks.txt",
-        bam = f"{bam_tmpdir}/{{sample}}/bam/{{sample}}.sorted.bam"
+        bam = f"{bam_tmpdir}/{{sample}}/bam/{{sample}}.sorted.bam", 
+        map = f"{binning_dir}/{{sample}}/{{sample}}.a.map.txt"
     output:
         paired_mapped = f"{fastq_tmpdir}/{{sample}}/{{sample}}-EVU-paired-mapped.fastq.gz", 
         singletons = f"{fastq_tmpdir}/{{sample}}/{{sample}}-EVU-singletons.fastq.gz"
@@ -134,7 +135,7 @@ rule split_fastq:
     shell:
         """
         {software.workflow}/scripts/split_fastq.sh \\
-            {input.bam} {input.euks} \\
+            {input.bam} {input.euks} {input.map} \\
             {output.paired_mapped} {output.singletons} \\
             {threads}
         """
