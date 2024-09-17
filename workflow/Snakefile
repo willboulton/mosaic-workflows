@@ -40,7 +40,7 @@ def select_samples_4(wc):
     filter_samples = [ s for s in samples if s.batch in run_batch ]
     return (
         list(set(f"{binning_dir}/{s.batch}/{s.batch}.euks.fna" for s in filter_samples)) + 
-        list(set(f"{assembly_dir}/{s.batch}/megahit"))
+        list(set(f"{assembly_dir}/{s.batch}/megahit") for s in filter_samples)
     )
 
 def select_samples_5(wc):
