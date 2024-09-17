@@ -121,6 +121,20 @@ rule aggregate_taxonomy:
             {output}
         """
 
+rule strobealign_single_sample:
+    input:
+        fq = f"{fastq_tmpdir}/{{sample}}-filter-METAG.fastq.gz",
+        ref = f"{binning_dir}/{{sample}}/{{sample}}.a.fna"
+    output:
+        f"{bam_tmpdir}/{{sample}}.sorted.bam"
+    conda:
+        "anvio"
+    envmodules:
+        "samtools/1.16.1"
+    shell:
+        """
+        strobealign -t {threads} {input.ref} --interleaved {input.fq} | samtools sort -@ {threads} -o {output}
+        """
 
 rule split_fastq:
     input:
