@@ -80,7 +80,7 @@ onstart:
         if s.batch in run_batch:
             shell(f"mkdir -p {fastq_tmpdir}/{s.img_taxon_id}")
             shell(f"mkdir -p {taxo_tmpdir}/{s.img_taxon_id}")
-            shell(f"mkdir -p {bam_tmpdir}/{s.img_taxon_id}")
+            shell(f"mkdir -p {bam_tmpdir}/{s.img_taxon_id}/bam")
 
 rule all:
     input: select_samples_4
