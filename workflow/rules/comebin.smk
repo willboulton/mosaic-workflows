@@ -19,18 +19,13 @@ rule comebin_single_assembly:
 
 rule cbin_00_preprocessing:
     input:
-        map = f"{binning_dir}/{{sample}}/{{sample}}.a.map.txt",
-        fna = f"{binning_dir}/{{sample}}/{{sample}}.a.fna"
+        f"{binning_dir}/{{sample}}/{{sample}}.a.fna"
     output:
         f"{binning_dir}/{{sample}}/{{sample}}.a.renamed_1000.fa"
     conda: "comebin_env"
     shell:
         """
-        mkfifo {wildcards.sample}_kv && \\
-        awk '{print $2 "\t" $1}' {input.map} > {wildcards.sample}_kv & \\
-        seqkit replace -p '(.+)$' -r '{kv}' -k {wildcards.sample}_kv {input.fna} | \\
-        seqkit seq -m 1001 > {output}
-        rm -f {wildcards.sample}_kv
+        seqkit seq -m 1001 {input} > {output}
         """
 
 rule cbin_01_augmentation_data:
