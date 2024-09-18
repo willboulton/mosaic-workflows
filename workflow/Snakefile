@@ -71,8 +71,8 @@ def select_samples_8(wc):
 def select_samples_9(wc):
     filter_samples = [ s for s in samples if str(s.img_taxon_id) == "3300046532" ]
     return ([ f"{binning_dir}/{s.img_taxon_id}/comebin/bins" for s in filter_samples ] + 
-        list(set([ f"{binning_dir}/{s.batch}/comebin_multi/bins" for s in filter_samples ] )) + 
-        list(set([ f"{binning_dir}/{s.batch}/comebin_coa/bins" for s in filter_samples ] ))
+        list(set([ f"{binning_dir}/E04_1/comebin_multi/bins" for s in filter_samples ] )) + 
+        list(set([ f"{binning_dir}/E04_1/comebin_coa/bins" for s in filter_samples ] ))
     )
 
 
@@ -94,4 +94,4 @@ onstart:
             shell(f"mkdir -p {bam_tmpdir}/{s.img_taxon_id}/bam")
 
 rule all:
-    input: select_samples_8
+    input: select_samples_9
