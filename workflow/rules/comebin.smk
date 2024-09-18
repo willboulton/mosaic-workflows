@@ -37,7 +37,6 @@ rule cbin_01_data_augmentation:
             -p {input.bam_dir} \\
             -o {binning_dir}/{wildcards.sample}/comebin \\
             -t {threads} 
-        touch {output}
         """
 
 use rule cbin_01_data_augmentation as cbin_01_multiassembly with:
@@ -70,7 +69,6 @@ rule cbin_02_training:
             -p {input.bam_dir} \\
             -o {binning_dir}/{wildcards.sample}/comebin \\
             -t {threads} 
-        touch {output}
         """
 
 use rule cbin_02_training as cbin_02_multiassembly with:
