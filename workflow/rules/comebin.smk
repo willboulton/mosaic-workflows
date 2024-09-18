@@ -32,10 +32,11 @@ rule cbin_01_data_augmentation:
     shell:
         """
         cd ~/software/COMEBin/COMEBin
+        out=$(dirname {output})
         bash run_comebin_01.sh \\
             -a {input.contigs_file} \\
             -p {input.bam_dir} \\
-            -o {binning_dir}/{wildcards.sample}/comebin \\
+            -o $out \\
             -t {threads} 
         """
 
@@ -64,10 +65,11 @@ rule cbin_02_training:
     shell:
         """
         cd ~/software/COMEBin/COMEBin
+        out=$(dirname {output})
         bash run_comebin_02.sh \\
             -a {input.contigs_file} \\
             -p {input.bam_dir} \\
-            -o {binning_dir}/{wildcards.sample}/comebin \\
+            -o $out \\
             -t {threads} 
         """
 
@@ -97,8 +99,8 @@ rule cbin_03_leiden_clustering:
     conda: "comebin_env"
     shell:
         """
-        out=$(dirname {output})
         cd ~/software/COMEBin/COMEBin
+        out=$(dirname {output})
         bash run_comebin_03.sh \\
             -a {input.contigs_file} \\
             -p {input.bam_dir} \\
@@ -136,10 +138,11 @@ rule cbin_04_bin_qc:
     shell:
         """
         cd ~/software/COMEBin/COMEBin
+        out=$(dirname {output})
         bash run_comebin_04.sh \\
             -a {input.contigs_file} \\
             -p {input.bam_dir} \\
-            -o {binning_dir}/{wildcards.sample}/comebin \\
+            -o $out \\
             -t {threads} 
         """
 
