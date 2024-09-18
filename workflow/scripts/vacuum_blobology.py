@@ -44,6 +44,8 @@ def parse_args():
     parser.add_argument('--contignames', type = str, default = '', 
                         help = 'File containing the contig ids in the same order as they appear in the embeddings file.')
 
+    parser.add_argument('--umap_only', action = 'store_true', help = 'Only do the umap bit.')
+
     
     args = parser.parse_args()
     return args
@@ -65,8 +67,9 @@ if __name__ == "__main__":
         print("VAMB Latent space loaded")
     elif args.embeddings_format == "COMEBin":
         print("Loading COMEBin latent space")
-        mat = pd.read_csv(args.embeddings, sep = '\t').to_numpy()
-        contignames = pd.DataFrame(mat.index, names = ['contig_id'])
+        df_emb = pd.read_csv(args.embeddings, sep = '\t', index_col = 0)
+        mat = df_emb.to_numpy()
+        contignames = pd.DataFrame(df_emb.index, columns = ['contig_id'])
         print("COMEBin Latent space loaded")
     else:
         exit("unknown file, only VAMB npz, or COMEBin tsv allowed")
@@ -103,6 +106,9 @@ if __name__ == "__main__":
         df_coords.to_csv(args.umap_out, sep = ',', index = False)
     else:
         exit(f"The parameter --umap_out, {args.umap_out} must have an extension one of npy, tsv, txt, or csv")
+
+    if args.umap_only:
+        exit()
         
     # get the umap weighted graph and put it in a readable form
     # (to, from) value

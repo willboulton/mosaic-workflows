@@ -93,7 +93,6 @@ set-resources:
     - strobealign_x_coassembly:runtime=240
     - strobealign_x_coassembly:cpus_per_task=8
 
-
     #- kallisto_index:mem="64GB"
     #- kallisto_index:slurm_partition="compute-64-512,compute-24-96"
     #- kallisto_index:runtime=360
@@ -202,7 +201,6 @@ set-resources:
     - concat_fasta:runtime=60
     - concat_fasta:cpus_per_task=3
 
-
     - template:mem="64G"
     - template:slurm_partition="compute-64-512,compute-24-96"
     - template:runtime=600
@@ -230,6 +228,10 @@ set-threads:
     - megahit=48
     - tiara=4
     - comebin_single_assembly=8
+    - cbin_00_preprocessing=1
+    - cbin_01_augmentation_data=8
+    - cbin_02_training=8
+    - cbin_03_leiden_clustering=8
     - mmseqs_lca=1
     - vacuum_single_assembly=1
     - aggregate_taxonomy=1
