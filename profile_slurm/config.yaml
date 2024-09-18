@@ -150,12 +150,12 @@ set-resources:
     - cbin_00_preprocessing:runtime=60
     - cbin_00_preprocessing:cpus_per_task=1
 
-    - cbin_01_augmentation_data:mem="12G"
+    - cbin_01_augmentation_data:mem="24G"
     - cbin_01_augmentation_data:slurm_partition="compute-64-512,compute-24-96"
-    - cbin_01_augmentation_data:runtime=240
+    - cbin_01_augmentation_data:runtime=120
     - cbin_01_augmentation_data:cpus_per_task=8
 
-    - cbin_02_training:mem="12G"
+    - cbin_02_training:mem="32G"
     - cbin_02_training:slurm_partition="gpu-rtx6000-2"
     - cbin_02_training:runtime=480
     - cbin_02_training:cpus_per_task=8
