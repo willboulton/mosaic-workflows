@@ -65,6 +65,10 @@ def select_samples_7(wc):
         #list(set(f"{bam_tmpdir}/{s.batch}/metabat_multi" for s in filter_samples)) 
     )
 
+def select_samples_8(wc):
+    filter_samples = [ s for s in samples if s.img_taxon_id == "3300060027" ]
+    return [ f"{binning_dir}/{s.batch}/comebin/bins" for s in filter_samples ]
+
 onstart:
     print("starting")
     print("********")
@@ -83,4 +87,4 @@ onstart:
             shell(f"mkdir -p {bam_tmpdir}/{s.img_taxon_id}/bam")
 
 rule all:
-    input: select_samples_4
+    input: select_samples_8
