@@ -66,8 +66,8 @@ def select_samples_7(wc):
     )
 
 def select_samples_8(wc):
-    filter_samples = [ s for s in samples if s.img_taxon_id == "3300060027" ]
-    return [ f"{binning_dir}/{s.batch}/comebin/bins" for s in filter_samples ]
+    filter_samples = [ s for s in samples if str(s.img_taxon_id) == "3300046532" ]
+    return [ f"{binning_dir}/{s.img_taxon_id}/comebin/bins" for s in filter_samples ]
 
 onstart:
     print("starting")
