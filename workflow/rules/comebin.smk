@@ -1,22 +1,3 @@
-rule comebin_single_assembly:
-    input:
-        fna = f"{binning_dir}/{{sample}}/{{sample}}.a.renamed_1000.fna",
-        bam = f"{bam_tmpdir}/{{sample}}/bam/{{sample}}.sorted.bam",
-        bam_dir = f"{bam_tmpdir}/{{sample}}/bam"
-    output:
-        directory(f"{binning_dir}/{{sample}}/comebin")
-    conda:
-        "comebin_env"
-    shell:
-        """
-        cd {software.comebin_src}/COMEBin
-        bash run_comebin.sh \\
-            -a {input.fna} \\
-            -p {input.bam_dir} \\
-            -o {output} \\
-            -t {threads} 
-        """    
-
 rule cbin_00_preprocessing:
     input:
         f"{binning_dir}/{{sample}}/{{sample}}.a.fna"
@@ -28,12 +9,25 @@ rule cbin_00_preprocessing:
         seqkit seq -m 1001 {input} > {output}
         """
 
-rule cbin_01_augmentation_data:
+use rule cbin_00_preprocessing as cbin_00_multiassembly with:
+    input:
+        f"{binning_dir}/{{batch}}/{{batch}}.euks.fna"
+    output:
+        f"{binning_dir}/{{batch}}/{{batch}}.euks.renamed_1000.fna"
+
+use rule cbin_00_preprocessing as cbin_00_coassembly with:
+    input:
+        f"{assembly_dir}/{{batch}}/megahit/final.contigs.fa"
+    output:
+        f"{assembly_dir}/{{batch}}/megahit/final.contigs.renamed_1000.fa"
+
+
+rule cbin_01_data_augmentation:
     input:
         contigs_file = f"{binning_dir}/{{sample}}/{{sample}}.a.renamed_1000.fa", 
         bam_dir = f"{bam_tmpdir}/{{sample}}/bam"
     output:
-        directory(f"{binning_dir}/{{sample}}/comebin/augmentation_data")
+        directory(f"{binning_dir}/{{sample}}/comebin/data_augmentation")
     conda: "comebin_env"
     shell:
         """
@@ -43,14 +37,28 @@ rule cbin_01_augmentation_data:
             -p {input.bam_dir} \\
             -o {binning_dir}/{wildcards.sample}/comebin \\
             -t {threads} 
+        touch {output}
         """
 
+use rule cbin_01_data_augmentation as cbin_01_multiassembly with:
+    input:
+        contigs_file = f"{binning_dir}/{{batch}}/{{batch}}.euks.renamed_1000.fna", 
+        bam_dir = f"{bam_tmpdir}/{{batch}}/bam_multi"
+    output:
+        directory(f"{binning_dir}/{{batch}}/comebin_multi/data_augmentation")
+
+use rule cbin_01_data_augmentation as cbin_01_coassembly with:
+    input:
+        contigs_file = f"{assembly_dir}/{{batch}}/megahit/final.contigs.renamed_1000.fa", 
+        bam_dir = f"{bam_tmpdir}/{{batch}}/bam_coa"
+    output:
+        directory(f"{binning_dir}/{{batch}}/comebin_coa/data_augmentation")
 
 rule cbin_02_training:
     input:
         contigs_file = f"{binning_dir}/{{sample}}/{{sample}}.a.renamed_1000.fa", 
         bam_dir = f"{bam_tmpdir}/{{sample}}/bam",
-        augmentation_data = f"{binning_dir}/{{sample}}/comebin/augmentation_data"
+        data_augmentation = f"{binning_dir}/{{sample}}/comebin/data_augmentation"
     output:
         directory(f"{binning_dir}/{{sample}}/comebin/comebin_res")
     conda: "comebin_env"
@@ -62,8 +70,24 @@ rule cbin_02_training:
             -p {input.bam_dir} \\
             -o {binning_dir}/{wildcards.sample}/comebin \\
             -t {threads} 
+        touch {output}
         """
 
+use rule cbin_02_training as cbin_02_multiassembly with:
+    input:
+        contigs_file = f"{binning_dir}/{{batch}}/{{batch}}.euks.renamed_1000.fna", 
+        bam_dir = f"{bam_tmpdir}/{{batch}}/bam_multi",
+        data_augmentation = f"{binning_dir}/{{batch}}/comebin_multi/data_augmentation"
+    output:
+        directory(f"{binning_dir}/{{batch}}/comebin_multi/comebin_res")
+
+use rule cbin_02_training as cbin_02_coassembly with:
+    input:
+        contigs_file = f"{assembly_dir}/{{batch}}/megahit/final.contigs.renamed_1000.fa", 
+        bam_dir = f"{bam_tmpdir}/{{batch}}/bam_coa",
+        data_augmentation = f"{binning_dir}/{{batch}}/comebin_coa/data_augmentation"
+    output:
+        directory(f"{binning_dir}/{{batch}}/comebin_coa/comebin_res")
 
 rule cbin_03_leiden_clustering:
     input:
@@ -87,6 +111,21 @@ rule cbin_03_leiden_clustering:
         mv {input.res}/*.fa {output}
         """
 
+use rule cbin_03_leiden_clustering as cbin_03_multiassembly with:
+    input:
+        contigs_file = f"{binning_dir}/{{batch}}/{{batch}}.euks.renamed_1000.fna", 
+        bam_dir = f"{bam_tmpdir}/{{batch}}/bam_multi",
+        res = f"{binning_dir}/{{batch}}/comebin_multi/comebin_res"
+    output:
+        directory(f"{binning_dir}/{{batch}}/comebin_multi/bins")
+
+use rule cbin_03_leiden_clustering as cbin_03_coassembly with:
+    input:
+        contigs_file = f"{assembly_dir}/{{batch}}/megahit/final.contigs.renamed_1000.fa", 
+        bam_dir = f"{bam_tmpdir}/{{batch}}/bam_coa",
+        res = f"{binning_dir}/{{batch}}/comebin_coa/comebin_res"
+    output:
+        directory(f"{binning_dir}/{{batch}}/comebin_coa/bins")
 
 rule cbin_04_bin_qc:
     input:
@@ -106,3 +145,18 @@ rule cbin_04_bin_qc:
             -t {threads} 
         """
 
+use rule cbin_04_bin_qc as cbin_04_multiassembly with:
+    input:
+        contigs_file = f"{binning_dir}/{{batch}}/{{batch}}.euks.renamed_1000.fna", 
+        bam_dir = f"{bam_tmpdir}/{{batch}}/bam_multi",
+        clust = f"{binning_dir}/{{batch}}/comebin_multi/bins"
+    output:
+        directory(f"{binning_dir}/{{batch}}/comebin_multi/comebin_out")
+
+use rule cbin_04_bin_qc as cbin_04_coassembly with:
+    input:
+        contigs_file = f"{assembly_dir}/{{batch}}/megahit/final.contigs.renamed_1000.fa", 
+        bam_dir = f"{bam_tmpdir}/{{batch}}/bam_coa",
+        clust = f"{binning_dir}/{{batch}}/comebin_coa/bins"
+    output:
+        directory(f"{binning_dir}/{{batch}}/comebin_coa/comebin_out")

@@ -1,0 +1,1 @@
+sbatch -p hmem-720,hmem-4T -c 1 --mem 720000 -t 3600 -n 40 --qos hmem --wrap "mkdir -p /gpfs/data/mock_lab/will/mosaic_tmp/coassemblies_tmp/E02_2_tmp;megahit --memory 700e9 --mem-flag 1 --min-contig-len 500 --presets meta-large --tmp-dir {assembly_dir}/{wildcards.batch}_tmp/ -t {threads} --12 {input.interleaved} -r {input.singletons} --continue -o {output}"
