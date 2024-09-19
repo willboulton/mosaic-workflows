@@ -95,7 +95,8 @@ rule cbin_03_leiden_clustering:
         bam_dir = f"{bam_tmpdir}/{{sample}}/bam",
         res = f"{binning_dir}/{{sample}}/comebin/comebin_res"
     output:
-        directory(f"{binning_dir}/{{sample}}/comebin/comebin_clusters")
+        clust = directory(f"{binning_dir}/{{sample}}/comebin/comebin_clusters"), 
+        out = directory(f"{binning_dir}/{{sample}}/comebin/comebin_out")
     conda: "comebin_env"
     shell:
         """
@@ -106,6 +107,9 @@ rule cbin_03_leiden_clustering:
             -p {input.bam_dir} \\
             -o $out \\
             -t {threads} 
+        
+        mkdir -p {output.out}
+        cp {output.clust}/*tsv_bins/*.fa {output.out}
         """
 
 use rule cbin_03_leiden_clustering as cbin_03_multiassembly with:
@@ -114,7 +118,8 @@ use rule cbin_03_leiden_clustering as cbin_03_multiassembly with:
         bam_dir = f"{bam_tmpdir}/{{batch}}/bam_multi",
         res = f"{binning_dir}/{{batch}}/comebin_multi/comebin_res"
     output:
-        directory(f"{binning_dir}/{{batch}}/comebin_multi/comebin_clusters")
+        clust = directory(f"{binning_dir}/{{batch}}/comebin_multi/comebin_clusters"), 
+        out = directory(f"{binning_dir}/{{batch}}/comebin_multi/comebin_out")
 
 use rule cbin_03_leiden_clustering as cbin_03_coassembly with:
     input:
@@ -122,7 +127,8 @@ use rule cbin_03_leiden_clustering as cbin_03_coassembly with:
         bam_dir = f"{bam_tmpdir}/{{batch}}/bam_coa",
         res = f"{binning_dir}/{{batch}}/comebin_coa/comebin_res"
     output:
-        directory(f"{binning_dir}/{{batch}}/comebin_coa/comebin_clusters")
+        clust = directory(f"{binning_dir}/{{batch}}/comebin_coa/comebin_clusters"), 
+        out = directory(f"{binning_dir}/{{batch}}/comebin_coa/comebin_out")
 
 rule cbin_04_bin_qc:
     input:
@@ -130,7 +136,7 @@ rule cbin_04_bin_qc:
         bam_dir = f"{bam_tmpdir}/{{sample}}/bam",
         clust = f"{binning_dir}/{{sample}}/comebin/comebin_clusters"
     output:
-        directory(f"{binning_dir}/{{sample}}/comebin/comebin_out")
+        directory(f"{binning_dir}/{{sample}}/comebin/bins")
     conda: "comebin_env"
     shell:
         """
@@ -149,7 +155,7 @@ use rule cbin_04_bin_qc as cbin_04_multiassembly with:
         bam_dir = f"{bam_tmpdir}/{{batch}}/bam_multi",
         clust = f"{binning_dir}/{{batch}}/comebin_multi/comebin_clusters"
     output:
-        directory(f"{binning_dir}/{{batch}}/comebin_multi/comebin_out")
+        directory(f"{binning_dir}/{{batch}}/comebin_multi/bins")
 
 use rule cbin_04_bin_qc as cbin_04_coassembly with:
     input:
@@ -157,4 +163,4 @@ use rule cbin_04_bin_qc as cbin_04_coassembly with:
         bam_dir = f"{bam_tmpdir}/{{batch}}/bam_coa",
         clust = f"{binning_dir}/{{batch}}/comebin_coa/comebin_clusters"
     output:
-        directory(f"{binning_dir}/{{batch}}/comebin_coa/comebin_out")
+        directory(f"{binning_dir}/{{batch}}/comebin_coa/bins")

@@ -208,6 +208,21 @@ set-resources:
     - cbin_03_multiassembly:runtime=720
     - cbin_03_multiassembly:cpus_per_task=8
 
+    - cbin_04_bin_qc:mem="64G"
+    - cbin_04_bin_qc:slurm_partition="compute-64-512,compute-24-96"
+    - cbin_04_bin_qc:runtime=720
+    - cbin_04_bin_qc:cpus_per_task=8
+    
+    - cbin_04_coassembly:mem="64G"
+    - cbin_04_coassembly:slurm_partition="compute-64-512,compute-24-96"
+    - cbin_04_coassembly:runtime=720
+    - cbin_04_coassembly:cpus_per_task=8
+
+    - cbin_04_multiassembly:mem="64G"
+    - cbin_04_multiassembly:slurm_partition="compute-64-512,compute-24-96"
+    - cbin_04_multiassembly:runtime=720
+    - cbin_04_multiassembly:cpus_per_task=8
+
     - mmseqs_lca:mem="16G"
     - mmseqs_lca:slurm_partition="compute-64-512,compute-24-96"
     - mmseqs_lca:runtime=30
@@ -282,6 +297,9 @@ set-threads:
     - cbin_01_multiassembly=8
     - cbin_02_multiassembly=8
     - cbin_03_multiassembly=8
+    - cbin_04_bin_qc=8
+    - cbin_04_coassembly=8
+    - cbin_04_multiassembly=8
     - mmseqs_lca=1
     - vacuum_single_assembly=1
     - aggregate_taxonomy=1

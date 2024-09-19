@@ -70,9 +70,9 @@ def select_samples_8(wc):
 
 def select_samples_9(wc):
     filter_samples = [ s for s in samples if str(s.img_taxon_id) == "3300046532" ]
-    return ([ f"{binning_dir}/{s.img_taxon_id}/comebin/comebin_clusters" for s in filter_samples ] + 
-        list(set([ f"{binning_dir}/E04_1/comebin_multi/comebin_clusters" for s in filter_samples ] )) + 
-        list(set([ f"{binning_dir}/E04_1/comebin_coa/comebin_clusters" for s in filter_samples ] ))
+    return ([ f"{binning_dir}/{s.img_taxon_id}/comebin/comebin_out" for s in filter_samples ] + 
+        list(set([ f"{binning_dir}/E04_1/comebin_multi/comebin_out" for s in filter_samples ] )) + 
+        list(set([ f"{binning_dir}/E04_1/comebin_coa/comebin_out" for s in filter_samples ] ))
     )
 
 
