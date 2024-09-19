@@ -160,51 +160,51 @@ set-resources:
     - cbin_00_multiassembly:runtime=60
     - cbin_00_multiassembly:cpus_per_task=1
 
-    - cbin_01_augmentation_data:mem="12G"
+    - cbin_01_augmentation_data:mem="24G"
     - cbin_01_augmentation_data:slurm_partition="compute-64-512,compute-24-96"
-    - cbin_01_augmentation_data:runtime=120
+    - cbin_01_augmentation_data:runtime=240
     - cbin_01_augmentation_data:cpus_per_task=8
 
-    - cbin_01_coassembly:mem="12G"
+    - cbin_01_coassembly:mem="24G"
     - cbin_01_coassembly:slurm_partition="compute-64-512,compute-24-96"
-    - cbin_01_coassembly:runtime=120
+    - cbin_01_coassembly:runtime=240
     - cbin_01_coassembly:cpus_per_task=8
 
-    - cbin_01_multiassembly:mem="12G"
+    - cbin_01_multiassembly:mem="24G"
     - cbin_01_multiassembly:slurm_partition="compute-64-512,compute-24-96"
-    - cbin_01_multiassembly:runtime=120
+    - cbin_01_multiassembly:runtime=240
     - cbin_01_multiassembly:cpus_per_task=8
 
-    - cbin_02_training:mem="12G"
-    - cbin_02_training:slurm_partition="gpu-rtx6000-2"
+    - cbin_02_training:mem="32G"
+    - cbin_02_training:slurm_partition="compute-64-512,compute-24-96" #"gpu-rtx6000-2"
     - cbin_02_training:runtime=480
     - cbin_02_training:cpus_per_task=8
-    - cbin_02_training:slurm_extra=r"--qos=gpu-rtx --gres=gpu:1"
+    #- cbin_02_training:slurm_extra=r"--qos=gpu-rtx --gres=gpu:1"
 
-    - cbin_02_coassembly:mem="12G"
-    - cbin_02_coassembly:slurm_partition="gpu-rtx6000-2"
+    - cbin_02_coassembly:mem="32G"
+    - cbin_02_coassembly:slurm_partition="compute-64-512,compute-24-96" #"gpu-rtx6000-2"
     - cbin_02_coassembly:runtime=480
     - cbin_02_coassembly:cpus_per_task=8
-    - cbin_02_coassembly:slurm_extra=r"--qos=gpu-rtx --gres=gpu:1"
+    #- cbin_02_coassembly:slurm_extra=r"--qos=gpu-rtx --gres=gpu:1"
 
-    - cbin_02_multiassembly:mem="12G"
-    - cbin_02_multiassembly:slurm_partition="gpu-rtx6000-2"
+    - cbin_02_multiassembly:mem="32G"
+    - cbin_02_multiassembly:slurm_partition="compute-64-512,compute-24-96" #"gpu-rtx6000-2"
     - cbin_02_multiassembly:runtime=480
     - cbin_02_multiassembly:cpus_per_task=8
-    - cbin_02_multiassembly:slurm_extra=r"--qos=gpu-rtx --gres=gpu:1"
+    #- cbin_02_multiassembly:slurm_extra=r"--qos=gpu-rtx --gres=gpu:1"
 
     - cbin_03_coassembly:mem="64G"
-    - cbin_03_coassembly:slurm_partition="gpu-rtx6000-2"
+    - cbin_03_coassembly:slurm_partition="compute-64-512,compute-24-96"
     - cbin_03_coassembly:runtime=720
     - cbin_03_coassembly:cpus_per_task=8
 
     - cbin_03_multiassembly:mem="64G"
-    - cbin_03_multiassembly:slurm_partition="gpu-rtx6000-2"
+    - cbin_03_multiassembly:slurm_partition="compute-64-512,compute-24-96"
     - cbin_03_multiassembly:runtime=720
     - cbin_03_multiassembly:cpus_per_task=8
 
     - cbin_03_leiden_clustering:mem="64G"
-    - cbin_03_leiden_clustering:slurm_partition="gpu-rtx6000-2"
+    - cbin_03_leiden_clustering:slurm_partition="compute-64-512,compute-24-96"
     - cbin_03_leiden_clustering:runtime=720
     - cbin_03_leiden_clustering:cpus_per_task=8
 
