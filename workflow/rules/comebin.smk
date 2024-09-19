@@ -95,7 +95,7 @@ rule cbin_03_leiden_clustering:
         bam_dir = f"{bam_tmpdir}/{{sample}}/bam",
         res = f"{binning_dir}/{{sample}}/comebin/comebin_res"
     output:
-        directory(f"{binning_dir}/{{sample}}/comebin/cluster_res")
+        directory(f"{binning_dir}/{{sample}}/comebin/comebin_clusters")
     conda: "comebin_env"
     shell:
         """
@@ -114,7 +114,7 @@ use rule cbin_03_leiden_clustering as cbin_03_multiassembly with:
         bam_dir = f"{bam_tmpdir}/{{batch}}/bam_multi",
         res = f"{binning_dir}/{{batch}}/comebin_multi/comebin_res"
     output:
-        directory(f"{binning_dir}/{{batch}}/comebin_multi/cluster_res")
+        directory(f"{binning_dir}/{{batch}}/comebin_multi/comebin_clusters")
 
 use rule cbin_03_leiden_clustering as cbin_03_coassembly with:
     input:
@@ -122,13 +122,13 @@ use rule cbin_03_leiden_clustering as cbin_03_coassembly with:
         bam_dir = f"{bam_tmpdir}/{{batch}}/bam_coa",
         res = f"{binning_dir}/{{batch}}/comebin_coa/comebin_res"
     output:
-        directory(f"{binning_dir}/{{batch}}/comebin_coa/cluster_res")
+        directory(f"{binning_dir}/{{batch}}/comebin_coa/comebin_clusters")
 
 rule cbin_04_bin_qc:
     input:
         contigs_file = f"{binning_dir}/{{sample}}/{{sample}}.a.renamed_1000.fa", 
         bam_dir = f"{bam_tmpdir}/{{sample}}/bam",
-        clust = f"{binning_dir}/{{sample}}/comebin/cluster_res"
+        clust = f"{binning_dir}/{{sample}}/comebin/comebin_clusters"
     output:
         directory(f"{binning_dir}/{{sample}}/comebin/comebin_out")
     conda: "comebin_env"
@@ -147,7 +147,7 @@ use rule cbin_04_bin_qc as cbin_04_multiassembly with:
     input:
         contigs_file = f"{binning_dir}/{{batch}}/{{batch}}.euks.renamed_1000.fna", 
         bam_dir = f"{bam_tmpdir}/{{batch}}/bam_multi",
-        clust = f"{binning_dir}/{{batch}}/comebin_multi/cluster_res"
+        clust = f"{binning_dir}/{{batch}}/comebin_multi/comebin_clusters"
     output:
         directory(f"{binning_dir}/{{batch}}/comebin_multi/comebin_out")
 
@@ -155,6 +155,6 @@ use rule cbin_04_bin_qc as cbin_04_coassembly with:
     input:
         contigs_file = f"{assembly_dir}/{{batch}}/megahit/final.contigs.renamed_1000.fa", 
         bam_dir = f"{bam_tmpdir}/{{batch}}/bam_coa",
-        clust = f"{binning_dir}/{{batch}}/comebin_coa/cluster_res"
+        clust = f"{binning_dir}/{{batch}}/comebin_coa/comebin_clusters"
     output:
         directory(f"{binning_dir}/{{batch}}/comebin_coa/comebin_out")
