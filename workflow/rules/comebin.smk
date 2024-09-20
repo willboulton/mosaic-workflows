@@ -109,7 +109,7 @@ rule cbin_03_leiden_clustering:
             -t {threads} 
         
         mkdir -p {output.out}
-        cp {output.clust}/*tsv_bins/*.fa {output.out}
+        cp {output.clust}/cluster_res/*tsv_bins/*.fa {output.out}
         """
 
 use rule cbin_03_leiden_clustering as cbin_03_multiassembly with:
