@@ -94,11 +94,12 @@ if __name__ == "__main__":
     if args.contignames:
         contignames = pd.read_csv(args.contignames, names = ['contig_id'])
     
-    elif extn in ["tsv", "txt"]:
+    if extn in ["tsv", "txt"]:
         df_coords = pd.DataFrame(coords, columns = ['umap_0', 'umap_1'])
         df_coords['contig_id'] = contignames.contig_id
         df_coords = df_coords[['contig_id', 'umap_0', 'umap_1']]
         df_coords.to_csv(args.umap_out, sep = '\t', index = False)
+        print(f"wrote {df_coords.shape} dataframe to {args.umap_out}")
     elif extn == "csv":
         df_coords = pd.DataFrame(coords, columns = ['umap_0', 'umap_1'])
         df_coords['contig_id'] = contignames.contig_id
@@ -172,7 +173,7 @@ if __name__ == "__main__":
                     if args.fasta_out and args.fasta_in:
 
                         with open(f"{args.fasta_out}/mcl.{idx + 1}.fna", 'w') as seq_fna:
-                            with NamedTemporaryFile() as tmpf:
+                            with NamedTemporaryFile(mode = "w") as tmpf:
                                 
                                 tmpf.write("\n".join(cluster))
                                 subprocess.run([
