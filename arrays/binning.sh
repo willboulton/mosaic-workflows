@@ -1,0 +1,16 @@
+# COMEBin generate augdata
+sbatch -p compute-64-512,compute-24-96 -c 1 --mem 24000 -t 240 -n 16 --wrap "source ~/start_conda;conda activate comebin_env;seqkit seq -m 1001 /gpfs/data/mock_lab/will/mosaic_tmp/binning_dir/3300060027/3300060027.a.fna > /gpfs/data/mock_lab/will/mosaic_tmp/binning_dir/3300060027/3300060027.a.renamed_1000.fa;cd ~/software/COMEBin/COMEBin;bash run_comebin_01.sh -a /gpfs/data/mock_lab/will/mosaic_tmp/binning_dir/3300060027/3300060027.a.renamed_1000.fa -p /gpfs/data/mock_lab/will/mosaic_tmp/bam_tmpdir/3300060027/bam -o /gpfs/data/mock_lab/will/mosaic_tmp/binning_dir/3300060027/comebin_test_v1_setpretrained -t 16"
+
+# COMEBin run using a pretrained model
+sbatch -p gpu-rtx6000-2 --mem 32000 -t 240 -n 16 --qos=gpu-rtx --gres=gpu:1 --wrap "source ~/start_conda;conda activate comebin_env;cd ~/software/COMEBin/COMEBin;bash run_comebin_02.sh -a /gpfs/data/mock_lab/will/mosaic_tmp/binning_dir/3300060027/3300060027.a.renamed_1000.fa -p /gpfs/data/mock_lab/will/mosaic_tmp/bam_tmpdir/3300060027/bam -o /gpfs/data/mock_lab/will/mosaic_tmp/binning_dir/3300060027/comebin_test_v1_setpretrained -t 16 -r /gpfs/data/mock_lab/will/mosaic_tmp/binning_dir/3300060026/comebin/comebin_res"
+
+# SemiBin2 - single sample
+sbatch -p compute-64-512,compute-24-96 -c 1 --mem 48000 -t 180 -n 8 --wrap "source ~/start_conda;conda activate SemiBin;module load hmmer/3.3;module load samtools/1.16.1;module load bedtools/2.29.2;SemiBin2 single_easy_bin -i /gpfs/data/mock_lab/will/mosaic_tmp/binning_dir/3300060026/3300060026.a.fna -o /gpfs/data/mock_lab/will/mosaic_tmp/binning_dir/3300060026/semibin -t 8 -m 4000 --environment ocean -b /gpfs/data/mock_lab/will/mosaic_tmp/bam_tmpdir/3300060026/bam/3300060026.sorted.bam --verbose"
+
+# SemiBin2 - array job
+sbatch -p compute-64-512,compute-24-96 -c 1 --mem 48000 -t 180 -n 8 --array 1-2 --wrap "source ~/start_conda;conda activate SemiBin;module load hmmer/3.3;module load samtools/1.16.1;module load bedtools/2.29.2;S=\$(ls /gpfs/data/mock_lab/will/mosaic_tmp/bam_tmpdir/33000*/bam/*.sorted.bam | cut -f 8 -d '/' | head -n \${SLURM_ARRAY_TASK_ID} | tail -1);SemiBin2 single_easy_bin -i /gpfs/data/mock_lab/will/mosaic_tmp/binning_dir/\$S/\$S.a.fna -o /gpfs/data/mock_lab/will/mosaic_tmp/binning_dir/\$S/semibin -t 8 -m 4000 --environment ocean -b /gpfs/data/mock_lab/will/mosaic_tmp/bam_tmpdir/\$S/bam/\$S.sorted.bam --verbose"
+
+# Vamb - single sample
+sbatch -p compute-64-512,compute-24-96 -c 1 --mem 24000 -t 240 -n 8 --wrap "source ~/start_conda;conda activate anvio;vamb --minfasta 100000 --norefcheck -p 8 -m 2000 --bamfiles /gpfs/data/mock_lab/will/mosaic_tmp/bam_tmpdir/3300055289/bam/3300055289.sorted.bam --fasta /gpfs/data/mock_lab/will/mosaic_tmp/binning_dir/3300055289/3300055289.a.fna --outdir /gpfs/data/mock_lab/will/mosaic_tmp/binning_dir/3300055289/vamb"
+
+# Genomad - use an array
