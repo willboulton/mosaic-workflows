@@ -3,7 +3,8 @@ def get_extension_by_binner(wc):
         "comebin":"fa",
         "metabat":"fa",
         "vacuum":"fna",
-        "vamb":"fna"
+        "vamb":"fna", 
+        "semibin":"fa"
     }
     return extn_map.get(wc.binner)
 

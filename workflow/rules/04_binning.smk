@@ -55,6 +55,26 @@ rule metabat_multiassembly:
             -t {threads} -v
         """
 
+rule semibin_single_assembly:
+    input:
+        fna = f"{binning_dir}/{{sample}}/{{sample}}.a.fna",
+        bam = f"{bam_tmpdir}/{{sample}}/bam/{{sample}}.sorted.bam"
+    output:
+        directory(f"{binning_dir}/{{sample}}/semibin")
+    conda:
+        "SemiBin"
+    envmodules:
+        "hmmer/3.3", "samtools/1.16.1", "bedtools/2.29.2"
+    shell:
+        """
+        SemiBin2 single_easy_bin \\
+            -i {input.fna} \\
+            -o {output} \\
+            -b {input.bam} -t {threads} -m 4000 --environment ocean
+        """
+
+
+
 rule vamb_single_assembly:
     input:
         fna = f"{binning_dir}/{{sample}}/{{sample}}.a.fna",
