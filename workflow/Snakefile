@@ -93,4 +93,4 @@ onstart:
             shell(f"mkdir -p {bam_tmpdir}/{s.img_taxon_id}/bam")
 
 rule all:
-    input: select_samples_9
+    input: select_samples_2
