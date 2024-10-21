@@ -92,7 +92,6 @@ rule vamb_single_assembly:
             --norefcheck \\
             -p {threads} \\
             -m 2000 \\
-            --cuda \\
             --bamfiles {input.bam} \\
             --fasta {input.fna} \\
             --outdir {output}
@@ -119,7 +118,6 @@ rule vamb_coassembly:
             --norefcheck \\
             -p {threads} \\
             -m 2000 \\
-            --cuda \\
             --rpkm {input.cov} \\
             --fasta {input.fna} \\
             --outdir vamb_coa
@@ -144,7 +142,6 @@ rule vamb_multiassembly:
             --norefcheck \\
             -p {threads} \\
             -m 2000 \\
-            --cuda \\
             --rpkm {input.cov} \\
             --fasta {input.fna} \\
             --outdir vamb_multi
