@@ -31,12 +31,11 @@ rule checkm2:
 # run aggregate_taxonomy per bin
 # disregard checkm2 bins
 # filter by size
-rule identify_superkingdom:
-    pass
 
+#rule identify_superkingdom:
 
-rule sort_bins:
-    pass
+#rule sort_bins:
+
 
 rule eukcc:
     input:
