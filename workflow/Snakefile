@@ -4,15 +4,16 @@ include: "rules/00_utils.smk"
 include: "rules/02_read_taxonomy.smk"
 include: "rules/03_mapping_assembly.smk"
 include: "rules/04_binning.smk"
-include: "rules/comebin.smk"
-#include: "rules/05_bin_qc.smk"
+include: "rules/05_bin_qc.smk"
+#include: "rules/comebin.smk"
+
 
 localrules: all
 
 wildcard_constraints:
         batch="[EIST]\d\d_(\d)+",
         sample="33000\d\d\d\d\d",
-        binner="vamb|comebin|metabat|vacuum"
+        binner="vamb|semibin|metabat"
 
 
 def select_samples(wc):
