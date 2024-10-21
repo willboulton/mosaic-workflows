@@ -26,9 +26,9 @@ def select_samples_2(wc):
     filter_samples = [s for s in samples if s.batch in run_batch]
     return (
         list(set(f"{assembly_dir}/{s.batch}/megahit" for s in filter_samples)) + 
-        [ f"{binning_dir}/{s.img_taxon_id}/metabat_checkm" for s in filter_samples ] + 
-        [ f"{binning_dir}/{s.img_taxon_id}/vamb_checkm" for s in filter_samples ] + 
-        [ f"{binning_dir}/{s.img_taxon_id}/semibin_checkm" for s in filter_samples ]
+        [ f"{binning_dir}/{s.img_taxon_id}/metabat" for s in filter_samples ] + 
+        [ f"{binning_dir}/{s.img_taxon_id}/vamb" for s in filter_samples ] + 
+        [ f"{binning_dir}/{s.img_taxon_id}/semibin" for s in filter_samples ]
     )
 
 def select_samples_3(wc):
