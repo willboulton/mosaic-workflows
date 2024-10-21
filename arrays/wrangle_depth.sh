@@ -10,6 +10,6 @@ if [ ! -f "$DEPTH2" ]; then
     mv $DEPTH $DEPTH2
 fi
 
-#printf "ID\tAvgFold\n" > $DEPTH
+printf "ID\tAvgFold\n" > $DEPTH
 
-#sed 's|_|\t|2' $DEPTH2 | cut -f 1,3 | uniq >> $DEPTH
+sed 's|_|\t|2' $DEPTH2 | cut -f 1,3 | uniq >> $DEPTH
