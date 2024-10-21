@@ -156,12 +156,10 @@ rule vacuum_coassembly:
         embeddings = f"{bam_tmpdir}/{{batch}}/vamb_multi/latent.npz",
         fna = f"{binning_dir}/{{batch}}/{{batch}}.euks.fna"
     output:
-        
     conda: "blobology"
     shell:
         """
-        {software.workflow}/scripts/vacuum_blobology.py \\
-            
+        {software.workflow}/scripts/vacuum_blobology.py
         """
 
 
