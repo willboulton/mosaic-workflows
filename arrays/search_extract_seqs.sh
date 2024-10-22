@@ -21,7 +21,11 @@ sbatch -p hmem-4T -c 1 --mem 800000 -t 600 -n 32 --qos hmem --wrap "cd /gpfs/hom
 sbatch -p compute-64-512,compute-24-96 -c 1 --mem 16000 -t 360 -n 1 --wrap "module add hmmer/3.3;cd ~/hmms;hmmsearch -E 1e-5 --tblout ~/scratch/blast_results/big2_vs_mosaic_contigs_faa_1em5.hmmtblout round2_big2.hmm ~/scratch/Mosaic/concat_contigs.faa.gz"
 
 # Get all sequence ids based on PFAM domains
-sbatch -p compute-64-512,compute-24-96 -c 1 --mem 16000 -t 240 -n 24 --wrap "cd /gpfs/data/mock_lab/will/mosaic_tmp/img_files_12_3_2024;ls | cut -f 1 -d '.' | ~/software/parallel/parallel-20240222/bin/parallel -j 24 \"zcat {}.tar.gz | tar xfO - {}/{}.a.pfam.txt | grep -wFf ~/query_seqs/crispr_pfams.txt\" > ~/scratch/blast_results/crispr_pfam_seqs.tsv"
+sbatch -p compute-64-512,compute-24-96 -c 1 --mem 16000 -t 720 -n 24 --wrap "cd /gpfs/data/mock_lab/will/mosaic_tmp/img_files_12_3_2024;ls | cut -f 1 -d '.' | ~/software/parallel/parallel-20240222/bin/parallel -j 24 \"zcat {}.tar.gz | tar xfO - {}/{}.a.pfam.txt | grep -wFf ~/query_seqs/pfam_crispr_domains.txt | sed 's|^|{}_|g'\" > ~/scratch/blast_results/crispr_pfam_seqs.tsv"
+
+# Get all CRISPR files and extract contig ids
+swrap -p compute-64-512,compute-24-96 -c 1 --mem 16000 -t 360 -n 24 --wrap "cd /gpfs/data/mock_lab/will/mosaic_tmp/img_files_12_3_2024;ls | cut -f 1 -d '.' | ~/software/parallel/parallel-20240222/bin/parallel -j 24 \"zcat {}.tar.gz | tar xfO - {}/{}.a.crispr.txt | sed 's|^|{}_|g'\" > ~/scratch/blast_results/crispr_pfam_seqs.tsv"
+
 
 # Blast - blastp
 sbatch -p compute-64-512,compute-24-96 -c 1 --mem 2000 -t 60 -n 8 --wrap "module add ncbi-blast/2.10.1+;blastp -query ~/query_seqs/aureochrome.faa -db ~/scratch/Mosaic/mosaic_contigs_faa_blastdb/mosaic_contigs.faa.blastdb -out ~/scratch/blast_results/aureochrome_vs_mosaic_faa.v3.blast.out -seg no -evalue 1e-5 -num_threads 8 -outfmt \"6 qseqid sseqid pident length qlen slen qcovs evalue bitscore\""
