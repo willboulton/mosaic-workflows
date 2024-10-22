@@ -71,7 +71,7 @@ set-resources:
 
     - strobealign_single_sample:mem="48G"
     - strobealign_single_sample:slurm_partition="compute-64-512,compute-24-96"
-    - strobealign_single_sample:runtime=360
+    - strobealign_single_sample:runtime=720
     - strobealign_single_sample:cpus_per_task=12
 
     - strobealign_x_sample:mem="48G"

@@ -133,7 +133,7 @@ rule strobealign_single_sample:
         "samtools/1.16.1"
     shell:
         """
-        strobealign -t {threads} {input.ref} --interleaved {input.fq} | samtools sort -@ {threads} -o {output}
+        strobealign -t {threads} {input.ref} --interleaved {input.fq} | samtools sort -m 3G -@ {threads} -o {output}
         """
 
 rule split_fastq:

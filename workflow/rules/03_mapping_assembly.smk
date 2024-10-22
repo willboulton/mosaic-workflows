@@ -68,7 +68,7 @@ rule megahit:
 
 rule strobealign_x_sample:
     input:
-        fq = f"{fastq_tmpdir}/{{sample}}-filter-METAG.fastq.gz",
+        fq = f"{fastq_tmpdir}/{{sample}}/{{sample}}-EVU-paired-mapped.fastq.gz",
         ref = f"{binning_dir}/{{batch}}/{{batch}}.euks.fna"
     output:
         f"{bam_tmpdir}/{{batch}}/bam_multi/{{sample}}_x_{{batch}}_euks_strobalign.sorted.bam"
@@ -84,7 +84,7 @@ rule strobealign_x_sample:
 
 rule strobealign_x_coassembly:
     input:
-        fq = f"{fastq_tmpdir}/{{sample}}-filter-METAG.fastq.gz",
+        fq = "{fastq_tmpdir}/{{sample}}/{{sample}}-EVU-paired-mapped.fastq.gz",
         ref = f"{assembly_dir}/{{batch}}/megahit/final.contigs.fa"
     output:
         f"{bam_tmpdir}/{{batch}}/bam_coa/{{sample}}_x_{{batch}}_euks_coa.sorted.bam"
