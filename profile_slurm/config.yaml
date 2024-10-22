@@ -111,6 +111,11 @@ set-resources:
     - vamb_multiassembly:cpus_per_task=16
     #- vamb_multiassembly:slurm_extra=r"--qos=gpu-rtx --gres=gpu:1"
 
+    - semibin_single_assembly:mem="32G"
+    - semibin_single_assembly:slurm_partition="compute-64-512,compute-24-96"
+    - semibin_single_assembly:runtime=240
+    - semibin_single_assembly:cpus_per_task=16
+
     - checkm2:mem="32G"
     - checkm2:slurm_partition="compute-64-512,compute-24-96"
     - checkm2:runtime=240
@@ -267,6 +272,7 @@ set-threads:
     - vamb_single_assembly=16
     - vamb_coassembly=16
     - vamb_multiassembly=16
+    - semibin_single_assembly=16
     - checkm2=16
     - megahit=48
     - tiara=4
