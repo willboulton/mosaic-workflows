@@ -23,7 +23,7 @@ def select_samples(wc):
     return [ f"{fastq_tmpdir}/{s.batch}/{s.img_taxon_id}-filter-METAG_{r}.fastq.gz" for s, r in samples_x_rg ]
 
 def select_samples_2(wc):
-    filter_samples = [s for s in samples if s.batch in run_batch]
+    filter_samples = [ s for s in samples if s.batch in run_batch ]
     return (
         list(set(f"{assembly_dir}/{s.batch}/megahit" for s in filter_samples)) + 
         [ f"{binning_dir}/{s.img_taxon_id}/metabat" for s in filter_samples ] + 

@@ -4,7 +4,7 @@ def get_extension_by_binner(wc):
         "metabat":"fa",
         "vacuum":"fna",
         "vamb":"fna", 
-        "semibin":"fa"
+        "semibin":"fna.gz"
     }
     return extn_map.get(wc.binner)
 
