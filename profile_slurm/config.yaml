@@ -100,7 +100,7 @@ set-resources:
 
     - vamb_single_assembly:mem="8G"
     - vamb_single_assembly:slurm_partition="compute-64-512,compute-24-96" #"gpu-rtx6000-2"
-    - vamb_single_assembly:runtime=240
+    - vamb_single_assembly:runtime=360
     - vamb_single_assembly:cpus_per_task=8
     #- vamb_single_assembly:slurm_extra=r"--qos=gpu-rtx --gres=gpu:1"
 
