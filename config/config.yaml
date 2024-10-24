@@ -1,5 +1,5 @@
 samples: "config/samples.tsv"
-home: "gpfs/home/qcf21tku"
+home: "/gpfs/home/qcf21tku"
 fastq_tmpdir: "/gpfs/data/mock_lab/will/fastq/tmp_fastq"
 taxo_tmpdir: "/gpfs/data/mock_lab/will/mosaic_tmp/taxo_tmpdir"
 bam_tmpdir: "/gpfs/data/mock_lab/will/mosaic_tmp/bam_tmpdir"
