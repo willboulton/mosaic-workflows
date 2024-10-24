@@ -145,7 +145,7 @@ rule samtools_sort:
         "samtools/1.16.1"
     shell:
         """
-        samtools sort -m 3G -@ {threads} -T {home} -o {output} {input}
+        samtools sort -m 4G -@ {threads} -T {home} -o {output} {input} && rm -f {input}
         """
 
 rule split_fastq:
