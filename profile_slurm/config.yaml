@@ -76,7 +76,7 @@ set-resources:
 
     - samtools_sort:mem="24G"
     - samtools_sort:slurm_partition="compute-64-512,compute-24-96"
-    - samtools_sort:runtime=600
+    - samtools_sort:runtime=1440
     - samtools_sort:cpus_per_task=4
 
     - strobealign_x_sample:mem="48G"
