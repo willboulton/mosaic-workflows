@@ -69,6 +69,7 @@ rule megahit:
 rule strobealign_x_sample:
     input:
         fq = f"{fastq_tmpdir}/{{sample}}/{{sample}}-EVU-paired-mapped.fastq.gz",
+        sng = f"{fastq_tmpdir}/{{sample}}/{{sample}}-EVU-singletons.fastq.gz",
         ref = f"{binning_dir}/{{batch}}/{{batch}}.euks.fna"
     output:
         f"{bam_tmpdir}/{{batch}}/bam_multi/{{sample}}_x_{{batch}}_euks_strobalign.sorted.bam"
@@ -78,13 +79,17 @@ rule strobealign_x_sample:
         "samtools/1.16.1"
     shell:
         """
-        strobealign -t {threads} {input.ref} --interleaved {input.fq} | samtools sort -@ {threads} -o {output}
+        cat {input.fq} {input.sng} > {output}.fastq.gz
+        strobealign -t {threads} {input.ref} --interleaved {output}.fastq.gz | \\
+            samtools sort -@ {threads} -o {output} && \\
+            rm -f {output}.fastq.gz
         """
         # strobealign -t {threads} --aemb {input.ref} --interleaved {input.fq} > {output}
 
 rule strobealign_x_coassembly:
     input:
-        fq = "{fastq_tmpdir}/{{sample}}/{{sample}}-EVU-paired-mapped.fastq.gz",
+        fq = f"{fastq_tmpdir}/{{sample}}/{{sample}}-EVU-paired-mapped.fastq.gz",
+        sng = f"{fastq_tmpdir}/{{sample}}/{{sample}}-EVU-singletons.fastq.gz",
         ref = f"{assembly_dir}/{{batch}}/megahit/final.contigs.fa"
     output:
         f"{bam_tmpdir}/{{batch}}/bam_coa/{{sample}}_x_{{batch}}_euks_coa.sorted.bam"
@@ -94,7 +99,10 @@ rule strobealign_x_coassembly:
         "samtools/1.16.1"
     shell:
         """
-        strobealign -t {threads} {input.ref} --interleaved {input.fq} | samtools sort -@ {threads} -o {output}
+        cat {input.fq} {input.sng} > {output}.fastq.gz
+        strobealign -t {threads} {input.ref} --interleaved {output}.fastq.gz | \\
+            samtools sort -@ {threads} -o {output} && \\
+            rm -f {output}.fastq.gz
         """
         # strobealign -t {threads} --aemb {input.ref} --interleaved {input.fq} > {output}
 

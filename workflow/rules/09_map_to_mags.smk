@@ -1,11 +1,11 @@
 rule strobealign_index:
     input:
-        fna=f""
+        f""
     output:
-        f"{input.fna}.r150.sti"
+        f"{input}.r150.sti"
     shell:
     """
-    strobealign --create-index -t {threads} {input.fna} -r 150 
+    strobealign --create-index -t {threads} {input} -r 150 
     """
 
 
