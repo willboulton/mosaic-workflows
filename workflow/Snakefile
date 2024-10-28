@@ -75,6 +75,13 @@ def select_samples_9(wc):
         list(set([ f"{binning_dir}/E04_1/comebin_coa/comebin_out" for s in filter_samples ] ))
     )
 
+def select_samples_10(wc):
+    filter_samples = [ s for s in samples if s.batch in run_batch ]
+    return (
+        list(set(f"{binning_dir}/{s.batch}/{s.batch}.euks_multi.jgi_cov.npz" for s in filter_samples)) + 
+        [ f"{binning_dir}/{s.img_taxon_id}/bins_checkm for s in filter_samples ] + 
+        [ f"{binning_dir}/{s.img_taxon_id}/ebins_eukcc for s in filter_samples ]
+    )
 
 onstart:
     print("starting")
@@ -94,4 +101,4 @@ onstart:
             shell(f"mkdir -p {bam_tmpdir}/{s.img_taxon_id}/bam")
 
 rule all:
-    input: select_samples_2
+    input: select_samples_10
