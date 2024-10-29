@@ -170,24 +170,6 @@ rule vacuum_multiassembly:
         """
 
 
-rule comebin_coassembly:
-    input:
-    output:
-    conda:
-        "comebin_env"
-    shell:
-        """
-        """
-
-rule comebin_multiassembly:
-    input:
-    output:
-    conda:
-        "comebin_env"
-    shell:
-        """
-        """
-
 rule split_bins:
     input:
         f""
