@@ -26,9 +26,9 @@ run_batch:
     #- "E02_1" # done megahit
     #- "E02_2" # done megahit
     #- "E03_1" # done megahit
-    #- "E04_1" # done megahit
-    #- "E04_3" # done megahit
-    #- "E04_2"
+    - "E04_1" # done megahit
+    - "E04_3" # done megahit
+    - "E04_2"
     #- "E06_1" # megahit failed
     #- "E07_1"
     #- "E07_2"
