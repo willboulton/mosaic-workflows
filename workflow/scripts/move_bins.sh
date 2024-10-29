@@ -9,8 +9,6 @@ mkdir -p ebins
 mkdir -p bins_checkm
 mkdir -p ebins_eukcc
 
-gzip -d semibin/output_bins/*.gz
-
 for f in $(ls metabat); do
     cp metabat/$f bins/${f%.fa}.fna
 done
@@ -20,8 +18,10 @@ for f in $(ls vamb/bins); do
 done
 
 for f in $(ls semibin/output_bins); do
-    cp semibin/output_bins/$f bins/${f%.fa}.fna
+    cp semibin/output_bins/$f bins/${f%.fa.gz}.fna.gz
 done
+
+gzip -d bins/*.gz
 
 seqkit stats bins/*.fna -o $1/bins_checkm/seqkit.stats.tsv
 
