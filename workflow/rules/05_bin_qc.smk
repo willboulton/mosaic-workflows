@@ -10,7 +10,9 @@ rule collate_bins:
         f"{binning_dir}/{{sample}}/ebins"
     shell:
         """
-        {software.workflow}/scripts/move_bins.sh {binning_dir}/{wildcards.sample}
+        {software.workflow}/scripts/move_bins.sh \\
+            {binning_dir}/{wildcards.sample} \\
+            {taxo_tmpdir}/{wildcards.sample}/{wildcards.sample}.a.tiara.txt
         """
 
 rule checkm2:
