@@ -7,7 +7,8 @@ rule collate_bins:
         "blobology"
     output:
         directory(f"{binning_dir}/{{sample}}/bins"),
-        directory(f"{binning_dir}/{{sample}}/ebins")
+        directory(f"{binning_dir}/{{sample}}/ebins"),
+        directory(f"{binning_dir}/{{sample}}/stats")
     shell:
         """
         {software.workflow}/scripts/move_bins.sh \\

@@ -6,8 +6,7 @@ cd $1
 
 mkdir -p bins
 mkdir -p ebins
-mkdir -p bins_checkm
-mkdir -p ebins_eukcc
+mkdir -p stats
 
 for f in $(ls metabat); do
     cp metabat/$f bins/${f%.fa}.fna
@@ -23,13 +22,13 @@ done
 
 gzip -d bins/*.gz
 
-seqkit stats bins/*.fna -o $1/bins_checkm/seqkit.stats.tsv
+seqkit stats bins/*.fna -o $1/stats/seqkit.stats.tsv
 
-for f in $(awk '{print $1}' bins_checkm/seqkit.stats.tsv | tail -n +2);do 
+for f in $(awk '{print $1}' stats/seqkit.stats.tsv | tail -n +2);do 
     grep -wFf <(grep ">" $f | tr -d '>') $2 | \
         cut -f 2 | sort | uniq -c | sort -nr -k 1 | head -n 1
-done | paste <(tail -n +2 bins_checkm/seqkit.stats.tsv) - > bins_checkm/seqkit.stats2.tsv
+done | paste <(tail -n +2 stats/seqkit.stats.tsv) - > stats/seqkit.stats2.tsv
 
-for f in $(grep "eukarya" bins_checkm/seqkit.stats2.tsv | tr -d ',' | awk '{if ($5 > 5000000) print $1}'); do
+for f in $(grep "eukarya" stats/seqkit.stats2.tsv | tr -d ',' | awk '{if ($5 > 5000000) print $1}'); do
     mv $f ebins
 done
