@@ -25,7 +25,7 @@ gzip -d bins/*.gz
 
 seqkit stats bins/*.fna -o $1/bins_checkm/seqkit.stats.tsv
 
-for f in $(awk '{print $1}' bins_checkm/seqkit.stats.tsv);do 
+for f in $(awk '{print $1}' bins_checkm/seqkit.stats.tsv | tail -n +2);do 
     grep -wFf <(grep ">" $f | tr -d '>') $2 | \
         cut -f 2 | sort | uniq -c | sort -nr -k 1 | head -n 1
 done | paste <(tail -n +2 bins_checkm/seqkit.stats.tsv) - > bins_checkm/seqkit.stats2.tsv

@@ -137,6 +137,11 @@ set-resources:
     - tiara:runtime=120
     - tiara:cpus_per_task=4
 
+    - eukcc_single_sample:mem="16G"
+    - eukcc_single_sample:slurm_partition="compute-64-512,compute-24-96"
+    - eukcc_single_sample:runtime=120
+    - eukcc_single_sample:cpus_per_task=4
+    
     - comebin_single_assembly:mem="64G"
     - comebin_single_assembly:slurm_partition= #"gpu-rtx6000-2"
     - comebin_single_assembly:runtime=720
@@ -285,6 +290,7 @@ set-threads:
     - vamb_multiassembly=16
     - semibin_single_assembly=16
     - checkm2=16
+    - eukcc_single_sample=4
     - megahit=48
     - tiara=4
     - comebin_single_assembly=8
