@@ -31,5 +31,5 @@ for f in $(awk '{print $1}' bins_checkm/seqkit.stats.tsv);do
 done | paste <(tail -n +2 bins_checkm/seqkit.stats.tsv) - > bins_checkm/seqkit.stats2.tsv
 
 for f in $(grep "eukarya" bins_checkm/seqkit.stats2.tsv | tr -d ',' | awk '{if ($5 > 5000000) print $1}'); do
-    cp $f ebins
+    mv $f ebins
 done
