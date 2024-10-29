@@ -256,6 +256,11 @@ set-resources:
     - concat_fasta:runtime=60
     - concat_fasta:cpus_per_task=3
 
+    - collate_bins:mem="8G"
+    - collate_bins:slurm_partition="compute-64-512,compute-24-96"
+    - collate_bins:runtime=60
+    - collate_bins:cpus_per_task=1
+
     - template:mem="64G"
     - template:slurm_partition="compute-64-512,compute-24-96"
     - template:runtime=600
