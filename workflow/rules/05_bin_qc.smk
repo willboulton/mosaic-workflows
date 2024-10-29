@@ -6,8 +6,8 @@ rule collate_bins:
     conda:
         "blobology"
     output:
-        f"{binning_dir}/{{sample}}/bins",
-        f"{binning_dir}/{{sample}}/ebins"
+        directory(f"{binning_dir}/{{sample}}/bins"),
+        directory(f"{binning_dir}/{{sample}}/ebins")
     shell:
         """
         {software.workflow}/scripts/move_bins.sh \\
@@ -36,7 +36,7 @@ rule eukcc_single_sample:
     input:
         f"{binning_dir}/{{sample}}/ebins"
     output:
-        f"{binning_dir}/{{sample}}/ebins_eukcc"
+        directory(f"{binning_dir}/{{sample}}/ebins_eukcc")
     envmodules:
         "singularity/3.6.0" 
     shell:
