@@ -309,4 +309,5 @@ set-threads:
     - concat_fastq=1
     - concat_fasta=4
     - split_fastq=4
+    - collate_bins=1
     - template=1
