@@ -12,4 +12,4 @@ fi
 
 printf "ID\tAvgFold\n" > $DEPTH
 
-sed 's|_|\t|2' $DEPTH2 | cut -f 1,3 | uniq >> $DEPTH
+tail -n +2 $DEPTH2 | sed 's|_|\t|2' | cut -f 1,3 | uniq >> $DEPTH

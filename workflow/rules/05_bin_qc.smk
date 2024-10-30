@@ -42,7 +42,7 @@ rule eukcc_single_sample:
         "singularity/3.6.0" 
     shell:
         """
-        [ -z "$(ls {input})" ] && exit 0
+        [ -z "$(ls {input})" ] && mkdir -p {output} && touch {output}/eukcc.csv && exit 0
         singularity exec {software.eukcc}/eukcc_latest.sif eukcc \\
             folder -t {threads} --db {software.eukcc}/eukcc2_db_ver_1.2 \\
             --suffix .fna --out {output} {input}
