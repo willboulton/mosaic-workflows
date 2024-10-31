@@ -86,7 +86,10 @@ def select_samples_10(wc):
 def select_samples_11(wc):
     filter_samples = [ s for s in samples if s.batch in run_batch ]
     return (
-        
+        list(set(f"{binning_dir}/{s.batch}/vamb_multi/vacuum_bins" for s in filter_samples)) + 
+        list(set(f"{binning_dir}/{s.batch}/metabat_multi" for s in filter_samples)) +
+        [ f"{binning_dir}/{s.img_taxon_id}/bins_checkm" for s in filter_samples ] + 
+        [ f"{binning_dir}/{s.img_taxon_id}/ebins_eukcc" for s in filter_samples ]        
     )
 
 onstart:
@@ -107,4 +110,4 @@ onstart:
             shell(f"mkdir -p {bam_tmpdir}/{s.img_taxon_id}/bam")
 
 rule all:
-    input: select_samples_10
+    input: select_samples_11

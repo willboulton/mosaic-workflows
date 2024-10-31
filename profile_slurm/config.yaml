@@ -123,7 +123,7 @@ set-resources:
 
     - checkm2:mem="32G"
     - checkm2:slurm_partition="compute-64-512,compute-24-96"
-    - checkm2:runtime=240
+    - checkm2:runtime=360
     - checkm2:cpus_per_task=16
 
     - megahit:mem="464G"
@@ -139,7 +139,7 @@ set-resources:
 
     - eukcc_single_sample:mem="24G"
     - eukcc_single_sample:slurm_partition="compute-64-512,compute-24-96"
-    - eukcc_single_sample:runtime=120
+    - eukcc_single_sample:runtime=240
     - eukcc_single_sample:cpus_per_task=3
     
     - comebin_single_assembly:mem="64G"
