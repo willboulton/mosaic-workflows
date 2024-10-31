@@ -129,7 +129,8 @@ rule vamb_multiassembly:
         cov = f"{binning_dir}/{{batch}}/{{batch}}.euks_multi.jgi_cov.npz"
     output:
         bins = directory(f"{binning_dir}/{{batch}}/vamb_multi"), 
-        embeddings = f"{binning_dir}/{{batch}}/vamb_multi/latent.npz"
+        embeddings = f"{binning_dir}/{{batch}}/vamb_multi/latent.npz",
+        contignames = f"{binning_dir}/{{batch}}/vamb_multi/contignames"
     conda:
         "anvio"
     envmodules:
