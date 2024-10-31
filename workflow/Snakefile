@@ -83,6 +83,12 @@ def select_samples_10(wc):
         [ f"{binning_dir}/{s.img_taxon_id}/ebins_eukcc" for s in filter_samples ]
     )
 
+def select_samples_11(wc):
+    filter_samples = [ s for s in samples if s.batch in run_batch ]
+    return (
+        
+    )
+
 onstart:
     print("starting")
     print("********")
@@ -91,7 +97,7 @@ onstart:
     for b in run_batch:
         shell(f"mkdir -p {assembly_dir}/{b}")
         shell(f"mkdir -p {binning_dir}/{b}")
-        shell(f"mkdir -p {bam_tmpdir}/{b}/bam_multia")
+        shell(f"mkdir -p {bam_tmpdir}/{b}/bam_multi")
         shell(f"mkdir -p {bam_tmpdir}/{b}/bam_coa")
 
     for s in samples:

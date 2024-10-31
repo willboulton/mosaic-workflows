@@ -17,7 +17,7 @@ def parse_args():
     
     parser.add_argument('--embeddings', type=str, help='File to the embeddings.')
 
-    parser.add_argument('--inflation', '-i', type=float, default = 1.2, help = 'MCL inflation parameter.')
+    parser.add_argument('--inflation', '-i', type=float, default = 1.1, help = 'MCL inflation parameter.')
     
     parser.add_argument('--umap_out', type=str, help = 'Path to UMAP 2d embeddings output file.')
 

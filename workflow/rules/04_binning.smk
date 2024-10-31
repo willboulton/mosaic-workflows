@@ -22,12 +22,12 @@ rule metabat_coassembly:
         fna = f"{assembly_dir}/{{batch}}/megahit/final.contigs.fa",
         depth = f"{binning_dir}/{{batch}}/{{batch}}.euks_coa.jgi_cov.tsv"
     output:
-        directory(f"{bam_tmpdir}/{{batch}}/metabat_coa")
+        directory(f"{binning_dir}/{{batch}}/metabat_coa")
     conda:
         "anvio"
     shell:
         """
-        cd {bam_tmpdir}
+        cd {binning_dir}
         metabat2 \\
             -i {input.fna} \\
             -a {input.depth} \\
@@ -41,12 +41,12 @@ rule metabat_multiassembly:
         fna = f"{binning_dir}/{{batch}}/{{batch}}.euks.fna",
         depth = f"{binning_dir}/{{batch}}/{{batch}}.euks_multi.jgi_cov.tsv"
     output:
-        directory(f"{bam_tmpdir}/{{batch}}/metabat_multi")
+        directory(f"{binning_dir}/{{batch}}/metabat_multi")
     conda:
         "anvio"
     shell:
         """
-        cd {bam_tmpdir}
+        cd {binning_dir}
         metabat2 \\
             -i {input.fna} \\
             -a {input.depth} \\
@@ -104,15 +104,15 @@ rule vamb_coassembly:
         fna = f"{assembly_dir}/{{batch}}/megahit/final.contigs.fa",
         cov = f"{binning_dir}/{{batch}}/{{batch}}.euks_coa.jgi_cov.npz"
     output:
-        bins = directory(f"{bam_tmpdir}/{{batch}}/vamb_coa"), 
-        embeddings = f"{bam_tmpdir}/{{batch}}/vamb_coa/latent.npz"
+        bins = directory(f"{binning_dir}/{{batch}}/vamb_coa"), 
+        embeddings = f"{binning_dir}/{{batch}}/vamb_coa/latent.npz"
     conda:
         "anvio"
     envmodules:
         "cuda/11.8"
     shell:
         """
-        cd {bam_tmpdir}/{wildcards.batch}
+        cd {binning_dir}/{wildcards.batch}
         rm -rf vamb_coa && vamb \\
             --minfasta 200000 \\
             --norefcheck \\
@@ -128,15 +128,15 @@ rule vamb_multiassembly:
         fna = f"{binning_dir}/{{batch}}/{{batch}}.euks.fna",
         cov = f"{binning_dir}/{{batch}}/{{batch}}.euks_multi.jgi_cov.npz"
     output:
-        bins = directory(f"{bam_tmpdir}/{{batch}}/vamb_multi"), 
-        embeddings = f"{bam_tmpdir}/{{batch}}/vamb_multi/latent.npz"
+        bins = directory(f"{binning_dir}/{{batch}}/vamb_multi"), 
+        embeddings = f"{binning_dir}/{{batch}}/vamb_multi/latent.npz"
     conda:
         "anvio"
     envmodules:
         "cuda/11.8"
     shell:
         """
-        cd {bam_tmpdir}/{wildcards.batch}
+        cd {binning_dir}/{wildcards.batch}
         rm -rf vamb_multi && vamb \\
             --minfasta 200000 \\
             --norefcheck \\
@@ -150,10 +150,13 @@ rule vamb_multiassembly:
 
 rule vacuum_coassembly:
     input:
-        embeddings = f"{bam_tmpdir}/{{batch}}/vamb_multi/latent.npz",
+        embeddings = f"{binning_dir}/{{batch}}/vamb_multi/latent.npz",
         fna = f"{binning_dir}/{{batch}}/{{batch}}.euks.fna"
     output:
-    conda: "blobology"
+    envmodules:
+        
+    conda: 
+        "blobology"
     shell:
         """
         {software.workflow}/scripts/vacuum_blobology.py
@@ -162,11 +165,24 @@ rule vacuum_coassembly:
 
 rule vacuum_multiassembly:
     input:
+        embeddings = f"{binning_dir}/{{batch}}/vamb_multi/latent.npz",
+        contignames = f"{binning_dir}/{{batch}}/vamb_multi/contignames",
+        fna = f"{binning_dir}/{{batch}}/{{batch}}.euks.fna"
     output:
-    conda: "blobology"
+        fna_out = directory(f"{binning_dir}/{{batch}}/vamb_multi/vacuum_bins"),
+        umap_out = f"{binning_dir}/{{batch}}/vamb_multi/umap_vamb.tsv"
+    envmodules:
+        "mcl/14-137"
+    conda: 
+        "blobology"
     shell:
         """
-        
+        mkdir -p {output.fna_out}
+        {software.workflow}/scripts/vacuum_blobology.py \\
+            --embeddings {input.embeddings} \\
+            --inflation 1.1 --embeddings_format VAMB \\
+            --fasta_in {input.fna} --contignames {input.contignames} \\
+            --umap_out {output.umap} --fasta_out {output.fna_out}
         """
 
 
