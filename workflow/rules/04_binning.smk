@@ -171,7 +171,8 @@ rule vacuum_multiassembly:
         fna = f"{binning_dir}/{{batch}}/{{batch}}.euks.fna"
     output:
         fna_out = directory(f"{binning_dir}/{{batch}}/vamb_multi/vacuum_bins"),
-        umap_out = f"{binning_dir}/{{batch}}/vamb_multi/umap_vamb.tsv"
+        umap_out = f"{binning_dir}/{{batch}}/vamb_multi/umap_vamb.tsv", 
+        mcl_out = f"{binning_dir}/{{batch}}/vamb_multi/vacuum_bins.tsv"
     envmodules:
         "mcl/14-137"
     conda: 
@@ -183,7 +184,8 @@ rule vacuum_multiassembly:
             --embeddings {input.embeddings} \\
             --inflation 1.1 --embeddings_format VAMB \\
             --fasta_in {input.fna} --contignames {input.contignames} \\
-            --umap_out {output.umap_out} --fasta_out {output.fna_out}
+            --umap_out {output.umap_out} --fasta_out {output.fna_out} \\
+            --mcl_out {output.mcl_out}
         """
 
 

@@ -59,12 +59,12 @@ set-resources:
     - metabat_single_assembly:runtime=90
     - metabat_single_assembly:cpus_per_task=4
 
-    - metabat_coassembly:mem="8G"
+    - metabat_coassembly:mem="16G"
     - metabat_coassembly:slurm_partition="compute-64-512,compute-24-96"
     - metabat_coassembly:runtime=90
     - metabat_coassembly:cpus_per_task=4
 
-    - metabat_multiassembly:mem="8G"
+    - metabat_multiassembly:mem="16G"
     - metabat_multiassembly:slurm_partition="compute-64-512,compute-24-96"
     - metabat_multiassembly:runtime=90
     - metabat_multiassembly:cpus_per_task=4
@@ -104,16 +104,16 @@ set-resources:
     - vamb_single_assembly:cpus_per_task=8
     #- vamb_single_assembly:slurm_extra=r"--qos=gpu-rtx --gres=gpu:1"
 
-    - vamb_coassembly:mem="4G"
+    - vamb_coassembly:mem="16G"
     - vamb_coassembly:slurm_partition="compute-64-512,compute-24-96" #"gpu-rtx6000-2"
-    - vamb_coassembly:runtime=60
-    - vamb_coassembly:cpus_per_task=16
+    - vamb_coassembly:runtime=240
+    - vamb_coassembly:cpus_per_task=8
     #- vamb_coassembly:slurm_extra=r"--qos=gpu-rtx --gres=gpu:1"
 
-    - vamb_multiassembly:mem="4G"
+    - vamb_multiassembly:mem="16G"
     - vamb_multiassembly:slurm_partition="compute-64-512,compute-24-96" #"gpu-rtx6000-2"
-    - vamb_multiassembly:runtime=60
-    - vamb_multiassembly:cpus_per_task=16
+    - vamb_multiassembly:runtime=240
+    - vamb_multiassembly:cpus_per_task=8
     #- vamb_multiassembly:slurm_extra=r"--qos=gpu-rtx --gres=gpu:1"
 
     - vacuum_multiassembly:mem="16G"
