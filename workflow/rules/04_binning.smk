@@ -183,7 +183,7 @@ rule vacuum_multiassembly:
             --embeddings {input.embeddings} \\
             --inflation 1.1 --embeddings_format VAMB \\
             --fasta_in {input.fna} --contignames {input.contignames} \\
-            --umap_out {output.umap} --fasta_out {output.fna_out}
+            --umap_out {output.umap_out} --fasta_out {output.fna_out}
         """
 
 
