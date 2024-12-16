@@ -66,7 +66,7 @@ set-resources:
 
     - metabat_multiassembly:mem="16G"
     - metabat_multiassembly:slurm_partition="compute-64-512,compute-24-96"
-    - metabat_multiassembly:runtime=90
+    - metabat_multiassembly:runtime=90 #change back to 90, more is unnecessary!
     - metabat_multiassembly:cpus_per_task=4
 
     - strobealign_single_sample:mem="48G"
@@ -291,8 +291,8 @@ set-threads:
     - strobealign_x_sample=8
     - strobealign_x_coassembly=8
     - vamb_single_assembly=8
-    - vamb_coassembly=16
-    - vamb_multiassembly=16
+    - vamb_coassembly=8
+    - vamb_multiassembly=8
     - vacuum_multiassembly=1
     - semibin_single_assembly=16
     - checkm2=16
