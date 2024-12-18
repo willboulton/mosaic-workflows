@@ -105,7 +105,8 @@ rule vamb_coassembly:
         cov = f"{binning_dir}/{{batch}}/{{batch}}.euks_coa.jgi_cov.npz"
     output:
         bins = directory(f"{binning_dir}/{{batch}}/vamb_coa"), 
-        embeddings = f"{binning_dir}/{{batch}}/vamb_coa/latent.npz"
+        embeddings = f"{binning_dir}/{{batch}}/vamb_coa/latent.npz",
+        contignames = f"{binning_dir}/{{batch}}/vamb_coa/contignames"
     conda:
         "anvio"
     envmodules:
