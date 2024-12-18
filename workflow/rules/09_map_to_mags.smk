@@ -21,3 +21,9 @@ rule strobealign_map_reads_to_mags:
         """
         strobealign --use-index -t {threads} --aemb {input.ref} --interleaved {input.fq} > {output}
         """
+
+rule coverm:
+    input:
+    output:
+    conda:
+    shell:
