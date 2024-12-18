@@ -151,16 +151,26 @@ rule vamb_multiassembly:
 
 rule vacuum_coassembly:
     input:
-        embeddings = f"{binning_dir}/{{batch}}/vamb_multi/latent.npz",
-        fna = f"{binning_dir}/{{batch}}/{{batch}}.euks.fna"
+        embeddings = f"{binning_dir}/{{batch}}/vamb_coa/latent.npz",
+        contignames = f"{binning_dir}/{{batch}}/vamb_coa/contignames",
+        fna = f"{assembly_dir}/{{batch}}/megahit/final.contigs.fa"
     output:
+        fna_out = directory(f"{binning_dir}/{{batch}}/vamb_coa/vacuum_bins"),
+        umap_out = f"{binning_dir}/{{batch}}/vamb_coa/umap_vamb.tsv", 
+        mcl_out = f"{binning_dir}/{{batch}}/vamb_coa/vacuum_bins.tsv"
     envmodules:
-        
+        "mcl/14-137"
     conda: 
         "blobology"
     shell:
         """
-        {software.workflow}/scripts/vacuum_blobology.py
+        mkdir -p {output.fna_out}
+        {software.workflow}/scripts/vacuum_blobology.py \\
+            --embeddings {input.embeddings} \\
+            --inflation 1.1 --embeddings_format VAMB \\
+            --fasta_in {input.fna} --contignames {input.contignames} \\
+            --umap_out {output.umap_out} --fasta_out {output.fna_out} \\
+            --mcl_out {output.mcl_out}
         """
 
 
