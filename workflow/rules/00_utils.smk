@@ -17,8 +17,9 @@ def initialise_config(config):
     binning_dir = config['binning_dir']
 
     globus = namedtuple("globus", (k for k in config["globus"].keys()))(**config["globus"])
-
-    samples = to_samplelist(pd.read_csv(config['samples'], sep = '\t'))
+    samples = pd.read_csv(config['samples'], sep = '\t')
+    samples = samples[~samples.img_taxon_id.isin([3300056979, 3300056980])]
+    samples = to_samplelist(samples)
     run_batch = config['run_batch']
     img_folder = config['img_folder']
     return (
