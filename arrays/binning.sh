@@ -14,3 +14,4 @@ sbatch -p compute-64-512,compute-24-96 -c 1 --mem 48000 -t 180 -n 8 --array 1-2 
 sbatch -p compute-64-512,compute-24-96 -c 1 --mem 24000 -t 240 -n 8 --wrap "source ~/start_conda;conda activate anvio;vamb --minfasta 100000 --norefcheck -p 8 -m 2000 --bamfiles /gpfs/data/mock_lab/will/mosaic_tmp/bam_tmpdir/3300055289/bam/3300055289.sorted.bam --fasta /gpfs/data/mock_lab/will/mosaic_tmp/binning_dir/3300055289/3300055289.a.fna --outdir /gpfs/data/mock_lab/will/mosaic_tmp/binning_dir/3300055289/vamb"
 
 # Genomad - use an array
+swrap --array 1-14 -p compute-64-512 -c 1 --mem 10000 -t 120 -n 16 --wrap "module add singularity/3.6.0; mkdir -p \${a[1]}; singularity run /gpfs/data/mock_lab/software/genomad.sif end-to-end --splits 8 --threads 16 --cleanup --verbose \${a[0]} \${a[1]} /gpfs/data/mock_lab/software/genomad_db" --array-file /gpfs/home/qcf21tku/gn_array_b1.txt --dry-run
