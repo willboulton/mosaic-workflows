@@ -38,14 +38,21 @@ def select_samples_3(wc):
 def select_samples_4(wc):
     filter_samples = [ s for s in samples if s.batch in run_batch ]
     return (
-        list(set(f"{binning_dir}/{s.batch}/{s.batch}.euks.fna" for s in filter_samples)) + 
+        list(set(f"{binning_dir}/{s.batch}/vamb_multi/vacuum_bins" for s in filter_samples)) + 
+        list(set(f"{binning_dir}/{s.batch}/metabat_multi" for s in filter_samples)) +
+        [ f"{binning_dir}/{s.img_taxon_id}/bins_checkm" for s in filter_samples ] + 
+        [ f"{binning_dir}/{s.img_taxon_id}/ebins_eukcc" for s in filter_samples ] + 
         list(set(f"{assembly_dir}/{s.batch}/megahit" for s in filter_samples))
     )
 
 def select_samples_5(wc):
     filter_samples = [ s for s in samples if s.batch in run_batch ]
-    return ([ f"{bam_tmpdir}/{s.batch}/bam_multia/{s.img_taxon_id}_x_{s.batch}_euks_strobalign.sorted.bam" for s in filter_samples ] + 
-            [ f"{bam_tmpdir}/{s.batch}/bam_coa/{s.img_taxon_id}_x_{s.batch}_euks_coa.sorted.bam" for s in filter_samples ]
+    return (
+        list(set(f"{binning_dir}/{s.batch}/vamb_multi/vacuum_bins" for s in filter_samples)) + 
+        list(set(f"{binning_dir}/{s.batch}/metabat_multi" for s in filter_samples)) +
+        [ f"{binning_dir}/{s.img_taxon_id}/bins_checkm" for s in filter_samples ] + 
+        [ f"{binning_dir}/{s.img_taxon_id}/ebins_eukcc" for s in filter_samples ] + 
+        list(set(f"{assembly_dir}/{s.batch}/{s.batch}-EVU.fastq.gz" for s in filter_samples))
     )
 
 def select_samples_6(wc):
@@ -87,6 +94,8 @@ def select_samples_10(wc):
 def select_samples_11(wc):
     filter_samples = [ s for s in samples if s.batch in run_batch ]
     return (
+        list(set(f"{binning_dir}/{s.batch}/vamb_multi/vacuum_bins" for s in filter_samples)) + 
+        list(set(f"{binning_dir}/{s.batch}/metabat_multi" for s in filter_samples)) +
         list(set(f"{binning_dir}/{s.batch}/vamb_coa/vacuum_bins" for s in filter_samples)) + 
         list(set(f"{binning_dir}/{s.batch}/metabat_coa" for s in filter_samples)) +
         [ f"{binning_dir}/{s.img_taxon_id}/bins_checkm" for s in filter_samples ] + 

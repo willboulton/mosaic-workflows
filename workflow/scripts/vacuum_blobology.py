@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 from sys import exit
 from scipy import sparse
@@ -10,6 +10,10 @@ import umap
 import subprocess
 import argparse
 
+import sys
+import platform
+print(platform.python_version())
+print(sys.path)
 
 def parse_args():
     

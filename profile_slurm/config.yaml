@@ -49,7 +49,7 @@ set-resources:
     - get_unmapped_reads:runtime=240
     - get_unmapped_reads:cpus_per_task=8
 
-    - mmseqs:mem="240G"
+    - mmseqs:mem="480G" #240G
     - mmseqs:slurm_partition="compute-64-512"
     - mmseqs:runtime=180
     - mmseqs:cpus_per_task=24
@@ -64,9 +64,9 @@ set-resources:
     - metabat_coassembly:runtime=90
     - metabat_coassembly:cpus_per_task=4
 
-    - metabat_multiassembly:mem="16G"
+    - metabat_multiassembly:mem="48G" #"16G"
     - metabat_multiassembly:slurm_partition="compute-64-512,compute-24-96"
-    - metabat_multiassembly:runtime=90 #change back to 90, more is unnecessary!
+    - metabat_multiassembly:runtime=600  #90 #change back to 90, more is unnecessary!
     - metabat_multiassembly:cpus_per_task=4
 
     - strobealign_single_sample:mem="48G"
@@ -74,57 +74,56 @@ set-resources:
     - strobealign_single_sample:runtime=360
     - strobealign_single_sample:cpus_per_task=12
 
-    - samtools_sort:mem="24G"
+    - samtools_sort:mem="48G"
     - samtools_sort:slurm_partition="compute-64-512,compute-24-96"
     - samtools_sort:runtime=1440
     - samtools_sort:cpus_per_task=4
 
-    - strobealign_x_sample:mem="48G"
+    - strobealign_x_sample:mem="92G"
     - strobealign_x_sample:slurm_partition="compute-64-512,compute-24-96"
-    - strobealign_x_sample:runtime=240
+    - strobealign_x_sample:runtime=600
     - strobealign_x_sample:cpus_per_task=8
     # strobealign indexing took 71 seconds on 4 threads, 24 GB mem
     # strobealign mapping might take: 
     # Total time mapping: 6488 s i.e. about 2 hours + I think 1 more hour. 
     # Something like 2 1/2 hours. 
 
-    - strobealign_x_coassembly:mem="48G"
+    - strobealign_x_coassembly:mem="92G"
     - strobealign_x_coassembly:slurm_partition="compute-64-512,compute-24-96"
-    - strobealign_x_coassembly:runtime=240
+    - strobealign_x_coassembly:runtime=480
     - strobealign_x_coassembly:cpus_per_task=8
 
-    - semibin_single_assembly:mem="4G"
-    - semibin_single_assembly:slurm_partition="compute-64-512,compute-24-96" #"gpu-rtx6000-2"
-    - semibin_single_assembly:runtime=60
+    - semibin_single_assembly:mem="400G" #"32G"  #"16G" #4G
+    - semibin_single_assembly:slurm_partition="compute-64-512,compute-24-96"
+    - semibin_single_assembly:runtime=600  #240 #60
     - semibin_single_assembly:cpus_per_task=16
 
-    - vamb_single_assembly:mem="8G"
-    - vamb_single_assembly:slurm_partition="compute-64-512,compute-24-96" #"gpu-rtx6000-2"
+    - vamb_single_assembly:mem="16G"
+    - vamb_single_assembly:slurm_partition="compute-64-512,compute-24-96"
     - vamb_single_assembly:runtime=360
     - vamb_single_assembly:cpus_per_task=8
-    #- vamb_single_assembly:slurm_extra=r"--qos=gpu-rtx --gres=gpu:1"
 
     - vamb_coassembly:mem="16G"
-    - vamb_coassembly:slurm_partition="compute-64-512,compute-24-96" #"gpu-rtx6000-2"
+    - vamb_coassembly:slurm_partition="compute-64-512,compute-24-96"
     - vamb_coassembly:runtime=240
     - vamb_coassembly:cpus_per_task=8
-    #- vamb_coassembly:slurm_extra=r"--qos=gpu-rtx --gres=gpu:1"
 
-    - vamb_multiassembly:mem="16G"
+    - vamb_multiassembly:mem="64G" #"16G"
     - vamb_multiassembly:slurm_partition="compute-64-512,compute-24-96" #"gpu-rtx6000-2"
     - vamb_multiassembly:runtime=240
     - vamb_multiassembly:cpus_per_task=8
     #- vamb_multiassembly:slurm_extra=r"--qos=gpu-rtx --gres=gpu:1"
 
-    - vacuum_multiassembly:mem="16G"
-    - vacuum_multiassembly:slurm_partition="compute-64-512,compute-24-96"
-    - vacuum_multiassembly:runtime=240
-    - vacuum_multiassembly:cpus_per_task=1
+    - vacuum_coassembly:mem="16G"
+    - vacuum_coassembly:slurm_partition="compute-64-512,compute-24-96"
+    - vacuum_coassembly:runtime=240
+    - vacuum_coassembly:cpus_per_task=1
 
-    - semibin_single_assembly:mem="32G"
-    - semibin_single_assembly:slurm_partition="compute-64-512,compute-24-96"
-    - semibin_single_assembly:runtime=240
-    - semibin_single_assembly:cpus_per_task=16
+
+    - vacuum_multiassembly:mem="24G" #"16G"
+    - vacuum_multiassembly:slurm_partition="compute-64-512,compute-24-96"
+    - vacuum_multiassembly:runtime=600 #240
+    - vacuum_multiassembly:cpus_per_task=1
 
     - checkm2:mem="32G"
     - checkm2:slurm_partition="compute-64-512,compute-24-96"
@@ -294,6 +293,7 @@ set-threads:
     - vamb_coassembly=8
     - vamb_multiassembly=8
     - vacuum_multiassembly=1
+    - vacuum_coassembly=1
     - semibin_single_assembly=16
     - checkm2=16
     - eukcc_single_sample=3
