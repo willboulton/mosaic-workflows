@@ -16,6 +16,21 @@ rule collate_bins:
             {taxo_tmpdir}/{wildcards.sample}/{wildcards.sample}.a.tiara.txt
         """
 
+rule das_tool:
+    input:
+        f"{binning_dir}/{{sample}}/bins"
+    output:
+        directory("f{binning_dir}/{{sample}}/bins_das")
+    envmodules:
+        "R/4.2.1", "ruby/3.3.5"
+    conda:
+        "bio"
+    shell:
+        """
+        {software.workflow}/scripts/run_dastool.sh {input}
+        """
+
+
 rule checkm2:
     input:
         f"{binning_dir}/{{sample}}/bins"

@@ -199,7 +199,6 @@ rule vacuum_multiassembly:
             --mcl_out {output.mcl_out}
         """
 
-
 rule split_bins:
     input:
         f""
@@ -209,5 +208,10 @@ rule split_bins:
         "blobology"
     shell:
         """
-        seqkit grep -r -p {input} > {}
+        cd {input}
+        for f in $(ls); do
+            for g in $(cat $f | grep ">" | tr -d '>' | cut -f 1 -d '_' | uniq); do
+                seqkit grep -rp ${g}_* $f > {output}/${f%.fa}.${g}.fna
+            done
+        done
         """
