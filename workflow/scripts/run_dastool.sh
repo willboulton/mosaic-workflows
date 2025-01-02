@@ -17,7 +17,7 @@ $HOME/software/DAS_Tool/src/Fasta_to_Contig2Bin.sh -e fna -i $1/bins > $1/das_c2
 seqkit grep -f <(cut -f 1 $1/das_c2b.tsv) $1/$SAMPLE.a.fna > $1/$SAMPLE.bins.fna
 
 sed -e 's|_| |2' $1/$SAMPLE.a.faa |\
-    seqkit grep -f <(cut -f 1 $1/das_c2b.v2.tsv) |\
+    seqkit grep -f <(cut -f 1 $1/das_c2b.tsv) |\
     awk 'BEGIN { OFS="_" }
     /^>/ {
         split($0, arr, " ")

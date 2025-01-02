@@ -18,7 +18,7 @@ rule collate_bins:
 
 rule das_tool:
     input:
-        f"{binning_dir}/{{sample}}/bins"
+        f"{binning_dir}/{{sample}}"
     output:
         directory("f{binning_dir}/{{sample}}/bins_das")
     envmodules:
