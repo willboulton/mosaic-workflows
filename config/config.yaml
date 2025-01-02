@@ -22,35 +22,35 @@ globus:
     ada_uuid: "59222a93-92c2-11ee-8c81-fd88ce9321ad"
 run_batch:
     - "E01_1" # done megahit
-    - "E01_2" # done megahit
-    - "E02_1" # done megahit
-    - "E02_2" # done megahit
-    - "E03_1" # done megahit
-    - "E04_1" # done megahit
-    - "E04_3" # done megahit
-    - "E04_2"
-    - "E06_1" # megahit failed
-    - "E07_1"
-    - "E07_2"
-    - "E09_1"
-    - "E11_1"
-    - "E12_1"
-    - "I01_1"
-    - "I01_3"
-    - "I02_2"
-    - "I02_3"
-    - "I02_4"
-    - "I03_1"
-    - "I04_1"
-    - "I04_2"
-    - "I06_1"
-    - "I06_2"
-    - "I06_3"
-    - "I07_2"
-    - "I07_3"
-    - "I07_7"
-    - "I07_8"
-    - "I08_1"
-    - "I11_1"
-    - "I11_2"
-    - "I12_1"
+    #- "E01_2" # done megahit
+    #- "E02_1" # done megahit
+    #- "E02_2" # done megahit
+    #- "E03_1" # done megahit
+    #- "E04_1" # done megahit
+    #- "E04_3" # done megahit
+    #- "E04_2"
+    #- "E06_1" # megahit failed
+    #- "E07_1"
+    #- "E07_2"
+    #- "E09_1"
+    #- "E11_1"
+    #- "E12_1"
+    #- "I01_1"
+    #- "I01_3"
+    #- "I02_2"
+    #- "I02_3"
+    #- "I02_4"
+    #- "I03_1"
+    #- "I04_1"
+    #- "I04_2"
+    #- "I06_1"
+    #- "I06_2"
+    #- "I06_3"
+    #- "I07_2"
+    #- "I07_3"
+    #- "I07_7"
+    #- "I07_8"
+    #- "I08_1"
+    #- "I11_1"
+    #- "I11_2"
+    #- "I12_1"
