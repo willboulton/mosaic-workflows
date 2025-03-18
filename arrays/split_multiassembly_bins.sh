@@ -13,3 +13,4 @@ for f in `wc -m ${BASE}*.fna | awk '$1 < 5000000' | awk '{ print $2 }'`; do
     rm -f $f
 done
 
+

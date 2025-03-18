@@ -4,7 +4,7 @@
 #SBATCH -t 180
 #SBATCH -c 1
 #SBATCH -n 1
-#SBATCH --array 1-1
+#SBATCH --array 3-356
 
 module add samtools/1.16.1
 
@@ -40,4 +40,5 @@ find $EUKT/$f/m*/*.bam -empty -delete
 mkdir -p $EUKT/$f/all
 samtools merge -o $EUKT/$f/all/all_merged.sorted.bam $EUKT/$f/m*/merged.sorted.bam && \
     rm -rf $EUKT/$f/m*
+
 
