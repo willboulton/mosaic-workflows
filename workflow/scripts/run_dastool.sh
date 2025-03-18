@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# $1 - base directory for sample
+# $1 - base directory for sample, $2 - threads
 
 # module load ruby/3.3.5
 # module load R/4.2.1
@@ -37,4 +37,4 @@ $HOME/software/DAS_Tool/DAS_Tool \
     -c $1/$SAMPLE.bins.fna \
     -p $1/$SAMPLE.bins.faa \
     -o $1/bins_das/das \
-    --score_threshold 0.0 --write_bins
+    --threads $2 --score_threshold 0.0 --write_bins
