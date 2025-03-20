@@ -39,14 +39,18 @@ def make_id(row):
     if "Parent" in attr_dict:
         attr_dict["Parent"] = ID_MAP[attr_dict["Parent"]]
 
-    new_id = f"{row.seq_id}_{row.start}_{row.end}_{row.type}"
+    if row.source.startswith("metaEuk"):
+        new_id = f"{row.seq_id}_{row.start}_{row.end}_{row.type}"
 
-    if new_id in ID_COUNTER:
-        count = ID_COUNTER.get(new_id)
-        ID_COUNTER[new_id] = count + 1
-        new_id = new_id + str(count)
+        if new_id in ID_COUNTER:
+            count = ID_COUNTER.get(new_id)
+            ID_COUNTER[new_id] = count + 1
+            new_id = new_id + str(count)
+        else:
+            ID_COUNTER[new_id] = 1
+
     else:
-        ID_COUNTER[new_id] = 1
+        new_id f"{row.seq_id}_{row.start}_{row.end}_{attr_dict["ID"]}"
     
     ID_MAP[attr_dict["ID"]] = new_id
     attr_dict["ID"] = new_id
