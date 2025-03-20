@@ -4,7 +4,7 @@
 #SBATCH --time 600
 #SBATCH -c 8
 #SBATCH -n 1
-#SBATCH --array 101-354
+#SBATCH --array 1-354
 
 module add singularity/3.6.0
 
