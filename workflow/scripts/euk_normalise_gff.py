@@ -44,7 +44,7 @@ def make_id(row):
     if new_id in ID_COUNTER:
         count = ID_COUNTER.get(new_id)
         ID_COUNTER[new_id] = count + 1
-        new_id += str(count)
+        new_id = new_id + str(count)
     else:
         ID_COUNTER[new_id] = 1
     
