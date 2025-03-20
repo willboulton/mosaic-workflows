@@ -278,6 +278,11 @@ def concat_pfam_to_gff(ipf, pdat, opf):
         header = False
     )
 
+def make_euk_pfam_data(pfam_path, op_file):
+    return
+
+def make_euk_gff(pfam_path, gff_path, op_file):
+    return 
 
 if __name__ == "__main__":
 
@@ -347,30 +352,28 @@ if __name__ == "__main__":
 
 
     elif argv[1] == "euk":
+
+        # euk mode is different - only takes one file at a time
+        pfam_path, gff_path, ea_folder = argv[2:]
+
+        mag_id = pfam_path.split("/")[-1].rstrip(".pfam.csv")
+
+        make_euk_pfam_data(
+            pfam_path, 
+            f"{ea_folder}/pfam/{mag_id}.pfam.txt"
+        )
+
+        make_euk_gff(
+            pfam_path, 
+            gff_path, 
+            f"{ea_folder}/gff/{mag_id}.gff"
+        )
+        
         exit(0)
 
     else:
-
-        ip_file_path, pfam_data_path, op_file_path = argv[1:]
-
-        if ip_file_path.endswith(".pfam.txt"):
-            concat_pfam_data(
-                ip_file_path, 
-                pfam_data_path, 
-                op_file_path
-            )
-            exit(0)
-
-        elif ip_file_path.endswith(".gff"):
-            concat_pfam_to_gff(
-                ip_file_path, 
-                pfam_data_path, 
-                op_file_path
-            )
-            exit(0)
-
-    print("ERROR")
-    print("Wasn't expecting this file extension - not sure what to do. ")
-    exit(1)
+        print("ERROR")
+        print("Wasn't expecting this file extension - not sure what to do. ")
+        exit(1)
 
 
