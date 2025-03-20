@@ -17,7 +17,7 @@ GFF_HEADER = [
 
 def preprocess_gff(gff_file):
 
-    df_gff = pd.read_csv(gff_file, sep = '\t', names = GFF_HEADER)
+    df_gff = pd.read_csv(gff_file, sep = '\t', names = GFF_HEADER, comment = '#')
     df_gff['attributes_dict'] = df_gff.attributes.apply(
             lambda x: dict(tuple(y.split("=") for y in x.split(";")))
     )
