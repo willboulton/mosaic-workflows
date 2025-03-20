@@ -50,7 +50,7 @@ def make_id(row):
             ID_COUNTER[new_id] = 1
 
     else:
-        new_id = f"{row.seq_id}_{row.start}_{row.end}_{attr_dict["ID"]}"
+        new_id = f"{row.seq_id}_{row.start}_{row.end}_{attr_dict['ID']}"
     
     ID_MAP[attr_dict["ID"]] = new_id
     attr_dict["ID"] = new_id
