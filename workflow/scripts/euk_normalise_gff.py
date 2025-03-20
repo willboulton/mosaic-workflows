@@ -49,6 +49,7 @@ def make_id(row):
         ID_COUNTER[new_id] = 1
     
     ID_MAP[attr_dict["ID"]] = new_id
+    attr_dict["ID"] = new_id
     return attr_dict
 
 if __name__ == "__main__":
