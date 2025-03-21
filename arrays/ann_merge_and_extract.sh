@@ -48,7 +48,7 @@ sed -i -e 's|\*$||g' -e 's| .*||' $EA/faa/$f.faa
 
 # merge pfam annotations into gff file 
 # generate .pfam.txt file
-#~/my_code/mosaic-workflows/arrays/pfam_add.py euk \
-#    $EA/pre/pfam/$f.pfam.csv \
-#    $EA/pre/gff_struc_v2/$f.gff3 \
-#    $EA
+~/my_code/mosaic-workflows/arrays/pfam_add.py euk \
+    $EA/pre/pfam/$f.pfam.csv \
+    $EA/pre/gff_struc_v2/$f.gff3 \
+    $EA
