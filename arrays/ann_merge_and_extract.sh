@@ -10,7 +10,7 @@ EA=$MC/annotations/euk
 f=$1
 
 # merge braker with metaeuk using agat 
-if [ ! -f $EA/br3/$f/braker.gff3 ]; then
+if [ -f $EA/br3/$f/braker.gff3 ]; then
     singularity exec ~/software/agat/agat_1.0.0--pl5321hdfd78af_0.sif \
         agat_sp_complement_annotations.pl \
             -r $EA/rrna/$f/$f.gff \
