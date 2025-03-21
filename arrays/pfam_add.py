@@ -75,7 +75,7 @@ def load_pfam_data_for_pftxt(pdat, add_col = None):
     return pf
    
 
-def concat_pfam_data(ipf, pdat, opf):
+def concat_pfam_data(ipf, pdat, opf, mode = 'sid_prefix'):
 
     pf = load_pfam_data_for_pftxt(pdat)
 
@@ -92,9 +92,19 @@ def concat_pfam_data(ipf, pdat, opf):
             pf[PFAM_HEADER]
         ))
 
-    df['seq_id'] = df.gene_id.apply(lambda x: "_".join(x.split("_")[:2]))
-    df['gene_start'] = df.gene_id.apply(lambda x: int(x.split("_")[2]))
-    df['gene_end'] = df.gene_id.apply(lambda x: int(x.split("_")[3]))
+    if mode == "ss_prefix':
+        start_idx = 3
+    elif mode == 'ss_noprefix':
+        start_idx = 2
+    elif mode == 'coa':
+        start_idx = 3
+    else:
+        print("calls to this function must pass in an appropriate mode")
+        exit(1)
+    
+    df['seq_id'] = df.gene_id.apply(lambda x: "_".join(x.split("_")[:start_idx]))
+    df['gene_start'] = df.gene_id.apply(lambda x: int(x.split("_")[start_idx]))
+    df['gene_end'] = df.gene_id.apply(lambda x: int(x.split("_")[start_idx + 1]))
 
     df = df.sort_values([
         "seq_id",
@@ -358,10 +368,16 @@ if __name__ == "__main__":
 
         mag_id = pfam_path.split("/")[-1].rstrip(".pfam.csv")
 
+        if mag_id.find("33000") >= 0:
+            mode = 'ss_prefix'
+        else:
+            mode = 'coa'
+
         concat_pfam_data(
             None,
             pfam_path, 
-            f"{ea_folder}/pfam/{mag_id}.pfam.txt"
+            f"{ea_folder}/pfam/{mag_id}.pfam.txt", 
+            mode = mode
         )
 
         concat_pfam_to_gff(
