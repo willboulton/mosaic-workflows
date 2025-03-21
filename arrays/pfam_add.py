@@ -79,15 +79,18 @@ def concat_pfam_data(ipf, pdat, opf):
 
     pf = load_pfam_data_for_pftxt(pdat)
 
-    df = pd.concat((
-        pd.read_csv(
-            ipf, 
-            sep = '\t', 
-            header = None, 
-            names = PFAM_HEADER
-        ), 
-        pf[PFAM_HEADER]
-    ))
+    if ipf == None:
+        df = pf[PFAM_HEADER]
+    else:
+        df = pd.concat((
+            pd.read_csv(
+                ipf, 
+                sep = '\t', 
+                header = None, 
+                names = PFAM_HEADER
+            ), 
+            pf[PFAM_HEADER]
+        ))
 
     df['seq_id'] = df.gene_id.apply(lambda x: "_".join(x.split("_")[:2]))
     df['gene_start'] = df.gene_id.apply(lambda x: int(x.split("_")[2]))
@@ -278,11 +281,6 @@ def concat_pfam_to_gff(ipf, pdat, opf):
         header = False
     )
 
-def make_euk_pfam_data(pfam_path, op_file):
-    return
-
-def make_euk_gff(pfam_path, gff_path, op_file):
-    return 
 
 if __name__ == "__main__":
 
@@ -354,18 +352,21 @@ if __name__ == "__main__":
     elif argv[1] == "euk":
 
         # euk mode is different - only takes one file at a time
+        # the output is a fixed existing folder relative to the 
+        # EA (euk annotation) folder given. 
         pfam_path, gff_path, ea_folder = argv[2:]
 
         mag_id = pfam_path.split("/")[-1].rstrip(".pfam.csv")
 
-        make_euk_pfam_data(
+        concat_pfam_data(
+            None,
             pfam_path, 
             f"{ea_folder}/pfam/{mag_id}.pfam.txt"
         )
 
-        make_euk_gff(
-            pfam_path, 
+        concat_pfam_to_gff(
             gff_path, 
+            pfam_path, 
             f"{ea_folder}/gff/{mag_id}.gff"
         )
         
