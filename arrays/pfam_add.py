@@ -92,7 +92,7 @@ def concat_pfam_data(ipf, pdat, opf, mode = 'sid_prefix'):
             pf[PFAM_HEADER]
         ))
 
-    if mode == "ss_prefix':
+    if mode == 'ss_prefix':
         start_idx = 3
     elif mode == 'ss_noprefix':
         start_idx = 2
