@@ -16,7 +16,7 @@ if [ -f $EA/br3/$f/braker.gff3 ]; then
             -r $EA/rrna/$f/$f.gff \
             -a $EA/trna/$f/$f.gff \
             -a $EA/br3/$f/braker.gff3 \
-            -a $EA/me/$f/$f.metaeuk.gff3 \
+            -a $EA/me/$f/$f.gff3 \
             --out $EA/pre/gff_struc_v1/$f.gff3
 else
     singularity exec ~/software/agat/agat_1.0.0--pl5321hdfd78af_0.sif \
