@@ -13,16 +13,16 @@ f=$1
 if [ ! -f $EA/br3/$f/braker.gff3 ]; then
     singularity exec ~/software/agat/agat_1.0.0--pl5321hdfd78af_0.sif \
         agat_sp_complement_annotations.pl \
-            -r $EA/trna/$f/$f.gff \
-            -a $EA/rrna/$f/$f.gff \
+            -r $EA/rrna/$f/$f.gff \
+            -a $EA/trna/$f/$f.gff \
             -a $EA/br3/$f/braker.gff3 \
             -a $EA/me/$f/$f.metaeuk.gff3 \
             --out $EA/pre/gff_struc_v1/$f.gff3
 else
     singularity exec ~/software/agat/agat_1.0.0--pl5321hdfd78af_0.sif \
         agat_sp_complement_annotations.pl \
-            -r $EA/trna/$f/$f.gff \
-            -a $EA/rrna/$f/$f.gff \
+            -r $EA/rrna/$f/$f.gff \
+            -a $EA/trna/$f/$f.gff \
             -a $EA/me/$f/$f.gff3 \
             --out $EA/pre/gff_struc_v1/$f.gff3
 fi
