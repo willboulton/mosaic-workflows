@@ -52,3 +52,11 @@ sed -i -e 's|\*$||g' -e 's| .*||' $EA/faa/$f.faa
     $EA/pre/pfam/$f.pfam.csv \
     $EA/pre/gff_struc_v2/$f.gff3 \
     $EA
+
+
+# run as:
+# swrap --array-file euks_all.txt \
+#  --partition compute-64-512,compute-24-96 --mem 8G -c 1 -t 30 \
+#  --array 1-354 \
+#  --wrap "source ~/start_conda; conda activate bio; module add singularity/3.6.0; module add hmmer/3.3; \
+#  ~/my_code/mosaic-workflows/arrays/ann_merge_and_extract.sh \${a[0]}"
