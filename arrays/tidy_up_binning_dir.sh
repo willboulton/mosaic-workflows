@@ -8,14 +8,14 @@ cd $BD/$SAMPLE
 
 
 echo "removing files from zip file"
-find $BD/$SAMPLE.a.fna -delete
-find $BD/$SAMPLE.a.faa -delete
-find $BD/$SAMPLE.a.map.txt -delete
-find $BD/$SAMPLE.a.depth.txt -delete
-find $BD/$SAMPLE.a.pfam.txt -delete
-find $BD/$SAMPLE.*.gff -delete
-find $BD/$SAMPLE.bins.faa.* -delete
-find $BD/$SAMPLE.bins.faa -delete
+find $BD/$SAMPLE/$SAMPLE.a.fna -delete
+find $BD/$SAMPLE/$SAMPLE.a.faa -delete
+find $BD/$SAMPLE/$SAMPLE.a.map.txt -delete
+find $BD/$SAMPLE/$SAMPLE.a.depth.txt -delete
+find $BD/$SAMPLE/$SAMPLE.a.pfam.txt -delete
+find $BD/$SAMPLE/$SAMPLE.*.gff -delete
+find $BD/$SAMPLE/$SAMPLE.bins.faa.* -delete
+find $BD/$SAMPLE/$SAMPLE.bins.faa -delete
 
 echo "removing semibin data"
 find $BD/$SAMPLE/semibin/data.csv -delete
