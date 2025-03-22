@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 
+from glob import glob 
+import pandas as pd
+
 PFAM_HEADER = [
     "seq_id", 
     "pfam_id", 
