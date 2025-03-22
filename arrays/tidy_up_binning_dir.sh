@@ -39,7 +39,7 @@ rm -rf $BD/$SAMPLE/bins_das/das_DASTool_bins
 rm -rf $BD/$SAMPLE/ebins_eukcc/refine_workdir
 
 echo "make metabat tsv"
-grep -H ">" metabat/* | \
+grep -H ">" $BD/$SAMPLE/metabat/* | \
     sed -e 's|.fa:>|\t|g' -e 's|metabat/||g' > $BD/$SAMPLE/metabat/metabat_c2b.tsv && \
     rm -f $BD/$SAMPLE/metabat/*.fa
 
