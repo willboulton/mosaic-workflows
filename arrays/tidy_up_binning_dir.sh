@@ -16,6 +16,7 @@ find $BD/$SAMPLE/$SAMPLE.a.pfam.txt -delete
 find $BD/$SAMPLE/$SAMPLE.*.gff -delete
 find $BD/$SAMPLE/$SAMPLE.bins.faa.* -delete
 find $BD/$SAMPLE/$SAMPLE.bins.faa -delete
+find $BD/$SAMPLE/$SAMPLE.bins.fna -delete
 
 echo "removing semibin data"
 find $BD/$SAMPLE/semibin/data.csv -delete
