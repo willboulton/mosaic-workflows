@@ -16,26 +16,24 @@ PFAM_HEADER = [
     "aln_length"
 ]
 
-pfam_files = glob("*/pfam/*")
+pfam_files = glob("*/pfam/*.pfam.txt")
 
 df_pfams = pd.concat((
     pd.read_csv(
         f, 
         sep = '\t', 
         header = None, 
-        names = PFAM_HEADER
+        names = (PFAM_HEADER + ["contig_id"] if f.startswith("vir") else PFAM_HEADER)
     ).pfam_id.value_counts(
     ).to_frame(
-    ).rename(
-        columns = {
-            "pfam_id" : f.split('/')[-1].strip(".gff"),
-        }
-    )
+    ).rename(columns = {
+        "pfam_id" : f.split('/')[-1].rstrip(".pfam.txt"),
+    })
     for f in pfam_files), 
     axis = 1
 ).fillna(0).applymap(int).sort_index(
 ).T.to_csv(
-    "/gpfs/data/mock_lab/will/mosaic_tmp/mag_catalogue/annotations/bin_pfam_counts.tsv",
+    "/gpfs/data/mock_lab/will/mosaic_tmp/mag_catalogue/annotations/pfam_counts.tsv",
     sep = '\t', 
     index = True, 
     header = True
