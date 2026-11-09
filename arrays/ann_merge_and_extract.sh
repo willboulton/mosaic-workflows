@@ -41,7 +41,7 @@ singularity exec ~/software/agat/agat_1.0.0--pl5321hdfd78af_0.sif \
 sed -i -e 's|\*$||g' -e 's| .*||' $EA/faa/$f.faa
 
 # run pfam scan
-~/software/pfam_scan/pfam_scan.py -cpu 1 \
+~/software/pfam_scan/pfam_scan.py -cpu 8 \
     -out $EA/pre/pfam/$f.pfam.csv \
     $EA/faa/$f.faa \
     ~/software/pfam_34_db

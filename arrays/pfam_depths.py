@@ -16,6 +16,10 @@ PFAM_HEADER = [
  "align_length"
 ]
 
+COG_HEADER = [
+
+]
+
 def main():
 
     # arguments: 
